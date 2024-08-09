@@ -7,6 +7,7 @@ import "@/fonts/line-awesome-1.3.0/css/line-awesome.css";
 import "@/styles/index.scss";
 import "rc-slider/assets/index.css";
 import Header from "@/components/common/Header";
+import StoreProvider from "@/services/redux/storeProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,14 +30,13 @@ export default function RootLayout({
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
-        <Header
-          className="shadow-sm dark:border-b dark:border-neutral-700"
-          navType="MainNav1"
-        />
-        {children}
-        <Footer />
-      </body>
+      <StoreProvider>
+        <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
+          <Header className="shadow-sm dark:border-b dark:border-neutral-700" />
+          {children}
+          <Footer />
+        </body>
+      </StoreProvider>
     </html>
   );
 }

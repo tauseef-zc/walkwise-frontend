@@ -10,7 +10,7 @@ export const NAVIGATION: NavItemType[] = [
   },
   {
     id: ncNanoId(),
-    href: "/",
+    href: "/tours",
     name: "Tours",
   },
   {
