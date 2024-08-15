@@ -1,9 +1,9 @@
-import StayCard2 from '@/components/home/partials/StayCard2';
 import Heading2 from '@/components/shared/Heading2';
 import Pagination from '@/components/shared/Pagination';
 import TabFilters from '@/components/tours/TabFilters';
 import { StayDataType } from '@/data/types';
 import { DEMO_STAY_LISTINGS } from "@/data/listings";
+import StayCard from '@/components/home/partials/StayCard';
 
 function Tours() {
   const data: StayDataType[] = DEMO_STAY_LISTINGS.filter((_, i) => i < 12);
@@ -27,7 +27,7 @@ function Tours() {
         </div>
         <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
           {data.map((stay) => (
-            <StayCard2 key={stay.id} data={stay} />
+            <StayCard key={stay.id} data={stay} />
           ))}
         </div>
         <div className="flex mt-16 justify-center items-center">

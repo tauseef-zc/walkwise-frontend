@@ -1,12 +1,20 @@
-
+"use client";
 import BackgroundSection from "@/components/common/partials/BackgroundSection";
 import GlassBackground from "@/components/home/GlassBackground";
 import SectionSliderNewCategories from "@/components/home/sections/SectionSliderNewCategories";
 import SectionSubscribe2 from "@/components/home/sections/SectionSubscribe2";
 import SectionHeroArchivePage from "@/components/tours/sections/SectionHeroArchivePage";
+import { usePathname } from "next/navigation";
 import React, { ReactNode } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
+  const path = usePathname();
+  let regex = /\/tours\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)/i;
+
+  if (regex.test(path)) {
+    return <>{children}</>;
+  }
+
   return (
     <div className={`nc-ListingStayPage relative `}>
       <GlassBackground />

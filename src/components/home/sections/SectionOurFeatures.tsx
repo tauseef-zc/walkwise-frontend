@@ -30,35 +30,34 @@ const SectionOurFeatures: FC<SectionOurFeaturesProps> = ({
         }`}
       >
         <span className="uppercase text-sm text-gray-400 tracking-widest">
-          BENnefits
+          Benefits
         </span>
-        <h2 className="font-semibold text-4xl mt-5">Happening cities </h2>
+        <h2 className="font-semibold text-4xl mt-5">Authentic Tour Experiences</h2>
 
         <ul className="space-y-10 mt-16">
           <li className="space-y-4">
-            <Badge name="Advertising" />
+            <Badge name="Pricing" />
             <span className="block text-xl font-semibold">
-              Cost-effective advertising
+              Cost Effective
             </span>
             <span className="block mt-5 text-neutral-500 dark:text-neutral-400">
-              With a free listing, you can advertise your rental with no upfront
-              costs
+              With a free listing, you can choose the tour within your budget
             </span>
           </li>
           <li className="space-y-4">
-            <Badge color="green" name="Exposure " />
+            <Badge color="green" name="Explore " />
             <span className="block text-xl font-semibold">
-              Reach millions with Chisfis
+              Unique experience
             </span>
             <span className="block mt-5 text-neutral-500 dark:text-neutral-400">
-              Millions of people are searching for unique places to stay around
+              Millions of people are searching for unique experiences around
               the world
             </span>
           </li>
           <li className="space-y-4">
             <Badge color="red" name="Secure" />
             <span className="block text-xl font-semibold">
-              Secure and simple
+              Secure and Simple
             </span>
             <span className="block mt-5 text-neutral-500 dark:text-neutral-400">
               A Holiday Lettings listing gives you a secure and easy way to take

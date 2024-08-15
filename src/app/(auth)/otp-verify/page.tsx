@@ -1,8 +1,20 @@
 "use client";
+import { useAuth } from "@/services/app/AuthService";
+import { useAppDispatch, useAppSelector } from "@/services/redux/hooks";
+import { toast } from "react-toastify";
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 
-const OtpScreen = () => {
+const OtpScreen = ({ searchParams }: { searchParams: any }) => {
+  const { isAuthenticated, onboarding, verified } = useAppSelector(
+    (state) => state.auth
+  );
   const [otp, setOtp] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [canSend, setCanSend] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+  const { sendVerification, verifyUser } = useAuth();
+  const router = useRouter();
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -22,7 +34,6 @@ const OtpScreen = () => {
         return newOtp;
       });
       targetIndex = index - 1;
-
     } else {
       setOtp((prev) => {
         const newOtp = [...prev];
@@ -31,10 +42,63 @@ const OtpScreen = () => {
       });
       targetIndex = index + 1;
     }
-    
 
     document.getElementById(`input-${targetIndex}`)?.focus();
   };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setLoading(false);
+    if (otp.length === 6) {
+      setLoading(true);
+      verifyUser({
+        email: searchParams?.email || "",
+        otp: otp.join(""),
+        verify_email: true,
+      })
+        .then((response) => {
+          setLoading(false);
+          setError("");
+          router.replace("/login");
+          toast("You account is verified, Please login to continue.", {
+            type: "success",
+            theme: localStorage.getItem("theme") === "dark" ? "dark" : "light",
+          });
+        })
+        .catch((error) => {
+          setLoading(false);
+          setOtp([]);
+          console.log({error});
+          setError("Invalid OTP entered! Please try again.");
+        });
+    }
+  };
+
+  const handleSendVerification = () => {
+    if (canSend) {
+      setError("");
+      setLoading(true);
+      setCanSend(false);
+      sendVerification(searchParams?.email || "")
+        .then((response) => {
+          setLoading(false);
+          setTimeout(() => {
+            setCanSend(true);
+          }, 5000);
+        })
+        .catch((error) => {
+          setLoading(false);
+          setError("Something went wrong! Please try again.");
+        });
+    }
+  };
+
+  if (verified && isAuthenticated && onboarding) {
+    redirect("/onboarding");
+  } else if (verified && isAuthenticated && !onboarding) {
+    redirect("/dashboard");
+  }
 
   return (
     <div className={`nc-PageLogin`}>
@@ -46,9 +110,9 @@ const OtpScreen = () => {
             address.
           </p>
         </header>
-        <form id="otp-form">
+        <form id="otp-form" onSubmit={handleSubmit}>
           <div className="flex items-center justify-center gap-3">
-            {Array(5)
+            {Array(6)
               .fill(0)
               .map((_, index) => (
                 <input
@@ -63,26 +127,32 @@ const OtpScreen = () => {
                   required
                   value={otp[index] ?? ""}
                   onChange={(e) => handleOnChange(e, index)}
+                  disabled={loading}
                 />
               ))}
           </div>
           <div className="max-w-[260px] mx-auto mt-8">
             <button
+              disabled={loading}
               type="submit"
               className="w-full inline-flex justify-center whitespace-nowrap rounded-lg bg-indigo-500 px-3.5 py-2.5 text-sm font-medium text-white shadow-sm shadow-indigo-950/10 hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-indigo-300 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 transition-colors duration-150"
             >
               Verify Account
             </button>
           </div>
+          <p className="text-center text-red-500 text-sm mt-10">{error}</p>
         </form>
         <div className="text-sm text-slate-500 text-center mt-16">
           {"Didn't receive code? "}
-          <a
-            className="font-medium text-indigo-500 hover:text-indigo-600"
-            href="#0"
-          >
-            Resend
-          </a>
+          {canSend && (
+            <button
+              className="font-medium text-indigo-500 hover:text-indigo-600"
+              type="button"
+              onClick={handleSendVerification}
+            >
+              Resend
+            </button>
+          )}
         </div>
       </div>
     </div>

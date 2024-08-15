@@ -418,12 +418,12 @@ const TabFilters = () => {
                           {renderMoreFilterItem(moreFilter1)}
                         </div>
                       </div>
-                      <div className="py-7">
+                      {/* <div className="py-7">
                         <h3 className="text-xl font-medium">Time of day</h3>
                         <div className="mt-6 relative ">
                           {renderMoreFilterItem(moreFilter2)}
                         </div>
-                      </div>
+                      </div> */}
 
                       {/* --------- */}
                       {/* ---- */}
@@ -524,12 +524,12 @@ const TabFilters = () => {
       <div className="hidden lg:flex space-x-4">
         {renderTabsTypeOfPlace()}
         {renderTabsPriceRage()}
-        {renderTabsTimeOfDay()}
-        {renderTabOnSale()}
+        {/* {renderTabsTimeOfDay()}
+        {renderTabOnSale()} */}
       </div>
       <div className="flex lg:hidden space-x-4">
         {renderTabMobileFilter()}
-        {renderTabOnSale()}
+        {/* {renderTabOnSale()} */}
       </div>
     </div>
   );

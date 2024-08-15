@@ -4,6 +4,10 @@ import { RootState } from "@/services/redux/store/store"; // Adjust this import 
 import { useAppSelector } from "@/services/redux/hooks";
 
 interface ApiHook {
+  csrf: <T = any>(
+    url: string,
+    config?: AxiosRequestConfig
+  ) => Promise<AxiosResponse<T>>;
   get: <T = any>(
     url: string,
     config?: AxiosRequestConfig
@@ -25,18 +29,25 @@ interface ApiHook {
 }
 
 export const useApi = (): ApiHook => {
-  
   const token = useAppSelector((state: RootState) => state.auth.token);
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
+  const path = "/" + process.env.NEXT_PUBLIC_API_SUFFIX;
 
   const instance = axios.create({
     baseURL,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-    },
-    withCredentials: true,
+    }
   });
+
+  const apiUrl = useCallback(
+    (url: string): string => {
+      return path + url;
+    },
+    [path]
+  );
+
 
   instance.interceptors.request.use((config) => {
     if (token) {
@@ -45,7 +56,7 @@ export const useApi = (): ApiHook => {
     return config;
   });
 
-  const get = useCallback(
+  const csrf = useCallback(
     <T = any>(
       url: string,
       config?: AxiosRequestConfig
@@ -55,15 +66,25 @@ export const useApi = (): ApiHook => {
     [instance]
   );
 
+  const get = useCallback(
+    <T = any>(
+      url: string,
+      config?: AxiosRequestConfig
+    ): Promise<AxiosResponse<T>> => {
+      return instance.get<T>(apiUrl(url), config);
+    },
+    [instance, apiUrl]
+  );
+
   const post = useCallback(
     <T = any>(
       url: string,
       data?: any,
       config?: AxiosRequestConfig
     ): Promise<AxiosResponse<T>> => {
-      return instance.post<T>(url, data, config);
+      return instance.post<T>(apiUrl(url), data, config);
     },
-    [instance]
+    [instance, apiUrl]
   );
 
   const put = useCallback(
@@ -72,9 +93,9 @@ export const useApi = (): ApiHook => {
       data?: any,
       config?: AxiosRequestConfig
     ): Promise<AxiosResponse<T>> => {
-      return instance.put<T>(url, data, config);
+      return instance.put<T>(apiUrl(url), data, config);
     },
-    [instance]
+    [instance, apiUrl]
   );
 
   const del = useCallback(
@@ -82,10 +103,11 @@ export const useApi = (): ApiHook => {
       url: string,
       config?: AxiosRequestConfig
     ): Promise<AxiosResponse<T>> => {
-      return instance.delete<T>(url, config);
+      return instance.delete<T>(apiUrl(url), config);
     },
-    [instance]
+    [instance, apiUrl]
   );
 
-  return { get, post, put, delete: del };
+  
+  return { csrf, get, post, put, delete: del };
 };

@@ -6,8 +6,6 @@ import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import StayCard from "../partials/StayCard";
 import StayCard2 from "../partials/StayCard2";
 import Heading from "@/components/shared/Heading";
-import ButtonSecondary from "@/components/shared/ButtonSecondary";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
 // OTHER DEMO WILL PASS PROPS
 const DEMO_DATA: StayDataType[] = DEMO_STAY_LISTINGS.filter((_, i) => i < 8);

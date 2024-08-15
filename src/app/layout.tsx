@@ -3,11 +3,13 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Head from "next/head";
 import "./globals.css";
-import "@/fonts/line-awesome-1.3.0/css/line-awesome.css";
+import "@/assets/fonts/line-awesome-1.3.0/css/line-awesome.css";
 import "@/styles/index.scss";
 import "rc-slider/assets/index.css";
 import Header from "@/components/common/Header";
 import StoreProvider from "@/services/redux/storeProvider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,6 +27,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en" className={poppins.className}>
       <Head>
@@ -35,6 +38,7 @@ export default function RootLayout({
           <Header className="shadow-sm dark:border-b dark:border-neutral-700" />
           {children}
           <Footer />
+          <ToastContainer position="top-right" autoClose={5000} />
         </body>
       </StoreProvider>
     </html>
