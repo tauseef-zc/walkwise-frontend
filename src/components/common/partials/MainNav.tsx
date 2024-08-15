@@ -9,6 +9,7 @@ import SwitchDarkMode from "@/components/shared/SwitchDarkMode";
 import SearchDropdown from "./SearchDropdown";
 import { useThemeMode } from "@/utils/useThemeMode";
 import LogoSvg from "../LogoSvg";
+import HeroSearchForm2MobileFactory from "./HeroSearchForm2MobileFactory";
 
 export interface MainNavProps {
   className?: string;
@@ -30,7 +31,7 @@ const MainNav: FC<MainNavProps> = ({ className = "" }) => {
 
         <div className="flex lg:hidden flex-[3] max-w-lg !mx-auto md:px-3 ">
           <div className="self-center flex-1">
-            {/* <HeroSearchForm2MobileFactory /> */}
+            <HeroSearchForm2MobileFactory />
           </div>
         </div>
 

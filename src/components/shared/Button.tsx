@@ -1,6 +1,6 @@
 "use client";
 
-import { Route } from "@/routers/types";
+import { Route } from "@/types/router";
 import Link from "next/link";
 import React, { ButtonHTMLAttributes, FC } from "react";
 
@@ -32,7 +32,9 @@ const Button: FC<ButtonProps> = ({
   loading,
   onClick = () => {},
 }) => {
-  const CLASSES = `nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors ${fontSize} ${sizeClass} ${translate} ${className} `;
+  const CLASSES = `nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors ${fontSize} ${sizeClass} ${translate} ${className} ${
+    loading ? "opacity-50 hover:cursor-not-allowed" : ""
+  } `;
 
   const _renderLoading = () => {
     return (
