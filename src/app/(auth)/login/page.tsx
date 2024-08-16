@@ -42,7 +42,3 @@ const Login = () => {
 };
 
 export default Login;
-function replace(arg0: string) {
-  throw new Error("Function not implemented.");
-}
-

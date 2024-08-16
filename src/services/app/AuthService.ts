@@ -9,6 +9,7 @@ import {
 import { useAppSelector } from "../redux/hooks";
 import axios from "axios";
 import { RegisterFormInput } from "@/types/formData";
+import { clearOnboardingData } from "../redux/reducers/slices/OnboardingSlice";
 // Adjust this import based on your Redux setup
 
 
@@ -43,6 +44,7 @@ export const useAuth = () => {
         })
         .catch((err) => {
           dispatch(clearCredentials());
+          dispatch(clearOnboardingData());
         });
   };
 
@@ -99,6 +101,7 @@ export const useAuth = () => {
     }): Promise<DataResponse> => {
       try {
         const response = await api.post<DataResponse>("/auth/verify", data);
+        await checkAuth();
         return response.data;
       } catch (error) {
         throw error;

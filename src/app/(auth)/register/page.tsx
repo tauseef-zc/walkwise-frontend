@@ -31,13 +31,10 @@ const Register = () => {
     setLoading(true);
     setServerError({} as RegisterRequestError);
     await registerUser(data).then((res) => {
-
       dispatch(setCredentials({ data: res }));
       toast("Your account is created successfully!", {
         type: "success",
       });
-      setLoading(false);
-      
     }).catch((error) => {
       setLoading(false);
       const { response } = error;
@@ -54,11 +51,10 @@ const Register = () => {
   };
 
   useEffect(() => {
+    setLoading(false);
     if (isAuthenticated && user !== null && !user.verified) {
       replace("/otp-verify?email=" + user.email);
-    }
-
-    if (isAuthenticated && user !== null && user.onboarding) {
+    }else if (isAuthenticated && user !== null && user.onboarding) {
       replace("/onboarding");
     }
   }, [isAuthenticated, user, replace]);

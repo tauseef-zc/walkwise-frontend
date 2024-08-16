@@ -1,16 +1,15 @@
 "use client";
 import { createSlice } from "@reduxjs/toolkit";
-import { File } from "buffer";
 
 export interface OnboardingState {
   step: number;
   data: {
     role: string;
     expertise: Array<string>;
-    about: string;
-    experience: number;
-    tourism_license?: File;
-    registration_certificate?: File;
+    bio: string;
+    experience: number | null;
+    tourism_license?: FileList | null;
+    registration_certificate?: FileList | null;
   };
   error: "";
 }
@@ -20,8 +19,10 @@ const initialState: OnboardingState = {
   data: {
     role: "",
     expertise: [],
-    about: "",
-    experience: 0
+    bio: "",
+    experience: null,
+    tourism_license: null,
+    registration_certificate: null,
   },
   error: "",
 };
@@ -39,12 +40,16 @@ const onboardingProcess = createSlice({
         ...action.payload,
       };
     },
+    clearOnboardingData: (state: OnboardingState) => {
+      state = initialState;
+    },
     setError: (state: OnboardingState, action) => {
       state.error = action.payload;
     },
   },
 });
 
-export const { setStep, setData, setError } = onboardingProcess.actions;
+export const { setStep, setData, clearOnboardingData, setError } =
+  onboardingProcess.actions;
 
 export default onboardingProcess.reducer;

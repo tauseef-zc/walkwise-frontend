@@ -113,7 +113,7 @@ const TagsDropdown = ({
 
         {/* Menu's */}
         {menuOpen ? (
-          <div className="card shadow bg-white dark:bg-neutral-900 dark:border dark:border-neutral-800 absolute w-full max-h-52 mt-2 p-1 flex overflow-y-auto scrollbar-thin dark:scrollbar-thin dark:scrollbar-thumb-neutral-700 scrollbar-track-slate-50 scrollbar-thumb-slate-200 rounded-md">
+          <div className="card shadow bg-white dark:bg-neutral-900 dark:border dark:border-neutral-800 absolute z-10 w-full max-h-52 mt-2 p-1 flex overflow-y-auto scrollbar-thin dark:scrollbar-thin dark:scrollbar-thumb-neutral-700 scrollbar-track-slate-50 scrollbar-thumb-slate-200 rounded-md">
             <ul className="w-full">
               {filteredTags?.length ? (
                 filteredTags.map((tag, i) => (

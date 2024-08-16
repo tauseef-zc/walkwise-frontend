@@ -1,11 +1,11 @@
 "use client";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import Cookies from "js-cookie";
 
 export interface User {
   id: number;
   name: string;
   email: string;
+  avatar?: string;
   verified: boolean;
   status: {
     label: string;
@@ -22,6 +22,7 @@ export interface User {
   created_at: string;
   updated_at: string;
   onboarding: boolean;
+  user_type: string;
 }
 
 export interface AuthState {
@@ -30,14 +31,16 @@ export interface AuthState {
   isAuthenticated: boolean;
   onboarding: boolean;
   verified: boolean;
+  user_type: string;
 }
 
 const initialState: AuthState = {
   user: null,
-  token: Cookies.get("token") ?? null,
-  isAuthenticated: Cookies.get("token") ? true : false,
+  token: localStorage.getItem("token") ?? null,
+  isAuthenticated: localStorage.getItem("token") ? true : false,
   onboarding: false,
   verified: false,
+  user_type: "user",
 };
 
 const authSlice = createSlice({
@@ -53,10 +56,11 @@ const authSlice = createSlice({
       state.verified = user?.verified ?? state.verified;
       if(token){
         state.token = token ? token : state.token;
-        Cookies.set("token", token);
+        localStorage.setItem("token", token);
       }
       state.isAuthenticated = true;
       state.onboarding = user?.onboarding ?? state.onboarding;
+      state.user_type = user?.user_type ?? state.user_type;
     },
     setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
@@ -67,7 +71,9 @@ const authSlice = createSlice({
       state.token = null;
       state.verified = false;
       state.isAuthenticated = false;
-      Cookies.remove("token");
+      state.onboarding = true;
+      state.user_type = "user";
+      localStorage.removeItem("token");
     },
   },
 });

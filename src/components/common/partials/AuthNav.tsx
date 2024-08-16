@@ -9,6 +9,7 @@ import { Route } from "@/types/router";
 import LogoSvg from "../LogoSvg";
 import SwitchDarkMode from "@/components/shared/SwitchDarkMode";
 import SearchDropdown from "./SearchDropdown";
+import Navigation from "@/components/shared/Navigation/Navigation";
 
 export interface AuthNavProps {
   className?: string;
@@ -22,7 +23,7 @@ const AuthNav: FC<AuthNavProps> = ({ className = "" }) => {
           <div className="w-100 self-center">
             <LogoSvg />
           </div>
-          <div className="hidden lg:block self-center h-10 border-l border-neutral-300 dark:border-neutral-500"></div>
+          <Navigation />
         </div>
 
         <div className="self-center lg:hidden flex-[3] max-w-lg !mx-auto md:px-3">
@@ -31,12 +32,12 @@ const AuthNav: FC<AuthNavProps> = ({ className = "" }) => {
 
         <div className="hidden md:flex flex-shrink-0 justify-end flex-1 lg:flex-none text-neutral-700 dark:text-neutral-100">
           <div className="hidden lg:flex space-x-1">
-            <Link
+            {/* <Link
               href={"/add-listing" as Route<string>}
               className="self-center text-opacity-90 group px-4 py-2 border border-neutral-300 hover:border-neutral-400 dark:border-neutral-700 rounded-full inline-flex items-center text-sm text-gray-700 dark:text-neutral-300 font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
             >
               List your property
-            </Link>
+            </Link> */}
             <SwitchDarkMode />
             <SearchDropdown className="flex items-center" />
             <NotifyDropdown />
