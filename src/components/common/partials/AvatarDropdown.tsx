@@ -5,6 +5,7 @@ import SwitchDarkMode2 from "@/components/shared/SwitchDarkMode2";
 import Avatar from "@/components/shared/Avatar";
 import { useAppSelector } from "@/services/redux/hooks";
 import MyAccount from "@/assets/icons/MyAccount";
+import useAssetsHelper from "@/utils/useAssetsHelper";
 
 interface Props {
   className?: string;
@@ -12,6 +13,7 @@ interface Props {
 
 export default function AvatarDropdown({ className = "" }: Props) {
   const { user } = useAppSelector((state) => state.auth);
+  const { getImage } = useAssetsHelper();
 
   return (
     <>
@@ -23,7 +25,11 @@ export default function AvatarDropdown({ className = "" }: Props) {
             >
               <Avatar
                 sizeClass="w-8 h-8 sm:w-9 sm:h-9"
-                imgUrl={user?.avatar ?? "/assets/images/avatar.jpg"}
+                imgUrl={
+                  user?.avatar
+                    ? getImage(user.avatar)
+                    : "/assets/images/avatar.jpg"
+                }
               />
             </Popover.Button>
             <Transition
@@ -41,7 +47,11 @@ export default function AvatarDropdown({ className = "" }: Props) {
                     <div className="flex items-center space-x-3">
                       <Avatar
                         sizeClass="w-12 h-12"
-                        imgUrl={user?.avatar ?? "/assets/images/avatar.jpg"}
+                        imgUrl={
+                          user?.avatar
+                            ? getImage(user.avatar)
+                            : "/assets/images/avatar.jpg"
+                        }
                       />
 
                       <div className="flex-grow">
@@ -55,9 +65,29 @@ export default function AvatarDropdown({ className = "" }: Props) {
                     <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
 
                     {/* ------------------ 1 --------------------- */}
+                    {user?.onboarding == true && (
+                      <Link
+                        href="/onboarding"
+                        className="flex items-center bg-blue-700 text-white p-2 -m-3 transition duration-150 ease-in-out rounded-lg focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                        onClick={() => close()}
+                      >
+                        <div className="flex items-center text-white justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">
+                          <MyAccount />
+                        </div>
+                        <div className="ml-4">
+                          <p className="text-sm font-medium ">
+                            Setup your profile
+                          </p>
+                        </div>
+                      </Link>
+                    )}
                     {user?.user_type !== "user" && (
                       <Link
-                        href={user?.user_type === "guide" ? "/dashboard" : "/my-account"}
+                        href={
+                          user?.user_type === "guide"
+                            ? "/dashboard"
+                            : "/my-account"
+                        }
                         className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                         onClick={() => close()}
                       >
@@ -65,7 +95,11 @@ export default function AvatarDropdown({ className = "" }: Props) {
                           <MyAccount />
                         </div>
                         <div className="ml-4">
-                          <p className="text-sm font-medium ">{user?.user_type === "guide" ? "My Dashboard": "My Account"}</p>
+                          <p className="text-sm font-medium ">
+                            {user?.user_type === "guide"
+                              ? "Dashboard"
+                              : "My Account"}
+                          </p>
                         </div>
                       </Link>
                     )}

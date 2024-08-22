@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Search, Close } from "./Icons";
 
 interface TagProps {
@@ -11,11 +11,11 @@ interface TagProps {
 const TagsDropdown = ({
   options,
   placeHolder,
-  selectedItems,
+  selectedItems = [],
   onItemSelect,
 }: TagProps) => {
   const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState<string[]>(selectedItems ?? []);
+  const [selected, setSelected] = useState<string[]>(selectedItems);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -37,6 +37,12 @@ const TagsDropdown = ({
     if (onItemSelect) onItemSelect(selected);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
+
+  useEffect(() => {
+    if (selectedItems.length > 0) {
+      setSelected(selectedItems);
+    }
+  }, [selectedItems]);
 
   return (
     <>
@@ -141,4 +147,4 @@ const TagsDropdown = ({
   );
 };
 
-export default TagsDropdown;
+export default memo(TagsDropdown);

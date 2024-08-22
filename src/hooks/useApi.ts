@@ -4,10 +4,6 @@ import { RootState } from "@/services/redux/store/store"; // Adjust this import 
 import { useAppSelector } from "@/services/redux/hooks";
 
 interface ApiHook {
-  csrf: <T = any>(
-    url: string,
-    config?: AxiosRequestConfig
-  ) => Promise<AxiosResponse<T>>;
   get: <T = any>(
     url: string,
     config?: AxiosRequestConfig
@@ -48,23 +44,12 @@ export const useApi = (): ApiHook => {
     [path]
   );
 
-
   instance.interceptors.request.use((config) => {
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   });
-
-  const csrf = useCallback(
-    <T = any>(
-      url: string,
-      config?: AxiosRequestConfig
-    ): Promise<AxiosResponse<T>> => {
-      return instance.get<T>(url, config);
-    },
-    [instance]
-  );
 
   const get = useCallback(
     <T = any>(
@@ -109,5 +94,5 @@ export const useApi = (): ApiHook => {
   );
 
   
-  return { csrf, get, post, put, delete: del };
+  return { get, post, put, delete: del };
 };

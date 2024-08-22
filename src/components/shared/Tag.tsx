@@ -1,5 +1,5 @@
 import { TaxonomyType } from "@/data/types";
-import { Route } from "@/routers/types";
+import { Route } from "@/types/router";
 import Link from "next/link";
 import React, { FC } from "react";
 

@@ -62,6 +62,9 @@ module.exports = {
           900: customColors("--c-neutral-900"),
         },
       },
+      animation: {
+        "spin-slow": "spin 3s linear infinite",
+      },
     },
   },
   variants: {

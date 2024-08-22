@@ -10,6 +10,12 @@ export interface OnboardingState {
     experience: number | null;
     tourism_license?: FileList | null;
     registration_certificate?: FileList | null;
+    accessibility: string[];
+    interests: string[];
+    dietary_restrictions: string;
+    gender: number | null;
+    nationality: string;
+    passport_image: FileList | null;
   };
   error: "";
 }
@@ -17,12 +23,18 @@ export interface OnboardingState {
 const initialState: OnboardingState = {
   step: 1,
   data: {
-    role: "",
+    role: "traveler",
     expertise: [],
     bio: "",
     experience: null,
     tourism_license: null,
     registration_certificate: null,
+    accessibility: [],
+    interests: [],
+    dietary_restrictions: "",
+    gender: 1,
+    nationality: "",
+    passport_image: null,
   },
   error: "",
 };

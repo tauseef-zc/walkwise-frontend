@@ -2,7 +2,7 @@
 import BackgroundSection from "@/components/common/partials/BackgroundSection";
 import GlassBackground from "@/components/home/GlassBackground";
 import SectionSliderNewCategories from "@/components/home/sections/SectionSliderNewCategories";
-import SectionSubscribe2 from "@/components/home/sections/SectionSubscribe2";
+import SectionSubscribe from "@/components/home/sections/SectionSubscribe";
 import SectionHeroArchivePage from "@/components/tours/sections/SectionHeroArchivePage";
 import { usePathname } from "next/navigation";
 import React, { ReactNode } from "react";
@@ -44,7 +44,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           />
         </div>
 
-        <SectionSubscribe2 className="py-24 lg:py-28" />
+        <SectionSubscribe className="py-24 lg:py-28" />
       </div>
     </div>
   );

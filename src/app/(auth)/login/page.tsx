@@ -7,7 +7,7 @@ import LoginForm from "@/components/auth/LoginForm";
 
 
 const Login = () => {
-  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, user } = useAppSelector((state: any) => state.auth);
   const { replace } = useRouter();
 
   useEffect(() => {
@@ -17,6 +17,11 @@ const Login = () => {
 
     if (isAuthenticated && user !== null && user.onboarding) {
       replace("/onboarding");
+    }
+
+    if (isAuthenticated && user !== null && user.verified &&!user.onboarding) {
+      const redirect = user.user_type === "traveler" ? "/my-account" : "/dashboard";
+      replace(redirect);
     }
   }, [isAuthenticated, user, replace]);
 

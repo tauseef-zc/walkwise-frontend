@@ -6,7 +6,7 @@ import SectionHero from "@/components/home/sections/SectionHero";
 import SectionHowItWork from "@/components/home/sections/SectionHowItWork";
 import SectionOurFeatures from "@/components/home/sections/SectionOurFeatures";
 import SectionSliderNewCategories from "@/components/home/sections/SectionSliderNewCategories";
-import SectionSubscribe2 from "@/components/home/sections/SectionSubscribe2";
+import SectionSubscribe from "@/components/home/sections/SectionSubscribe";
 
 export default function Home() {
   return (
@@ -22,7 +22,7 @@ export default function Home() {
           <BackgroundSection className="bg-orange-50 dark:bg-black dark:bg-opacity-20 " />
           <SectionClientSay />
         </div>
-        <SectionSubscribe2 />
+        <SectionSubscribe />
       </div>
     </main>
   );

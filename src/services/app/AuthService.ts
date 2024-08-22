@@ -39,7 +39,6 @@ export const useAuth = () => {
   const checkAuth = async () => {
       await getUser()
         .then((res) => {
-          console.log(res);
           dispatch(setCredentials(res));
         })
         .catch((err) => {

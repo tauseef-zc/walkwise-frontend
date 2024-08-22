@@ -4,6 +4,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface User {
   id: number;
   name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   avatar?: string;
   verified: boolean;
@@ -17,12 +19,31 @@ export interface User {
   };
   nationality: string;
   primary_lang: string;
-  other_lang: string;
+  other_lang: string[];
   newsletter: boolean;
   created_at: string;
   updated_at: string;
   onboarding: boolean;
   user_type: string;
+  resource: {
+    accessibility?: string[];
+    interests?: string[];
+    phone: string;
+    bio?: string;
+    dietary_restrictions?: string;
+    experience?: number;
+    expertise?: string[];
+    has_vehicle?: boolean;
+    documents?: string[];
+    passport_image?: string;
+    nationality: string;
+    emergency_contact?: {
+      name: string;
+      phone: string;
+      email: string;
+    };
+
+  }
 }
 
 export interface AuthState {

@@ -1,4 +1,5 @@
 "use client";
+import PhoneInput from "@/components/inputs/PhoneInput";
 import FormItem from "@/components/onboarding/FormItem";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
@@ -19,6 +20,8 @@ interface IFormInput {
   avatar: FileList;
   has_vehicle: boolean;
   gender?: number | null;
+  primary_lang: string;
+  other_lang: string[];
 }
 
 function Completion() {
@@ -29,6 +32,7 @@ function Completion() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<IFormInput>({
     defaultValues: {
@@ -42,11 +46,13 @@ function Completion() {
 
   const handleNext = async (dataItems: IFormInput) => {
     setLoading(true);
-    await createGuide(dataItems).then((res) => {
-      checkAuth();
-    }).catch((err) => {
-      setLoading(false);
-    })
+    await createGuide(dataItems)
+      .then((res) => {
+        checkAuth();
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -57,14 +63,14 @@ function Completion() {
     if (step <= 1) {
       push("/onboarding/");
     }
-  }, [data.role, step]);
+  }, [data.role, push, step]);
 
   useEffect(() => {
     if (!user?.onboarding) {
       setLoading(false);
       push("/dashboard");
     }
-  }, [user]);
+  }, [push, user]);
 
   return (
     <form
@@ -77,7 +83,7 @@ function Completion() {
         <div className="space-y-8 py-8">
           <FormItem
             label="Display Image"
-            error={errors.phone as FieldError}
+            error={errors.avatar as FieldError}
             desc="Please upload a square image. The image should be at least 256x256."
           >
             <UploadInput
@@ -86,10 +92,7 @@ function Completion() {
             />
           </FormItem>
           <FormItem label="Phone number" error={errors.phone as FieldError}>
-            <Input
-              type="number"
-              {...register("phone", { required: "Phone number is required" })}
-            />
+            <PhoneInput name="phone" register={register} required={true} />
           </FormItem>
           <FormItem label="What is your gender?">
             <div className="flex justify-start gap-5">
@@ -125,20 +128,30 @@ function Completion() {
                 Yes
               </label>
               <label className="item">
-                <input
-                  type="radio"
-                  {...register("has_vehicle")}
-                  value="0"
-                />{" "}
-                No
+                <input type="radio" {...register("has_vehicle")} value="0" /> No
               </label>
             </div>
           </FormItem>
-          <FormItem label="What language do you speak">
+          <FormItem
+            label="What is your primary language"
+            error={errors.phone as FieldError}
+          >
+            <Input
+              type="text"
+              {...register("primary_lang", {
+                required: "Primary Language is required",
+              })}
+            />
+          </FormItem>
+          <FormItem label="Any other languages you can speak?">
             <TagsDropdown
               options={["English", "Sinhala", "Tamil"]}
               placeHolder="Choose your language"
+              onItemSelect={(items) => {
+                setValue("other_lang", items);
+              }}
             />
+            <Input type="hidden" {...register("other_lang")} />
           </FormItem>
         </div>
       </div>

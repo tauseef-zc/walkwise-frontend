@@ -1,6 +1,6 @@
 "use client";
 import Guide from "@/assets/icons/Guide";
-import Traveller from "@/assets/icons/Traveller";
+import Traveler from "@/assets/icons/Traveler";
 import FormItem from "@/components/onboarding/FormItem";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import { useAppDispatch, useAppSelector } from "@/services/redux/hooks";
@@ -48,31 +48,43 @@ const OnBoarding = () => {
           <FormItem>
             <div className="flex items-center justify-evenly">
               <div
-                onClick={() => handleRole("traveller")}
+                onClick={() => handleRole("traveler")}
                 className={
                   cardStyle +
-                  (data.role === "traveller"
-                    ? "border border-gray-200 dark:border-gray-700 rounded-lg shadow"
+                  (data.role === "traveler"
+                    ? "cursor-pointer border border-blue-700 dark:border-gray-700 rounded-lg shadow-lg text-blue-700 transition-all"
                     : "")
                 }
               >
-                <Traveller
+                <Traveler
                   width={100}
                   height={100}
-                  className="dark:fill-white"
+                  className={
+                    data.role === "traveler"
+                      ? "fill-blue-700 dark:fill-white"
+                      : "dark:fill-white hover:animate-pulse"
+                  }
                 />
-                <p className="text-regular dark:text-white">Traveller</p>
+                <p className="text-regular dark:text-white">Traveler</p>
               </div>
               <div
                 onClick={() => handleRole("guide")}
                 className={
                   cardStyle +
                   (data.role === "guide"
-                    ? "border border-gray-200 dark:border-gray-700 rounded-lg shadow"
+                    ? "cursor-pointer border border-blue-700 dark:border-gray-700 rounded-lg shadow-lg text-blue-700 transition-all"
                     : "")
                 }
               >
-                <Guide width={100} height={100} />
+                <Guide
+                  width={100}
+                  height={100}
+                  className={
+                    data.role === "guide"
+                      ? "fill-blue-700 dark:fill-white"
+                      : "dark:fill-white hover:animate-pulse"
+                  }
+                />
                 <p className="text-regular dark:text-white">Guide</p>
               </div>
             </div>

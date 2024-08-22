@@ -1,6 +1,6 @@
 import * as React from "react";
 import { SVGProps } from "react";
-const Traveller = (props: SVGProps<SVGSVGElement>) => (
+const Traveler = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={props.width ?? 50}
@@ -34,4 +34,4 @@ const Traveller = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
-export default Traveller;
+export default Traveler;
