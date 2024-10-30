@@ -2,12 +2,9 @@ import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useApi } from "@/hooks/useApi";
 import {
-  clearCredentials,
   setCredentials,
   User,
 } from "../redux/reducers/slices/AuthSlice";
-import { useAppSelector } from "../redux/hooks";
-import axios from "axios";
 import { RegisterFormInput } from "@/types/formData";
 // Adjust this import based on your Redux setup
 
@@ -35,21 +32,18 @@ export const useAuth = () => {
   const dispatch = useDispatch();
   const api = useApi();
 
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
       await getUser()
         .then((res) => {
-          console.log(res);
-          dispatch(setCredentials(res));
-        })
-        .catch((err) => {
-          dispatch(clearCredentials());
+          dispatch(setCredentials(res.data));
         });
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   const login = useCallback(
-    async (email: string, password: string): Promise<LoginResponse> => {
+    async (email: string, password: string): Promise<DataResponse> => {
       try {
-        const response = await axios.post<LoginResponse>("/api/login", {
+        const response = await api.post<DataResponse>("/auth/login", {
           email,
           password,
         });
@@ -58,22 +52,19 @@ export const useAuth = () => {
         throw error;
       }
     },
-    []
+    [api]
   );
 
   const register = useCallback(
-    async (data: RegisterFormInput): Promise<RegisterResponse> => {
+    async (data: RegisterFormInput): Promise<DataResponse> => {
       try {
-        const response = await axios.post<RegisterResponse>(
-          "/api/register",
-          data
-        );
+        const response = await api.post<DataResponse>("/auth/register", data);
         return response.data;
       } catch (error) {
         throw error;
       }
     },
-    []
+    [api]
   );
 
   const sendVerification = useCallback(
@@ -99,30 +90,31 @@ export const useAuth = () => {
     }): Promise<DataResponse> => {
       try {
         const response = await api.post<DataResponse>("/auth/verify", data);
+        await checkAuth();
         return response.data;
       } catch (error) {
         throw error;
       }
     },
-    [api]
+    [api, checkAuth]
   );
 
   const logout = useCallback(async (): Promise<void> => {
     try {
-      await axios.get("/api/logout");
+      await api.get("/auth/logout");
     } catch (error) {
       throw error;
     }
-  }, []);
+  }, [api]);
 
   const getUser = useCallback(async (): Promise<DataResponse> => {
     try {
-      const response = await axios.get<DataResponse>("/api/user");
+      const response = await api.get<DataResponse>("/auth/user");
       return response.data;
     } catch (error) {
       throw error;
     }
-  }, []);
+  }, [api]);
 
   return {
     login,

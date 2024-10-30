@@ -2,12 +2,9 @@ import { useCallback } from "react";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { RootState } from "@/services/redux/store/store"; // Adjust this import based on your Redux setup
 import { useAppSelector } from "@/services/redux/hooks";
+import Cookies from "js-cookie";
 
 interface ApiHook {
-  csrf: <T = any>(
-    url: string,
-    config?: AxiosRequestConfig
-  ) => Promise<AxiosResponse<T>>;
   get: <T = any>(
     url: string,
     config?: AxiosRequestConfig
@@ -31,7 +28,7 @@ interface ApiHook {
 export const useApi = (): ApiHook => {
   const token = useAppSelector((state: RootState) => state.auth.token);
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
-  const path = "/" + process.env.NEXT_PUBLIC_API_SUFFIX;
+  const path = process.env.NEXT_PUBLIC_API_SUFFIX;
 
   const instance = axios.create({
     baseURL,
@@ -48,7 +45,6 @@ export const useApi = (): ApiHook => {
     [path]
   );
 
-
   instance.interceptors.request.use((config) => {
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
@@ -56,14 +52,18 @@ export const useApi = (): ApiHook => {
     return config;
   });
 
-  const csrf = useCallback(
-    <T = any>(
-      url: string,
-      config?: AxiosRequestConfig
-    ): Promise<AxiosResponse<T>> => {
-      return instance.get<T>(url, config);
+  instance.interceptors.response.use(
+    (response) => {
+      return response;
     },
-    [instance]
+    (error) => {
+      if (error.response.status === 401) {
+        Cookies.remove("token");
+        Cookies.remove("user");
+        (window as any).location.href = "/login";
+      }
+      return Promise.reject(error);
+    }
   );
 
   const get = useCallback(
@@ -109,5 +109,5 @@ export const useApi = (): ApiHook => {
   );
 
   
-  return { csrf, get, post, put, delete: del };
+  return { get, post, put, delete: del };
 };

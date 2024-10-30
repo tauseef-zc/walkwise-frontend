@@ -41,7 +41,7 @@ const MainNav: FC<MainNavProps> = ({ className = "" }) => {
             <SearchDropdown className="flex items-center" />
             <div className="px-1" />
             <ButtonPrimary className="self-center" href="/login">
-              Sign up
+              Sign in
             </ButtonPrimary>
           </div>
 

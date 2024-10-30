@@ -1,34 +1,14 @@
-"use client";
 import BackgroundSection from "@/components/common/partials/BackgroundSection";
 import GlassBackground from "@/components/home/GlassBackground";
 import SectionSliderNewCategories from "@/components/home/sections/SectionSliderNewCategories";
-import SectionSubscribe2 from "@/components/home/sections/SectionSubscribe2";
-import SectionHeroArchivePage from "@/components/tours/sections/SectionHeroArchivePage";
-import { usePathname } from "next/navigation";
+import SectionSubscribe from "@/components/home/sections/SectionSubscribe";
 import React, { ReactNode } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
-  const path = usePathname();
-  let regex = /\/tours\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)/i;
-
-  if (regex.test(path)) {
-    return <>{children}</>;
-  }
 
   return (
     <div className={`nc-ListingStayPage relative `}>
       <GlassBackground />
-      <div className="container pt-10 pb-10 lg:pt-16 lg:pb-10">
-        <SectionHeroArchivePage
-          currentPage="Experiences"
-          listingType={
-            <>
-              <i className="text-2xl las la-umbrella-beach"></i>
-              <span className="ml-2.5">1599 tours</span>
-            </>
-          }
-        />
-      </div>
 
       {children}
 
@@ -44,7 +24,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           />
         </div>
 
-        <SectionSubscribe2 className="py-24 lg:py-28" />
+        <SectionSubscribe className="py-24 lg:py-28" />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Search, Close } from "./Icons";
 
 interface TagProps {
@@ -11,11 +11,11 @@ interface TagProps {
 const TagsDropdown = ({
   options,
   placeHolder,
-  selectedItems,
+  selectedItems = [],
   onItemSelect,
 }: TagProps) => {
   const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState<string[]>(selectedItems ?? []);
+  const [selected, setSelected] = useState<string[]>(selectedItems);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -37,6 +37,12 @@ const TagsDropdown = ({
     if (onItemSelect) onItemSelect(selected);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
+
+  useEffect(() => {
+    if (selectedItems.length > 0) {
+      setSelected(selectedItems);
+    }
+  }, [selectedItems]);
 
   return (
     <>
@@ -113,7 +119,7 @@ const TagsDropdown = ({
 
         {/* Menu's */}
         {menuOpen ? (
-          <div className="card shadow bg-white dark:bg-neutral-900 dark:border dark:border-neutral-800 absolute w-full max-h-52 mt-2 p-1 flex overflow-y-auto scrollbar-thin dark:scrollbar-thin dark:scrollbar-thumb-neutral-700 scrollbar-track-slate-50 scrollbar-thumb-slate-200 rounded-md">
+          <div className="card shadow bg-white dark:bg-neutral-900 dark:border dark:border-neutral-800 absolute z-10 w-full max-h-52 mt-2 p-1 flex overflow-y-auto scrollbar-thin dark:scrollbar-thin dark:scrollbar-thumb-neutral-700 scrollbar-track-slate-50 scrollbar-thumb-slate-200 rounded-md">
             <ul className="w-full">
               {filteredTags?.length ? (
                 filteredTags.map((tag, i) => (
@@ -141,4 +147,4 @@ const TagsDropdown = ({
   );
 };
 
-export default TagsDropdown;
+export default memo(TagsDropdown);

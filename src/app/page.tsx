@@ -1,14 +1,16 @@
 import BackgroundSection from "@/components/common/partials/BackgroundSection";
 import GlassBackground from "@/components/home/GlassBackground";
 import SectionClientSay from "@/components/home/sections/SectionClientSay";
-import SectionGridFeaturePlaces from "@/components/home/sections/SectionGridFeaturePlaces";
+import SectionFeatured from "@/components/home/sections/SectionFeatured";
 import SectionHero from "@/components/home/sections/SectionHero";
 import SectionHowItWork from "@/components/home/sections/SectionHowItWork";
 import SectionOurFeatures from "@/components/home/sections/SectionOurFeatures";
 import SectionSliderNewCategories from "@/components/home/sections/SectionSliderNewCategories";
-import SectionSubscribe2 from "@/components/home/sections/SectionSubscribe2";
+import SectionSubscribe from "@/components/home/sections/SectionSubscribe";
 
 export default function Home() {
+
+
   return (
     <main className="nc-PageHome relative overflow-hidden">
       <GlassBackground />
@@ -16,13 +18,13 @@ export default function Home() {
         <SectionHero />
         <SectionSliderNewCategories />
         <SectionOurFeatures />
-        <SectionGridFeaturePlaces cardType="card1" />
+        <SectionFeatured />
         <SectionHowItWork />
         <div className="relative py-16">
           <BackgroundSection className="bg-orange-50 dark:bg-black dark:bg-opacity-20 " />
           <SectionClientSay />
         </div>
-        <SectionSubscribe2 />
+        <SectionSubscribe />
       </div>
     </main>
   );

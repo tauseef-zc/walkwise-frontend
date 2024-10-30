@@ -1,21 +1,19 @@
 import { logout } from "@/lib/api";
-import { cookies } from "next/headers";
-
+import Cookies from "js-cookie";
 
 export async function GET() {
   try {
-    const token = cookies().get("token")?.value;
+    const token = Cookies.get("token");
 
-    if(token){
-        cookies().delete("token");
-        cookies().delete("user");
-        await logout(token);
+    if (token) {
+      Cookies.remove("token");
+      Cookies.remove("user");
+      await logout(token);
     }
 
     return new Response("logged out", {
-      status: 200
+      status: 200,
     });
-
   } catch (error: any) {
     return new Response(JSON.stringify(error.response.data), {
       status: error.response.status,

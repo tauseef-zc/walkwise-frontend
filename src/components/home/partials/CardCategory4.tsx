@@ -3,20 +3,21 @@ import { TaxonomyType } from "@/data/types";
 import convertNumbThousand from "@/utils/convertNumbThousand";
 import Link from "next/link";
 import Image from "next/image";
+import { ICategory } from "@/services/redux/reducers/slices/TourCategorySlice";
 
 export interface CardCategory4Props {
   className?: string;
-  taxonomy: TaxonomyType;
+  taxonomy: ICategory;
 }
 
 const CardCategory4: FC<CardCategory4Props> = ({
   className = "",
   taxonomy,
 }) => {
-  const { count, name, href = "/", thumbnail, listingType } = taxonomy;
+  const { count, category, slug = "/", image } = taxonomy;
   return (
     <Link
-      href={href}
+      href={slug}
       className={`nc-CardCategory4 flex flex-col ${className}`}
       data-nc-id="CardCategory4"
     >
@@ -24,7 +25,7 @@ const CardCategory4: FC<CardCategory4Props> = ({
         className={`flex-shrink-0 relative w-full aspect-w-5 aspect-h-5 sm:aspect-h-6 h-0 rounded-2xl overflow-hidden group`}
       >
         <Image
-          src={thumbnail || ""}
+          src={image || ""}
           className="object-cover w-full h-full rounded-2xl"
           fill
           alt="archive"
@@ -36,16 +37,13 @@ const CardCategory4: FC<CardCategory4Props> = ({
         <h2
           className={`text-base sm:text-lg text-neutral-900 dark:text-neutral-100 font-medium truncate`}
         >
-          {name}
+          {category}
         </h2>
         <span
           className={`block mt-2 text-sm text-neutral-6000 dark:text-neutral-400`}
         >
           {convertNumbThousand(count || 0)}
-          {` `}
-          {(!listingType || listingType === "stay") && "properties"}
-          {listingType === "car" && "cars"}
-          {listingType === "experiences" && "experiences"}
+          {` tours`}
         </span>
       </div>
     </Link>

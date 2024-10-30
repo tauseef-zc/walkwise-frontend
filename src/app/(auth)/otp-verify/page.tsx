@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/services/redux/hooks";
 import { toast } from "react-toastify";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
+import ButtonPrimary from "@/components/shared/ButtonPrimary";
 
 const OtpScreen = ({ searchParams }: { searchParams: any }) => {
   const { isAuthenticated, onboarding, verified } = useAppSelector(
@@ -58,13 +59,13 @@ const OtpScreen = ({ searchParams }: { searchParams: any }) => {
         verify_email: true,
       })
         .then((response) => {
-          setLoading(false);
           setError("");
-          router.replace("/login");
-          toast("You account is verified, Please login to continue.", {
+          toast("You account is verified, Please complete your profile.", {
             type: "success",
             theme: localStorage.getItem("theme") === "dark" ? "dark" : "light",
           });
+          setLoading(false);
+          router.replace("/dashboard");
         })
         .catch((error) => {
           setLoading(false);
@@ -93,12 +94,6 @@ const OtpScreen = ({ searchParams }: { searchParams: any }) => {
         });
     }
   };
-
-  if (verified && isAuthenticated && onboarding) {
-    redirect("/onboarding");
-  } else if (verified && isAuthenticated && !onboarding) {
-    redirect("/dashboard");
-  }
 
   return (
     <div className={`nc-PageLogin`}>
@@ -131,14 +126,13 @@ const OtpScreen = ({ searchParams }: { searchParams: any }) => {
                 />
               ))}
           </div>
-          <div className="max-w-[260px] mx-auto mt-8">
-            <button
-              disabled={loading}
+          <div className="max-w-[260px] mx-auto mt-8 text-center justify-center">
+            <ButtonPrimary
+              loading={loading}
               type="submit"
-              className="w-full inline-flex justify-center whitespace-nowrap rounded-lg bg-indigo-500 px-3.5 py-2.5 text-sm font-medium text-white shadow-sm shadow-indigo-950/10 hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-indigo-300 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 transition-colors duration-150"
             >
               Verify Account
-            </button>
+            </ButtonPrimary>
           </div>
           <p className="text-center text-red-500 text-sm mt-10">{error}</p>
         </form>

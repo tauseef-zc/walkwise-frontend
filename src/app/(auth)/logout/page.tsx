@@ -2,7 +2,7 @@
 import { useAuth } from "@/services/app/AuthService";
 import { useAppDispatch, useAppSelector } from "@/services/redux/hooks";
 import { clearCredentials } from "@/services/redux/reducers/slices/AuthSlice";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const Logout = () => {
@@ -14,7 +14,7 @@ const Logout = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.replace("/login");
+      redirect("/login");
     }
   }, [isAuthenticated, router]);
 

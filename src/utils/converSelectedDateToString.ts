@@ -1,4 +1,4 @@
-import { DateRage } from "@/app/(client-components)/type";
+import { DateRage } from "@/types/home";
 
 const converSelectedDateToString = ([startDate, endDate]: DateRage) => {
   const dateString =

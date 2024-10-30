@@ -20,13 +20,13 @@ export const NAVIGATION: NavItemType[] = [
   },
   {
     id: ncNanoId(),
-    href: "/",
+    href: "/about",
     name: "About"
   },
 
   {
     id: ncNanoId(),
-    href: "/",
+    href: "/contact",
     name: "Contact"
   },
 ];

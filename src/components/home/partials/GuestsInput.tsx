@@ -8,29 +8,26 @@ import ClearDataButton from "./ClearDataButton";
 import ButtonSubmit from "./ButtonSubmit";
 import { PathName } from "@/types/router";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
-
-export interface GuestsObject {
-  guestAdults?: number;
-  guestChildren?: number;
-  guestInfants?: number;
-}
+import { GuestsObject } from "@/data/tours";
 
 export interface GuestsInputProps {
   fieldClassName?: string;
   className?: string;
   buttonSubmitHref?: PathName;
   hasButtonSubmit?: boolean;
+  onSearchSubmit?: (data: GuestsObject) => void;
 }
 
 const GuestsInput: FC<GuestsInputProps> = ({
   fieldClassName = "[ nc-hero-field-padding ]",
   className = "[ nc-flex-1 ]",
-  buttonSubmitHref = "/listing-stay-map",
+  buttonSubmitHref = "/tours",
   hasButtonSubmit = true,
+  onSearchSubmit = (data: GuestsObject) => {},
 }) => {
-  const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(2);
-  const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(1);
-  const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(1);
+  const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(1);
+  const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(0);
+  const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(0);
 
   const handleChangeData = (value: number, type: keyof GuestsObject) => {
     let newValue = {
@@ -93,7 +90,11 @@ const GuestsInput: FC<GuestsInputProps> = ({
             {/* BUTTON SUBMIT OF FORM */}
             {hasButtonSubmit && (
               <div className="pr-2 xl:pr-4">
-                <ButtonSubmit href={buttonSubmitHref} />
+                <ButtonSubmit isSubmit={true} onClick={() => onSearchSubmit({
+                  guestAdults: guestAdultsInputValue,
+                  guestChildren: guestChildrenInputValue,
+                  guestInfants: guestInfantsInputValue
+                })} />
               </div>
             )}
           </div>

@@ -5,13 +5,13 @@ import axios from "axios";
 export interface AuthResponse {
   data: {
     user?: User;
-    accessToken?: string;
+    accessToken?: string | object;
   };
 }
 
-const api = axios.create({
+export const api = axios.create({
   baseURL:
-    process.env.NEXT_PUBLIC_API_URL + "/" + process.env.NEXT_PUBLIC_API_SUFFIX,
+    process.env.NEXT_PUBLIC_API_URL + "" + process.env.NEXT_PUBLIC_API_SUFFIX,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",

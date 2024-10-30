@@ -1,6 +1,6 @@
 "use client";
 
-import { PathName } from "@/routers/types";
+import { PathName } from "@/types/router";
 import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";

@@ -6,6 +6,8 @@ import LogoSvg from './LogoSvg';
 
 const Footer = () => {
 
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY ?? "";
+
     const renderWidgetMenuItem = (menu: WidgetFooterMenu, index: number) => {
       return (
         <div key={index} className="text-sm">
@@ -46,6 +48,11 @@ const Footer = () => {
           {widgetMenus.map(renderWidgetMenuItem)}
         </div>
       </div>
+      <script
+        src={`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`}
+        async
+        defer
+      ></script>
     </>
   );
 }

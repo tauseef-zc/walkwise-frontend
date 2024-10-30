@@ -5,11 +5,11 @@ import Badge from "@/components/shared/Badge";
 import Input from "@/components/shared/Input";
 import Image from "next/image";
 
-export interface SectionSubscribe2Props {
+export interface SectionSubscribeProps {
   className?: string;
 }
 
-const SectionSubscribe2: FC<SectionSubscribe2Props> = ({ className = "" }) => {
+const SectionSubscribe: FC<SectionSubscribeProps> = ({ className = "" }) => {
   return (
     <div
       className={`nc-SectionSubscribe2 relative flex flex-col lg:flex-row lg:items-center ${className}`}
@@ -60,4 +60,4 @@ const SectionSubscribe2: FC<SectionSubscribe2Props> = ({ className = "" }) => {
   );
 };
 
-export default SectionSubscribe2;
+export default SectionSubscribe;

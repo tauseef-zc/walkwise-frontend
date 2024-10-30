@@ -2,9 +2,6 @@ import React, { FC } from 'react'
 
 export interface CommonLayoutProps {
   children: React.ReactNode;
-  params: {
-    stepIndex: string;
-  };
 }
 
 const layout: FC<CommonLayoutProps> = ({ children }) => {
@@ -19,10 +16,6 @@ const layout: FC<CommonLayoutProps> = ({ children }) => {
       </div>
     </div>
   );
-}
-
-layout.propTypes = {
-
 }
 
 export default layout

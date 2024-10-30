@@ -5,7 +5,10 @@ import Cookies from "js-cookie";
 export interface User {
   id: number;
   name: string;
+  first_name: string;
+  last_name: string;
   email: string;
+  avatar?: string;
   verified: boolean;
   status: {
     label: string;
@@ -17,11 +20,31 @@ export interface User {
   };
   nationality: string;
   primary_lang: string;
-  other_lang: string;
+  other_lang: string[];
   newsletter: boolean;
   created_at: string;
   updated_at: string;
   onboarding: boolean;
+  user_type: string;
+  resource: {
+    accessibility?: string[];
+    interests?: string[];
+    phone: string;
+    bio?: string;
+    dietary_restrictions?: string;
+    experience?: number;
+    expertise?: string[];
+    has_vehicle?: boolean;
+    documents?: string[];
+    passport_image?: string;
+    nationality: string;
+    emergency_contact?: {
+      name: string;
+      phone: string;
+      email: string;
+    };
+
+  }
 }
 
 export interface AuthState {
@@ -30,14 +53,16 @@ export interface AuthState {
   isAuthenticated: boolean;
   onboarding: boolean;
   verified: boolean;
+  user_type: string;
 }
 
 const initialState: AuthState = {
-  user: null,
+  user: Cookies.get("user") ? JSON.parse(Cookies.get("user")!) : null,
   token: Cookies.get("token") ?? null,
   isAuthenticated: Cookies.get("token") ? true : false,
   onboarding: false,
   verified: false,
+  user_type: "user",
 };
 
 const authSlice = createSlice({
@@ -46,17 +71,22 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (
       state,
-      action: PayloadAction<{ data: { user?: User; accessToken?: string } }>
+      action: PayloadAction<{ user?: User; accessToken?: string }>
     ) => {
-      const { user, accessToken: token } = action.payload.data;
+      const { user, accessToken: token } = action.payload;
       state.user = user ?? state.user;
-      state.verified = user?.verified ?? state.verified;
+      if (state.user) {
+        Cookies.set("user", JSON.stringify(state.user));
+      }
+      
       if(token){
         state.token = token ? token : state.token;
         Cookies.set("token", token);
       }
+      state.verified = user?.verified ?? state.verified;
       state.isAuthenticated = true;
       state.onboarding = user?.onboarding ?? state.onboarding;
+      state.user_type = user?.user_type ?? state.user_type;
     },
     setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
@@ -67,7 +97,10 @@ const authSlice = createSlice({
       state.token = null;
       state.verified = false;
       state.isAuthenticated = false;
+      state.onboarding = true;
+      state.user_type = "user";
       Cookies.remove("token");
+      Cookies.remove("user");
     },
   },
 });
