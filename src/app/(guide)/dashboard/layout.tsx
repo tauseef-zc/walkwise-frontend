@@ -1,5 +1,6 @@
+"use client";
 import { DashboardNav } from "@/components/guide/Nav";
-import React, { FC } from "react";
+import React, { FC, Suspense } from "react";
 
 export interface CommonLayoutProps {
   children?: React.ReactNode;
@@ -11,7 +12,9 @@ const DashboardLayout: FC<CommonLayoutProps> = ({ children }) => {
       <div className="border-b border-neutral-200 dark:border-neutral-700 pt-12 bg-white dark:bg-neutral-800">
         <DashboardNav />
       </div>
-      <div className="container pt-14 sm:pt-20 pb-24 lg:pb-32">{children}</div>
+      <div className="container pt-14 sm:pt-20 pb-24 lg:pb-32">
+        <Suspense>{children}</Suspense>
+      </div>
     </div>
   );
 };

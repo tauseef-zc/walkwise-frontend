@@ -1,15 +1,16 @@
 "use client";
 import { useAuth } from "@/services/app/AuthService";
 import { useAppSelector } from "@/services/redux/hooks";
+import Cookies from "js-cookie";
 import React, { useEffect } from "react";
 
 const AuthCheck = ({ children }: { children: React.ReactNode }) => {
 
   const { checkAuth } = useAuth();
-  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    if ((isAuthenticated || !localStorage.getItem("token")) && user === null) {
+    if (isAuthenticated) {
       checkAuth();
     }
 

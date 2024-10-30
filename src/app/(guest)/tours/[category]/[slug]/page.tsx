@@ -82,7 +82,7 @@ const TourDetail = () => {
       </header>
 
       {/* MAIn */}
-      <main className="relative z-10 mt-11 flex flex-col lg:flex-row ">
+      <main className="relative z-10 mt-11  flex flex-col lg:flex-row pb-24 lg:pb-28">
         {/* CONTENT */}
         <div className="w-full lg:w-3/5 xl:w-2/3 space-y-8 lg:pr-10 lg:space-y-10">
           <TourInfo />
@@ -90,7 +90,7 @@ const TourDetail = () => {
         </div>
 
         {/* SIDEBAR */}
-        <div className="hidden lg:block flex-grow mt-14 lg:mt-0">
+        <div className="hidden lg:block flex-grow mt-14 lg:mt-0 ">
           <div className="sticky top-28">
             <TourSidebar />
           </div>

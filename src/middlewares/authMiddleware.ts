@@ -1,7 +1,15 @@
 import { NextRequest } from "next/server";
 
-export const authPath = ["/dashboard", "/dashboard/create-tour", "/onboarding"];
-export const authGuestPath = ["/login", "/register", "/otp-verify"];
+export const authPath = [
+  "/dashboard", 
+  "/dashboard/create-tour", 
+  "/onboarding"
+];
+export const authGuestPath = [
+  "/login", 
+  "/register", 
+  "/otp-verify"
+];
 
 export const checkAuth = (
   user: any,
@@ -50,7 +58,7 @@ export const checkAuth = (
     if (
       user?.verified === true &&
       user?.onboarding === true &&
-      (pathName.startsWith("/dashboard") || pathName.startsWith("/my-account"))
+      !pathName.startsWith("/onboarding")
     ) {
       return new URL("/onboarding", request.url);
     }

@@ -126,7 +126,7 @@ const OtpScreen = ({ searchParams }: { searchParams: any }) => {
                 />
               ))}
           </div>
-          <div className="max-w-[260px] mx-auto mt-8">
+          <div className="max-w-[260px] mx-auto mt-8 text-center justify-center">
             <ButtonPrimary
               loading={loading}
               type="submit"

@@ -11,6 +11,7 @@ import StoreProvider from "@/services/redux/storeProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthCheck from "@/components/auth/AuthCheck";
+import { cookies } from "next/headers";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -28,6 +29,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const authenticated = cookies().has("token") ?? false;
+
   return (
     <html lang="en" className={poppins.className}>
       <Head>
@@ -36,7 +40,7 @@ export default function RootLayout({
       <StoreProvider>
         <AuthCheck>
           <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
-            <Header className="shadow-sm dark:border-b dark:border-neutral-700" />
+            <Header className="shadow-sm dark:border-b dark:border-neutral-700" logged={authenticated}/>
             {children}
             <Footer />
             <ToastContainer position="top-right" autoClose={2500} />

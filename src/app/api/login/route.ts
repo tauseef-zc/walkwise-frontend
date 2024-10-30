@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { login } from "../../../lib/api";
-import { cookies } from "next/headers";
+import Cookies from "js-cookie";
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,13 +8,11 @@ export async function POST(request: NextRequest) {
     const { email, password } = await request.json();
     const { data } = await login(email, password);
 
-    cookies().set("user", JSON.stringify(data.user));
+    Cookies.set("user", JSON.stringify(data.user));
+    Cookies.set("token", data.accessToken || '');
 
     return new Response(JSON.stringify(data), {
       status: 200,
-      headers: {
-        "Set-Cookie": `token=${data.accessToken}; HttpOnly; Path=/; Max-Age=86400; SameSite=Strict`,
-      },
     });
 
   } catch (error: any) {

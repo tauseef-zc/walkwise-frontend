@@ -1,10 +1,13 @@
 "use client";
+import api from "@/lib/restApi";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AxiosResponse } from "axios";
 
 export interface ICategory {
   id: number;
   category: string;
+  slug: string;
+  image: string;
+  tours_count?: number;
 }
 
 export interface TourCategoryState {
@@ -17,7 +20,7 @@ const initialState: TourCategoryState = {
 
 export const getTourCategory = createAsyncThunk(
   "gettingTourCategories",
-  async (response: Promise<AxiosResponse>) => await response
+  async () => await api.get("/tour-categories")
 );
 
 const tourCategoryProcess = createSlice({
@@ -25,8 +28,8 @@ const tourCategoryProcess = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getTourCategory.fulfilled, (state, action) => {
-      state.data = action.payload.data;
+    builder.addCase(getTourCategory.fulfilled, (state, action: any) => {
+      state.data = action.payload;
     });
   },
 });

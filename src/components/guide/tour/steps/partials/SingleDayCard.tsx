@@ -1,9 +1,10 @@
+import LocationInput, { PlaceResult } from "@/components/inputs/LocationInput";
 import FormItem from "@/components/onboarding/FormItem";
 import ButtonThird from "@/components/shared/ButtonThird";
 import Input from "@/components/shared/Input";
 import Textarea from "@/components/shared/Textarea";
 import React from "react";
-import { FieldError, FieldErrors, UseFormRegister } from "react-hook-form";
+import { FieldError, FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 
 interface ItineraryFormInput {
   tour_days?: {
@@ -11,6 +12,7 @@ interface ItineraryFormInput {
     itinerary: string;
     meal_plan: string;
     accommodation: string;
+    location: PlaceResult;
   }[];
 }
 const SingleDayCard = ({
@@ -18,13 +20,17 @@ const SingleDayCard = ({
   cardId,
   removeAction,
   register,
+  setValue,
   errors,
+  tourData
 }: {
   cardId: number;
   cardIndex: number;
   removeAction: (id: number) => void;
   register: UseFormRegister<ItineraryFormInput>;
+  setValue: UseFormSetValue<ItineraryFormInput>;
   errors: FieldErrors<ItineraryFormInput>;
+  tourData: ItineraryFormInput
 }) => {
   return (
     <div className="p-10 shadow bg-white dark:bg-neutral-800 mb-5">
@@ -73,6 +79,22 @@ const SingleDayCard = ({
           placeholder="ex: At Resort"
           {...register(`tour_days.${cardId}.accommodation`, {
             required: "Accommodation is required",
+          })}
+        />
+      </FormItem>
+      <FormItem
+        label="Day Location"
+        className="mb-5"
+        error={errors.tour_days?.[cardId]?.location as FieldError}
+      >
+        <LocationInput
+          type="places"
+          defaultLocation={tourData?.tour_days?.[cardId]?.location}
+          onPlaceSelected={function (location: PlaceResult): void {
+            setValue(`tour_days.${cardId}.location`, location);
+          }}
+          {...register(`tour_days.${cardId}.location`, {
+            required: "Location is required",
           })}
         />
       </FormItem>

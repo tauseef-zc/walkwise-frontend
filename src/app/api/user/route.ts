@@ -1,13 +1,15 @@
-import { AuthResponse, getUserProfile } from "@/lib/api";
-import { cookies } from "next/headers";
+import { getUserProfile } from "@/lib/api";
+import Cookies from "js-cookie";
+
 
 export async function GET() {
   try {
-    const token = cookies().get("token")?.value;
+    const token = Cookies.get("token");
+    console.log({ token });
 
     if (token) {
       const { data } = await getUserProfile(token);
-      cookies().set("user", JSON.stringify(data.user));
+      Cookies.set("user", JSON.stringify(data.user));
       data.accessToken = token;
 
       return new Response(JSON.stringify({data}), {

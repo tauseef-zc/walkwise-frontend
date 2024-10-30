@@ -70,6 +70,7 @@ const Avatar: FC<AvatarProps> = ({
           className={`absolute inset-0 w-full h-full object-cover ${radius}`}
           src={url}
           alt={name}
+          sizes="(max-width: 400px) 100vw, 400px"
           fill
         />
       )}

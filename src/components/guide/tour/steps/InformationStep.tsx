@@ -13,14 +13,17 @@ import {
 import { useApi } from "@/hooks/useApi";
 import { IFormInput } from "../TourCreateForm";
 import { AxiosResponse } from "axios";
+import LocationInput, { PlaceResult } from "@/components/inputs/LocationInput";
+import useTourCategory from "@/services/redux/actions/useTourCategory";
 
-interface IInformationFormInput extends IFormInput{
+interface IInformationFormInput extends IFormInput {
   title?: string;
+  location?: PlaceResult;
   overview?: string;
   tour_category_id?: number;
   price?: number;
-  start_point?: string;
-  end_point?: string;
+  start_point?: PlaceResult;
+  end_point?: PlaceResult;
   max_packs?: number;
   inclusions?: string;
   exclusions?: string;
@@ -34,30 +37,19 @@ const StepInformation = ({
   tourData: IInformationFormInput;
   onSubmitAction: (data: IInformationFormInput) => void;
 }) => {
-  const dispatch = useAppDispatch();
-  const { get } = useApi();
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
   } = useForm<IInformationFormInput>({
     defaultValues: tourData,
   });
   const onSubmit = (formData: IInformationFormInput) => {
+    console.log(formData);
     onSubmitAction(formData);
   };
-  const { data: categories } = useAppSelector(
-    (state) => state.site_data.categories
-  );
-
-  const getCategories = () => {
-    return getTourCategory(get<AxiosResponse>("/tour-categories"));
-  }
-  useEffect(() => {
-    if (categories.length === 0) {
-      dispatch(getCategories());
-    }
-  }, []);
+  const { categories } = useTourCategory();
 
   return (
     <>
@@ -70,6 +62,22 @@ const StepInformation = ({
           <Input
             placeholder="Ex: Colombo Tour 3 days / 2 nights"
             {...register("title", { required: "Title is required" })}
+          />
+        </FormItem>
+        <FormItem
+          label="Primary Tour Location"
+          className="mb-5"
+          error={errors.location as FieldError}
+        >
+          <LocationInput
+            placeholder="Tour based on location. Ex: Galle"
+            defaultLocation={tourData.location}
+            onPlaceSelected={function (location: PlaceResult): void {
+              setValue("location", location);
+            }}
+            {...register("location", {
+              required: "Primary location is required",
+            })}
           />
         </FormItem>
         <FormItem
@@ -116,10 +124,15 @@ const StepInformation = ({
           className="mb-5"
           error={errors.start_point as FieldError}
         >
-          <Input
-            placeholder="Ex: Airport"
+          <LocationInput
+            type="places"
+            placeholder="Ex: Bandaranayake Airport"
+            defaultLocation={tourData.location}
+            onPlaceSelected={function (location: PlaceResult): void {
+              setValue("start_point", location);
+            }}
             {...register("start_point", {
-              required: "Start Location is required",
+              required: "Please enter a tour Starting Location",
             })}
           />
         </FormItem>
@@ -128,10 +141,15 @@ const StepInformation = ({
           className="mb-5"
           error={errors.end_point as FieldError}
         >
-          <Input
-            placeholder="Ex: Customer Hotel / Airport"
+          <LocationInput
+            type="places"
+            placeholder="Ex: Colombo, Sri Lanka"
+            defaultLocation={tourData.location}
+            onPlaceSelected={function (location: PlaceResult): void {
+              setValue("end_point", location);
+            }}
             {...register("end_point", {
-              required: "End Location is required",
+              required: "Please enter a tour Ending Location",
             })}
           />
         </FormItem>

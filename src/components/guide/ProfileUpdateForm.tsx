@@ -28,11 +28,10 @@ interface IFormInput {
 
 const ProfileUpdateForm: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [isClient, setIsClient] = useState(false);
   const { createGuide } = useGuide();
   const { user } = useAppSelector((state) => state.auth);
-  const { first_name, last_name, gender, email, primary_lang, other_lang } = {
-    ...user,
-  };
+  const { first_name, last_name, gender, email, primary_lang, other_lang } = {...user};
   const {
     expertise,
     bio,
@@ -95,7 +94,11 @@ const ProfileUpdateForm: FC = () => {
     }
   }, [user, setValue]);
 
-  return (
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  return isClient && (
     <form method="POST" onSubmit={handleSubmit(handleFormSubmit)}>
       <FormItem
         label="First Name"

@@ -15,6 +15,7 @@ interface DateFormat {
   tour_dates?: ITourDate[];
 }
 const DateRangeCard = ({
+  dates,
   cardId,
   cardIndex,
   onCardRemoved,
@@ -23,6 +24,7 @@ const DateRangeCard = ({
   setValue,
   errors,
 }: {
+  dates?: ITourDate;
   cardId: number;
   cardIndex: number;
   onCardRemoved: (id: number) => void;
@@ -66,6 +68,7 @@ const DateRangeCard = ({
       </div>
       <div className={`${open ? "block" : "hidden"}`}>
         <DatesRangeInput
+          defaultValue={dates}
           onChangeAction={(data) => {
             setValue(`tour_dates.${cardId}`, data);
           }}

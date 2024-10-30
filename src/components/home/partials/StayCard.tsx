@@ -1,39 +1,35 @@
 import React, { FC } from "react";
-import { DEMO_STAY_LISTINGS } from "@/data/listings";
-import { StayDataType } from "@/data/types";
 import StartRating from "./StartRating";
 import BtnLikeIcon from "./BtnLikeIcon";
 import SaleOffBadge from "./SaleOffBadge";
 import Badge from "@/components/shared/Badge";
 import Link from "next/link";
 import GallerySlider from "./GallerySlider";
+import { FeaturedTour, Tour } from "@/data/tours";
 
 export interface StayCardProps {
   className?: string;
-  data?: StayDataType;
+  data: Tour | FeaturedTour;
   size?: "default" | "small";
 }
-
-const DEMO_DATA = DEMO_STAY_LISTINGS[0];
 
 const StayCard: FC<StayCardProps> = ({
   size = "default",
   className = "",
-  data = DEMO_DATA,
+  data,
 }) => {
   const {
-    galleryImgs,
-    listingCategory,
-    posted_by,
+    images,
+    category,
     title,
-    days,
-    href,
+    slug,
     like,
     saleOff,
     isAds,
     price,
     reviewStart,
     reviewCount,
+    guide,
     id,
   } = data;
 
@@ -43,8 +39,8 @@ const StayCard: FC<StayCardProps> = ({
         <GallerySlider
           uniqueID={`StayCard_${id}`}
           ratioClass="aspect-w-4 aspect-h-3 "
-          galleryImgs={galleryImgs}
-          href={href}
+          galleryImgs={images}
+          href={"tours/" + category.slug + "/" + slug}
           galleryClass={size === "default" ? undefined : ""}
         />
         <BtnLikeIcon isLiked={like} className="absolute right-3 top-3 z-[1]" />
@@ -57,9 +53,12 @@ const StayCard: FC<StayCardProps> = ({
     return (
       <div className={size === "default" ? "p-4 space-y-4" : "p-3 space-y-1"}>
         <div className={size === "default" ? "space-y-2" : "space-y-1"}>
-          <span className="text-sm text-neutral-500 dark:text-neutral-400">
-            {listingCategory.name} · {days}
-          </span>
+          <Link
+            href={"tours/" + category.slug}
+            className="text-sm text-neutral-500 dark:text-neutral-400"
+          >
+            {category.category}
+          </Link>
           <div className="flex items-center space-x-2">
             {isAds && <Badge name="ADS" color="green" />}
             <h2
@@ -67,19 +66,21 @@ const StayCard: FC<StayCardProps> = ({
                 size === "default" ? "text-base" : "text-base"
               }`}
             >
-              <span className="line-clamp-1">{title}</span>
+              <Link href={"tours/" + category.slug + "/" + slug}>
+                <span className="line-clamp-1">{title}</span>
+              </Link>
             </h2>
           </div>
           <div className="flex items-center text-neutral-500 dark:text-neutral-400 text-sm space-x-1.5">
             <i className="las la-user-circle"></i>
-            <span className="">
-              {posted_by}
-            </span>
+            <span className="">{guide.name}</span>
           </div>
         </div>
         <div className="w-14 border-b border-neutral-100 dark:border-neutral-800"></div>
         <div className="flex justify-between items-center">
-          <span className="text-base font-semibold">{price}</span>
+          <Link href={"tours/" + category.slug + "/" + slug}>
+            <span className="text-base font-semibold">{price}</span>
+          </Link>
           {!!reviewStart && (
             <StartRating reviewCount={reviewCount} point={reviewStart} />
           )}
@@ -98,7 +99,7 @@ const StayCard: FC<StayCardProps> = ({
       data-nc-id="StayCard"
     >
       {renderSliderGallery()}
-      <Link href={href}>{renderContent()}</Link>
+      <div>{renderContent()}</div>
     </div>
   );
 };

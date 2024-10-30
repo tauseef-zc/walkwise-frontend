@@ -1,5 +1,6 @@
 "use client";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
 export interface User {
   id: number;
@@ -56,9 +57,9 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: null,
-  token: localStorage.getItem("token") ?? null,
-  isAuthenticated: localStorage.getItem("token") ? true : false,
+  user: Cookies.get("user") ? JSON.parse(Cookies.get("user")!) : null,
+  token: Cookies.get("token") ?? null,
+  isAuthenticated: Cookies.get("token") ? true : false,
   onboarding: false,
   verified: false,
   user_type: "user",
@@ -70,15 +71,19 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (
       state,
-      action: PayloadAction<{ data: { user?: User; accessToken?: string } }>
+      action: PayloadAction<{ user?: User; accessToken?: string }>
     ) => {
-      const { user, accessToken: token } = action.payload.data;
+      const { user, accessToken: token } = action.payload;
       state.user = user ?? state.user;
-      state.verified = user?.verified ?? state.verified;
+      if (state.user) {
+        Cookies.set("user", JSON.stringify(state.user));
+      }
+      
       if(token){
         state.token = token ? token : state.token;
-        localStorage.setItem("token", token);
+        Cookies.set("token", token);
       }
+      state.verified = user?.verified ?? state.verified;
       state.isAuthenticated = true;
       state.onboarding = user?.onboarding ?? state.onboarding;
       state.user_type = user?.user_type ?? state.user_type;
@@ -94,7 +99,8 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.onboarding = true;
       state.user_type = "user";
-      localStorage.removeItem("token");
+      Cookies.remove("token");
+      Cookies.remove("user");
     },
   },
 });

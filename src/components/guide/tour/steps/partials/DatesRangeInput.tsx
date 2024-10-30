@@ -9,15 +9,17 @@ export interface DatesRangeInputProps {
   className?: string;
   title?: string;
   onChangeAction?: (data: { from: Date | null; to: Date | null }) => void;
+  defaultValue?: { from: Date | null; to: Date | null };
 }
 
 const DatesRangeInput: FC<DatesRangeInputProps> = ({
   title,
   className = "",
   onChangeAction,
+  defaultValue = { from: new Date(), to: new Date() },
 }) => {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(defaultValue.from);
+  const [endDate, setEndDate] = useState<Date | null>(defaultValue.to);
 
   const onChangeDate = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;

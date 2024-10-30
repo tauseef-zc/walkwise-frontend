@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 import { FC, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { XMarkIcon } from "@heroicons/react/24/solid";
@@ -60,7 +62,6 @@ const ImageUploader: FC<IImageUploadProps> = ({ onUpload }) => {
         <img
           src={file.preview}
           className="block w-full h-full object-cover"
-          // Revoke data uri after image is loaded
           onLoad={() => {
             URL.revokeObjectURL(file.preview ?? "");
           }}
@@ -71,6 +72,7 @@ const ImageUploader: FC<IImageUploadProps> = ({ onUpload }) => {
 
    useEffect(() => {
     onUpload(files);
+   // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [files]);
 
   useEffect(() => {

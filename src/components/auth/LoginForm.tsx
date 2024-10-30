@@ -1,17 +1,18 @@
 "use client";
+import ButtonPrimary from "@/components/shared/ButtonPrimary";
+import Input from "@/components/shared/Input";
+import Link from "next/link";
 import { useAuth } from "@/services/app/AuthService";
 import { LoginFormInput, LoginRequestError } from "@/types/formData";
 import { setCredentials } from "@/services/redux/reducers/slices/AuthSlice";
 import { toast } from "react-toastify";
-import ButtonPrimary from "@/components/shared/ButtonPrimary";
-import Input from "@/components/shared/Input";
 import { useForm } from "react-hook-form";
-import { useAppDispatch } from "@/services/redux/hooks";
-import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/services/redux/hooks";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 const LoginForm = () => {
+  const { isAuthenticated, user } = useAppSelector((state: any) => state.auth);
   const dispatch = useAppDispatch();
   const { replace } = useRouter();
   const [serverError, setServerError] = useState(
@@ -31,10 +32,13 @@ const LoginForm = () => {
 
     await login(data.email, data.password)
       .then((res) => {
-        dispatch(setCredentials({ data: res }));
-        toast("Welcome, " + res.user.name + "! Your login was successful", {
-          type: "success",
-        });
+        dispatch(setCredentials(res.data));
+        toast(
+          "Welcome, " + res.data?.user?.name + "! Your login was successful",
+          {
+            type: "success",
+          }
+        );
         setLoading(false);
       })
       .catch((error) => {
@@ -51,6 +55,22 @@ const LoginForm = () => {
         }
       });
   };
+
+  useEffect(() => {
+    if (isAuthenticated && user !== null && !user.verified) {
+      replace("/otp-verify?email=" + user.email);
+    }
+
+    if (isAuthenticated && user !== null && user.onboarding) {
+      replace("/onboarding");
+    }
+
+    if (isAuthenticated && user !== null && user.verified && !user.onboarding) {
+      const redirect =
+        user.user_type === "traveler" ? "/my-account" : "/dashboard";
+      replace(redirect);
+    }
+  }, [isAuthenticated, user, replace]);
 
   return (
     <form

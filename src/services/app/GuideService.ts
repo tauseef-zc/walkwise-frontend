@@ -1,5 +1,4 @@
 import { useApi } from "@/hooks/useApi";
-import { useAppDispatch } from "../redux/hooks";
 
 export const useGuide = () => {
     const api = useApi();

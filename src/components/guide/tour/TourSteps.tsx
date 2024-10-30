@@ -14,7 +14,7 @@ const TourSteps = ({
   currentStep: number;
 }) => {
   return (
-    <ol className="items-center justify-evenly w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse mb-10 p-5 border border-gray-200 dark:border-gray-700">
+    <ol className="items-center justify-evenly w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse mb-10 p-5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-neutral-800">
       {steps.map((step, index) => (
         <li
           className={

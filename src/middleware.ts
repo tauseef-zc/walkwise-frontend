@@ -19,3 +19,14 @@ export function middleware(request: NextRequest) {
 
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: [
+    "/dashboard/:path*",
+    "/my-account/:path*",
+    "/login",
+    "/register",
+    "/otp-verify",
+    "/onboarding",
+  ],
+};

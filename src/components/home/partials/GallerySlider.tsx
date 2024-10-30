@@ -8,10 +8,13 @@ import { useSwipeable } from "react-swipeable";
 import { variants } from "@/utils/animationVariants";
 import Link from "next/link";
 import { Route } from "@/types/router";
+import { TourImages } from "@/data/tours";
+import { getImage } from "@/lib/assets";
+import { getRoute } from "@/lib/urls";
 
 export interface GallerySliderProps {
   className?: string;
-  galleryImgs: (StaticImageData | string)[];
+  galleryImgs: TourImages[];
   ratioClass?: string;
   uniqueID: string;
   href?: Route<string>;
@@ -25,7 +28,6 @@ export default function GallerySlider({
   galleryImgs,
   ratioClass = "aspect-w-4 aspect-h-3",
   imageClass = "",
-  uniqueID = "uniqueID",
   galleryClass = "rounded-xl",
   href = "/listing-stay-detail",
   navigation = true,
@@ -74,7 +76,7 @@ export default function GallerySlider({
         {/* Main image */}
         <div className={`w-full overflow-hidden ${galleryClass}`}>
           <Link
-            href={href}
+            href={getRoute(href)}
             className={`relative flex items-center justify-center ${ratioClass}`}
           >
             <AnimatePresence initial={false} custom={direction}>
@@ -88,7 +90,7 @@ export default function GallerySlider({
                 className="absolute inset-0"
               >
                 <Image
-                  src={currentImage || ""}
+                  src={getImage(currentImage.thumbnail) || ""}
                   fill
                   alt="listing card gallery"
                   className={`object-cover ${imageClass}`}

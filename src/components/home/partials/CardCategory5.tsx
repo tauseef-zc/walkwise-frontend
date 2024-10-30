@@ -1,19 +1,19 @@
 import React, { FC } from "react";
-import { TaxonomyType } from "@/data/types";
 import convertNumbThousand from "@/utils/convertNumbThousand";
 import Link from "next/link";
 import Image from "next/image";
+import { ICategory } from "@/services/redux/reducers/slices/TourCategorySlice";
 
 export interface CardCategory5Props {
   className?: string;
-  taxonomy: TaxonomyType;
+  taxonomy: ICategory;
 }
 
 const CardCategory5: FC<CardCategory5Props> = ({
   className = "",
   taxonomy,
 }) => {
-  const { count, name, href = "/", thumbnail } = taxonomy;
+  const { count, category:name, slug: href = "/", image: thumbnail } = taxonomy;
   return (
     <Link
       href={href}

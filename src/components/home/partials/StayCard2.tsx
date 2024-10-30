@@ -1,31 +1,28 @@
 import React, { FC } from "react";
 import GallerySlider from "./GallerySlider";
-import { DEMO_STAY_LISTINGS } from "@/data/listings";
-import { StayDataType } from "@/data/types";
 import StartRating from "./StartRating";
 import BtnLikeIcon from "./BtnLikeIcon";
 import SaleOffBadge from "./SaleOffBadge";
 import Badge from "@/components/shared/Badge";
 import Link from "next/link";
+import { FeaturedTour, Tour } from "@/data/tours";
 
 export interface StayCard2Props {
   className?: string;
-  data?: StayDataType;
+  data: Tour | FeaturedTour;
   size?: "default" | "small";
 }
-
-const DEMO_DATA = DEMO_STAY_LISTINGS[0];
 
 const StayCard2: FC<StayCard2Props> = ({
   size = "default",
   className = "",
-  data = DEMO_DATA,
+  data,
 }) => {
   const {
-    galleryImgs,
-    listingCategory,
+    images,
+    category,
     title,
-    href,
+    slug,
     like,
     saleOff,
     isAds,
@@ -41,9 +38,9 @@ const StayCard2: FC<StayCard2Props> = ({
         <GallerySlider
           uniqueID={`StayCard2_${id}`}
           ratioClass="aspect-w-12 aspect-h-11"
-          galleryImgs={galleryImgs}
+          galleryImgs={images}
           imageClass="rounded-lg"
-          href={href}
+          href={slug}
         />
         <BtnLikeIcon isLiked={like} className="absolute right-3 top-3 z-[1]" />
         {saleOff && <SaleOffBadge className="absolute left-3 top-3" />}
@@ -56,7 +53,7 @@ const StayCard2: FC<StayCard2Props> = ({
       <div className={size === "default" ? "mt-3 space-y-3" : "mt-2 space-y-2"}>
         <div className="space-y-2">
           <span className="text-sm text-neutral-500 dark:text-neutral-400">
-            {listingCategory.name} · 
+            {category.category}
           </span>
           <div className="flex items-center space-x-2">
             {isAds && <Badge name="ADS" color="green" />}
@@ -71,15 +68,7 @@ const StayCard2: FC<StayCard2Props> = ({
         </div>
         <div className="w-14 border-b border-neutral-100 dark:border-neutral-800"></div>
         <div className="flex justify-between items-center">
-          <span className="text-base font-semibold">
-            {price}
-            {` `}
-            {size === "default" && (
-              <span className="text-sm text-neutral-500 dark:text-neutral-400 font-normal">
-                /night
-              </span>
-            )}
-          </span>
+          <span className="text-base font-semibold">{price}</span>
           {!!reviewStart && (
             <StartRating reviewCount={reviewCount} point={reviewStart} />
           )}
@@ -91,7 +80,7 @@ const StayCard2: FC<StayCard2Props> = ({
   return (
     <div className={`nc-StayCard2 group relative ${className}`}>
       {renderSliderGallery()}
-      <Link href={href}>{renderContent()}</Link>
+      <Link href={slug}>{renderContent()}</Link>
     </div>
   );
 };

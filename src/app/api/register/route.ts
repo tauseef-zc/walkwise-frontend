@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { register } from "../../../lib/api";
-import { cookies } from "next/headers";
+import Cookies from "js-cookie";
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     
     const { data } = await register(payload);
 
-    cookies().set("user", JSON.stringify(data.user));
+    Cookies.set("user", JSON.stringify(data.user));
 
     return new Response(JSON.stringify(data), {
       status: 200,

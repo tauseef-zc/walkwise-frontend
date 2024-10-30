@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { RootState } from "@/services/redux/store/store"; // Adjust this import based on your Redux setup
 import { useAppSelector } from "@/services/redux/hooks";
+import Cookies from "js-cookie";
 
 interface ApiHook {
   get: <T = any>(
@@ -27,7 +28,7 @@ interface ApiHook {
 export const useApi = (): ApiHook => {
   const token = useAppSelector((state: RootState) => state.auth.token);
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
-  const path = "/" + process.env.NEXT_PUBLIC_API_SUFFIX;
+  const path = process.env.NEXT_PUBLIC_API_SUFFIX;
 
   const instance = axios.create({
     baseURL,
@@ -50,6 +51,20 @@ export const useApi = (): ApiHook => {
     }
     return config;
   });
+
+  instance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      if (error.response.status === 401) {
+        Cookies.remove("token");
+        Cookies.remove("user");
+        (window as any).location.href = "/login";
+      }
+      return Promise.reject(error);
+    }
+  );
 
   const get = useCallback(
     <T = any>(

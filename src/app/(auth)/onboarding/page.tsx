@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 
 const cardStyle =
-  "flex flex-col items-center gap-3 p-6 bg-white dark:bg-gray-800 hover:cursor-pointer";
+  "flex flex-col items-center gap-3 p-6 hover:cursor-pointer";
 
 const OnBoarding = () => {
   const { step, data } = useAppSelector((state) => state.onboarding);
@@ -52,7 +52,7 @@ const OnBoarding = () => {
                 className={
                   cardStyle +
                   (data.role === "traveler"
-                    ? "cursor-pointer border border-blue-700 dark:border-gray-700 rounded-lg shadow-lg text-blue-700 transition-all"
+                    ? "cursor-pointer border border-blue-700 rounded-lg shadow-lg text-blue-700 transition-all"
                     : "")
                 }
               >
@@ -61,18 +61,18 @@ const OnBoarding = () => {
                   height={100}
                   className={
                     data.role === "traveler"
-                      ? "fill-blue-700 dark:fill-white"
+                      ? "fill-blue-700"
                       : "dark:fill-white hover:animate-pulse"
                   }
                 />
-                <p className="text-regular dark:text-white">Traveler</p>
+                <p className="text-regular">Traveler</p>
               </div>
               <div
                 onClick={() => handleRole("guide")}
                 className={
                   cardStyle +
                   (data.role === "guide"
-                    ? "cursor-pointer border border-blue-700 dark:border-gray-700 rounded-lg shadow-lg text-blue-700 transition-all"
+                    ? "cursor-pointer border border-blue-700 rounded-lg shadow-lg text-blue-700 transition-all"
                     : "")
                 }
               >
@@ -81,11 +81,11 @@ const OnBoarding = () => {
                   height={100}
                   className={
                     data.role === "guide"
-                      ? "fill-blue-700 dark:fill-white"
+                      ? "fill-blue-700"
                       : "dark:fill-white hover:animate-pulse"
                   }
                 />
-                <p className="text-regular dark:text-white">Guide</p>
+                <p className="text-regular">Guide</p>
               </div>
             </div>
           </FormItem>

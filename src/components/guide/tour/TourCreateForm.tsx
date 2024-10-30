@@ -6,6 +6,7 @@ import ItineraryStep from "./steps/ItineraryStep";
 import CompletionStep from "./steps/CompletionStep";
 import { ArrowPathIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
 import { useGuide } from "@/services/app/GuideService";
+import { PlaceResult } from "@/components/inputs/LocationInput";
 
 const tourStepsItems: iTourStep[] = [
   { step: 1, name: "Tour Information", description: "Add Tour Details" },
@@ -13,13 +14,19 @@ const tourStepsItems: iTourStep[] = [
   { step: 3, name: "Completion", description: "Availability and images" },
 ];
 
+interface ValidationError {
+  errors: Array<any>;
+  message: string;
+}
+
 export interface IFormInput {
   title?: string;
   overview?: string;
+  location?: PlaceResult;
   tour_category_id?: number;
   price?: number;
-  start_point?: string;
-  end_point?: string;
+  start_point?: PlaceResult;
+  end_point?: PlaceResult;
   max_packs?: number;
   inclusions?: string;
   exclusions?: string;
@@ -29,6 +36,7 @@ export interface IFormInput {
     itinerary: string;
     meal_plan: string;
     accommodation: string;
+    location: PlaceResult;
   }[];
   tour_dates?: {
     from: Date | null;
@@ -41,13 +49,17 @@ const TourCreateForm = () => {
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
+  const [errors, setErrors] = useState<ValidationError>({} as ValidationError);
   const [data, setData] = useState<IFormInput>({} as IFormInput);
   const { createTour } = useGuide();
 
   const prepareFormItems = (updatedData: IFormInput) => {
     const formData = new FormData();
     Object.entries(updatedData).forEach(([key, value]) => {
-      if (key === "tour_images" && value) {
+      
+      if (["start_point", "end_point", "location"].includes(key)) {
+        formData.append(key, JSON.stringify(value));
+      } else if (key === "tour_images" && value) {
         value.forEach((image: File) =>
           formData.append("tour_images[]", image, image.name)
         );
@@ -62,12 +74,14 @@ const TourCreateForm = () => {
       } else {
         formData.append(key, String(value));
       }
+
     });
     return formData;
   };
 
   const handleNext = (dataItems: IFormInput) => {
     setData((state) => ({ ...state, ...dataItems }));
+    window.scrollTo(0, 0);
     setStep(step + 1);
   };
 
@@ -87,7 +101,6 @@ const TourCreateForm = () => {
     createTour(formData)
       .then((data) => {
         setLoading(false);
-        console.log(data);
         setSuccess(true);
         setTimeout(() => {
             setSuccess(false);
@@ -95,7 +108,11 @@ const TourCreateForm = () => {
             setData({} as IFormInput);
         }, 10000);
       })
-      .catch(() => setLoading(false));
+      .catch((err) => {
+        setStep(3);
+        setLoading(false);
+        setErrors(err.response.data);
+      });
   };
 
   return (
@@ -117,9 +134,11 @@ const TourCreateForm = () => {
       )}
       {step === 3 && (
         <CompletionStep
+          tourData={data}
           onSubmitAction={(data) => handleSubmit(data)}
           onBackAction={handleBack}
           loading={loading}
+          serverErrors={errors}
         />
       )}
 
@@ -135,7 +154,9 @@ const TourCreateForm = () => {
         <div className="flex flex-col items-center justify-center m-16">
           <CheckCircleIcon className="w-24 h-24 text-green-500" />
           <h2 className="text-2xl">Success</h2>
-          <p className="text-sm">Your tour has been created, It will be published soon</p>
+          <p className="text-sm">
+            Your tour has been created, It will be published soon
+          </p>
         </div>
       )}
     </div>

@@ -3,6 +3,7 @@
 import { ClockIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import React, { useState, useRef, useEffect, FC } from "react";
 import ClearDataButton from "./ClearDataButton";
+import { PlaceResult } from "@/components/inputs/LocationInput";
 
 export interface LocationInputProps {
   placeHolder?: string;
@@ -10,6 +11,8 @@ export interface LocationInputProps {
   className?: string;
   divHideVerticalLineClass?: string;
   autoFocus?: boolean;
+  onLocationSelected: (place: PlaceResult) => void;
+  defaultLocation: PlaceResult | null;
 }
 
 const LocationInput: FC<LocationInputProps> = ({
@@ -18,12 +21,18 @@ const LocationInput: FC<LocationInputProps> = ({
   desc = "Where are you going?",
   className = "nc-flex-1.5",
   divHideVerticalLineClass = "left-10 -right-0.5",
+  onLocationSelected,
+  defaultLocation,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [autocomplete, setAutocomplete] =
+    useState<google.maps.places.Autocomplete | null>(null);
 
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<any>(defaultLocation?.address ?? "");
   const [showPopover, setShowPopover] = useState(autoFocus);
+
+  console.log("defaultLocation", defaultLocation);
 
   useEffect(() => {
     setShowPopover(autoFocus);
@@ -45,6 +54,54 @@ const LocationInput: FC<LocationInputProps> = ({
       inputRef.current.focus();
     }
   }, [showPopover]);
+
+  useEffect(() => {
+    const autocompleteInstance = new window.google.maps.places.Autocomplete(
+      inputRef.current as HTMLInputElement,
+      {
+        componentRestrictions: { country: "LK" },
+        fields: [
+          "address_components",
+          "geometry",
+          "name",
+          "place_id",
+          "formatted_address",
+        ],
+        types: ["geocode"],
+      }
+    );
+
+    autocompleteInstance.addListener("place_changed", () => {
+      const place = autocompleteInstance.getPlace();
+      const location: PlaceResult = {
+        placeId: place.place_id,
+        name: place.name,
+        address: place.formatted_address,
+        geocode: {
+          lat: place.geometry?.location?.lat(),
+          lng: place.geometry?.location?.lng(),
+        },
+      };
+      setValue(place.formatted_address ?? "");
+      onLocationSelected(location);
+    });
+
+    setAutocomplete(autocompleteInstance);
+
+    return () => {
+      if (autocomplete) {
+        window.google.maps.event.clearInstanceListeners(autocomplete);
+      }
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (defaultLocation !== null) {
+      setValue(defaultLocation.address);
+    }
+  }, [defaultLocation]);
 
   const eventClickOutsideDiv = (event: MouseEvent) => {
     if (!containerRef.current) return;
@@ -121,7 +178,7 @@ const LocationInput: FC<LocationInputProps> = ({
   return (
     <div className={`relative flex ${className}`} ref={containerRef}>
       <div
-        onClick={() => setShowPopover(true)}
+        // onClick={() => setShowPopover(true)}
         className={`flex z-10 flex-1 relative [ nc-hero-field-padding ] flex-shrink-0 items-center space-x-3 cursor-pointer focus:outline-none text-left  ${
           showPopover ? "nc-hero-field-focused" : ""
         }`}
@@ -134,10 +191,10 @@ const LocationInput: FC<LocationInputProps> = ({
             className={`block w-full bg-transparent border-none focus:ring-0 p-0 focus:outline-none focus:placeholder-neutral-300 xl:text-lg font-semibold placeholder-neutral-800 dark:placeholder-neutral-200 truncate`}
             placeholder={placeHolder}
             value={value}
-            autoFocus={showPopover}
             onChange={(e) => {
-              setValue(e.currentTarget.value);
+              setValue(e.target.value);
             }}
+            autoFocus={showPopover}
             ref={inputRef}
           />
           <span className="block mt-0.5 text-sm text-neutral-400 font-light ">

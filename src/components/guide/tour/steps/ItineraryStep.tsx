@@ -5,6 +5,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import SingleDayCard from "./partials/SingleDayCard";
 import { IFormInput } from "../TourCreateForm";
+import { PlaceResult } from "@/components/inputs/LocationInput";
 
 interface ItineraryFormInput extends IFormInput {
   tour_days?: {
@@ -12,6 +13,7 @@ interface ItineraryFormInput extends IFormInput {
     itinerary: string;
     meal_plan: string;
     accommodation: string;
+    location: PlaceResult;
   }[];
 }
 
@@ -30,6 +32,7 @@ const ItineraryStep = ({
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
   } = useForm<ItineraryFormInput>({
     defaultValues: tourData ?? {},
@@ -49,8 +52,6 @@ const ItineraryStep = ({
     onSubmitAction(dataItems);
   };
 
-  console.log({tourData, cardIds});
-
   return (
     <>
       <form action="POST" onSubmit={handleSubmit(handleNext)}>
@@ -62,7 +63,9 @@ const ItineraryStep = ({
               cardId={cardId}
               removeAction={onCardRemoved}
               register={register}
+              setValue={setValue}
               errors={errors}
+              tourData={tourData}
             />
           ))}
           <div className="flex justify-between">

@@ -103,7 +103,7 @@ const contents: ContentItem[][] = [
 const DashboardTours = () => {
   const { push } = useRouter();
   return (
-    <>
+    <div>
       <div className="flex flex-col md:flex-row items-center justify-between mb-8">
         <div className="flex-grow ">
           <h2 className="text-3xl font-semibold ">Tours</h2>
@@ -218,7 +218,7 @@ const DashboardTours = () => {
           </svg>
         </a>
       </div>
-    </>
+    </div>
   );
 };
 

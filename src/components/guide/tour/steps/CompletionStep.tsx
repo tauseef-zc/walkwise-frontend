@@ -5,8 +5,9 @@ import DateRangeCard from "./partials/DateRangeCard";
 import ImageUploader from "./partials/ImageUploader";
 import Input from "@/components/shared/Input";
 import { useForm } from "react-hook-form";
+import { IFormInput } from "../TourCreateForm";
 
-interface IFinalFormInput {
+interface IFinalFormInput extends IFormInput {
   tour_dates?: {
     from: Date | null;
     to: Date | null;
@@ -14,17 +15,31 @@ interface IFinalFormInput {
   tour_images?: File[];
 }
 const CompletionStep = ({
+  tourData,
   onSubmitAction,
   onBackAction,
   loading = false,
+  serverErrors,
 }: {
+  tourData: IFinalFormInput;
   onSubmitAction: (data: IFinalFormInput) => void;
   onBackAction: (step: number) => void;
   loading?: boolean;
+  serverErrors?: {
+    errors: Array<any>;
+    message: string;
+  };
 }) => {
-  const [cardIds, setCardIds] = React.useState<number[]>([0]);
+  const idCount = tourData.tour_dates?.length ?? 0;
+  const ids: number[] = idCount > 0 ? Array.from(Array(idCount).keys()) : [0];  
+  const [cardIds, setCardIds] = React.useState<number[]>(ids);
   const [openDate, setOpenDate] = React.useState<number>(0);
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<IFinalFormInput>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<IFinalFormInput>();
 
   const onCardRemoved = (cardId: number) => {
     let updatedIds = cardIds.filter((value) => value !== cardId);
@@ -51,6 +66,7 @@ const CompletionStep = ({
             register={register}
             setValue={setValue}
             errors={errors}
+            dates={tourData?.tour_dates?.find((date, id) => id == cardId)}
           />
         ))}
         <ButtonSecondary type="button" onClick={() => onCardAdded()}>
@@ -63,13 +79,15 @@ const CompletionStep = ({
           You can upload up to 10 images
         </p>
         {errors.tour_dates && (
-          <p className="text-sm text-red-500 mb-5">
-            Please upload tour images
-          </p>
+          <p className="text-sm text-red-500 mb-5">Please upload tour images</p>
         )}
         <ImageUploader onUpload={(files) => setValue("tour_images", files)} />
         <Input type="hidden" {...register("tour_images", { required: true })} />
       </div>
+
+      {serverErrors && (
+        <p className="text-sm text-red-500 mb-5">{serverErrors.message}</p>
+      )}
 
       {!loading && (
         <div className="flex justify-between">
