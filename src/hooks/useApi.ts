@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { RootState } from "@/services/redux/store/store"; // Adjust this import based on your Redux setup
 import { useAppSelector } from "@/services/redux/hooks";
-import Cookies from "js-cookie";
+import { deleteCookie } from "cookies-next";
 
 interface ApiHook {
   get: <T = any>(
@@ -58,8 +58,8 @@ export const useApi = (): ApiHook => {
     },
     (error) => {
       if (error.response.status === 401) {
-        Cookies.remove("token");
-        Cookies.remove("user");
+        deleteCookie("token");
+        deleteCookie("user");
         (window as any).location.href = "/login";
       }
       return Promise.reject(error);

@@ -1,15 +1,14 @@
 import { getUserProfile } from "@/lib/api";
-import Cookies from "js-cookie";
+import { getCookie, setCookie } from "cookies-next";
 
 
 export async function GET() {
   try {
-    const token = Cookies.get("token");
-    console.log({ token });
+    const token = getCookie("token");
 
     if (token) {
       const { data } = await getUserProfile(token);
-      Cookies.set("user", JSON.stringify(data.user));
+      setCookie("user", JSON.stringify(data.user));
       data.accessToken = token;
 
       return new Response(JSON.stringify({data}), {

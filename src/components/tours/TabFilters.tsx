@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Popover, Transition } from "@headlessui/react";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import ButtonThird from "@/components/shared/ButtonThird";
@@ -8,54 +8,41 @@ import ButtonClose from "@/components/shared/ButtonClose";
 import Checkbox from "@/components/shared/Checkbox";
 import convertNumbThousand from "@/utils/convertNumbThousand";
 import Slider from "rc-slider";
+import useTourCategory from "@/services/redux/actions/useTourCategory";
+import { ICategory } from "@/services/redux/reducers/slices/TourCategorySlice";
+import { createSearchUrl } from "@/services/server/tourActions";
+import { useRouter } from "next/navigation";
+import { TourProps } from "@/app/(guest)/tours/page";
+import useFilters from "@/utils/filterActions";
 
-// DEMO DATA
-const typeOfExpriences = [
-  {
-    name: "Food & drink",
-    description: "Short description for the experience",
-  },
-  {
-    name: "Art and culture",
-    description: "Short description for the experience",
-  },
-  {
-    name: "Nature and outdoors",
-    description: "Short description for the experience",
-  },
-  {
-    name: "Sports",
-    description: "Short description for the experience",
-  },
-];
+interface FilterType {
+  key: string;
+  value: string;
+}
 
-const timeOfdays = [
-  {
-    name: "Morning",
-    description: "Start before 12pm",
-  },
-  {
-    name: "Afternoon",
-    description: "Start after 12pm",
-  },
-  {
-    name: "Evening",
-    description: "Start after 5pm",
-  },
-];
-
-//
-const moreFilter1 = typeOfExpriences;
-const moreFilter2 = timeOfdays;
-
-const TabFilters = () => {
-  const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
-  //
-  const [isOnSale, setIsOnSale] = useState(true);
-  const [rangePrices, setRangePrices] = useState([0, 1000]);
-  //
-  const closeModalMoreFilter = () => setisOpenMoreFilter(false);
-  const openModalMoreFilter = () => setisOpenMoreFilter(true);
+const TabFilters = ({
+  searchParams,
+  defaultCategory,
+}: {
+  searchParams: TourProps;
+  defaultCategory?: any;
+}) => {
+  const { categories } = useTourCategory();
+  const [isOpenMoreFilter, setIsOpenMoreFilter] = useState(false);
+  
+  const closeModalMoreFilter = () => setIsOpenMoreFilter(false);
+  const openModalMoreFilter = () => setIsOpenMoreFilter(true);
+  const router = useRouter();
+  const {
+    filters,
+    rangePrices,
+    selectedCategories,
+    onFilterRemove,
+    onCategoryChange,
+    clearSelectedCategories,
+    setRangePrices,
+    reset,
+  } = useFilters(categories, router);
 
   const renderXClear = () => {
     return (
@@ -101,77 +88,56 @@ const TabFilters = () => {
               <Popover.Panel className="absolute z-10 w-screen max-w-sm px-4 mt-3 left-0 sm:px-0 lg:max-w-md">
                 <div className="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
                   <div className="relative flex flex-col px-5 py-6 space-y-5">
-                    {typeOfExpriences.map((item) => (
-                      <div key={item.name} className="">
-                        <Checkbox
-                          name={item.name}
-                          label={item.name}
-                          subLabel={item.description}
-                        />
-                      </div>
-                    ))}
+                    {categories.length > 0 &&
+                      categories.map((item) => (
+                        <div key={item.category} className="">
+                          <Checkbox
+                            name={`category-${item.id}`}
+                            label={item.category}
+                            subLabel={item.info}
+                            onChange={() => onCategoryChange(item)}
+                            defaultChecked={
+                              filters.length > 0 &&
+                              filters.find(
+                                (filter) =>
+                                  filter.key === "byCategories" &&
+                                  filter.value === item.category
+                              ) &&
+                              selectedCategories.includes(item)
+                            }
+                          />
+                        </div>
+                      ))}
                   </div>
                   <div className="p-5 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
-                    <ButtonThird onClick={close} sizeClass="px-4 py-2 sm:px-5">
-                      Clear
-                    </ButtonThird>
-                    <ButtonPrimary
-                      onClick={close}
+                    <ButtonThird
+                      onClick={() => {
+                        clearSelectedCategories();
+                        close();
+                      }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Apply
-                    </ButtonPrimary>
-                  </div>
-                </div>
-              </Popover.Panel>
-            </Transition>
-          </>
-        )}
-      </Popover>
-    );
-  };
-
-  const renderTabsTimeOfDay = () => {
-    return (
-      <Popover className="relative">
-        {({ open, close }) => (
-          <>
-            <Popover.Button
-              className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border border-neutral-300 dark:border-neutral-700 hover:border-neutral-400 dark:hover:border-neutral-6000 focus:outline-none ${
-                open ? "!border-primary-500 " : ""
-              }`}
-            >
-              <span>Time of day</span>
-              <i className="las la-angle-down ml-2"></i>
-            </Popover.Button>
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-200"
-              enterFrom="opacity-0 translate-y-1"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition ease-in duration-150"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 translate-y-1"
-            >
-              <Popover.Panel className="absolute z-10 w-screen max-w-sm px-4 mt-3 left-0 sm:px-0 lg:max-w-md">
-                <div className="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-neutral-900   border border-neutral-200 dark:border-neutral-700">
-                  <div className="relative flex flex-col px-5 py-6 space-y-5">
-                    {timeOfdays.map((item) => (
-                      <div key={item.name} className="">
-                        <Checkbox
-                          name={item.name}
-                          label={item.name}
-                          subLabel={item.description}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="p-5 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
-                    <ButtonThird onClick={close} sizeClass="px-4 py-2 sm:px-5">
                       Clear
                     </ButtonThird>
                     <ButtonPrimary
-                      onClick={close}
+                      onClick={() => {
+                        close();
+                        if (selectedCategories.length > 0) {
+                          const categoryIds = selectedCategories.map(
+                            (item) => item.id
+                          );
+                          searchParams.byCategories =
+                            JSON.stringify(categoryIds);
+                          router.push(
+                            `/tours?${createSearchUrl(searchParams)}`
+                          );
+                        } else {
+                          delete searchParams.byCategories;
+                          router.push(
+                            `/tours?${createSearchUrl(searchParams)}`
+                          );
+                        }
+                      }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
                       Apply
@@ -189,17 +155,21 @@ const TabFilters = () => {
   const renderTabsPriceRage = () => {
     return (
       <Popover className="relative">
-        {({ open, close }) => (
+        {({ close }) => (
           <>
             <Popover.Button
-              className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border border-primary-500 bg-primary-50 text-primary-700 focus:outline-none `}
+              className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border border-neutral-300 dark:border-neutral-700 hover:border-neutral-400 dark:hover:border-neutral-6000 focus:outline-none `}
             >
-              <span>
-                {`$${convertNumbThousand(
-                  rangePrices[0]
-                )} - $${convertNumbThousand(rangePrices[1])}`}{" "}
-              </span>
-              {renderXClear()}
+              {rangePrices[0] >= 0 && rangePrices[1] > 0 ? (
+                <span>
+                  {`$${convertNumbThousand(
+                    rangePrices[0]
+                  )} - $${convertNumbThousand(rangePrices[1])}`}{" "}
+                </span>
+              ) : (
+                <span>Price range</span>
+              )}
+              {rangePrices[0] >= 0 && rangePrices[1] > 0 && renderXClear()}
             </Popover.Button>
             <Transition
               as={Fragment}
@@ -214,7 +184,7 @@ const TabFilters = () => {
                 <div className="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
                   <div className="relative flex flex-col px-5 py-6 space-y-8">
                     <div className="space-y-5">
-                      <span className="font-medium">Price per day</span>
+                      <span className="font-medium">Price in USD</span>
                       <Slider
                         range
                         min={0}
@@ -275,11 +245,29 @@ const TabFilters = () => {
                     </div>
                   </div>
                   <div className="p-5 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
-                    <ButtonThird onClick={close} sizeClass="px-4 py-2 sm:px-5">
+                    <ButtonThird
+                      onClick={() => {
+                        close();
+                        setRangePrices([0, 0]);
+                        delete searchParams.minPrice;
+                        delete searchParams.maxPrice;
+                        router.push(`/tours?${createSearchUrl(searchParams)}`);
+                      }}
+                      sizeClass="px-4 py-2 sm:px-5"
+                    >
                       Clear
                     </ButtonThird>
                     <ButtonPrimary
-                      onClick={close}
+                      onClick={() => {
+                        close();
+                        if (rangePrices[0] >= 0 && rangePrices[1] > 0) {
+                          searchParams.minPrice = rangePrices[0];
+                          searchParams.maxPrice = rangePrices[1];
+                          router.push(
+                            `/tours?${createSearchUrl(searchParams)}`
+                          );
+                        }
+                      }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
                       Apply
@@ -294,28 +282,9 @@ const TabFilters = () => {
     );
   };
 
-  const renderTabOnSale = () => {
-    return (
-      <div
-        className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border focus:outline-none cursor-pointer transition-all ${
-          isOnSale
-            ? "border-primary-500 bg-primary-50 text-primary-700"
-            : "border-neutral-300 dark:border-neutral-700"
-        }`}
-        onClick={() => setIsOnSale(!isOnSale)}
-      >
-        <span>On sale</span>
-        {isOnSale && renderXClear()}
-      </div>
-    );
-  };
-
   const renderMoreFilterItem = (
-    data: {
-      name: string;
-      description?: string;
-      defaultChecked?: boolean;
-    }[]
+    data: ICategory[],
+    selectedCategories: ICategory[]
   ) => {
     const list1 = data.filter((_, i) => i < data.length / 2);
     const list2 = data.filter((_, i) => i >= data.length / 2);
@@ -324,22 +293,24 @@ const TabFilters = () => {
         <div className="flex flex-col space-y-5">
           {list1.map((item) => (
             <Checkbox
-              key={item.name}
-              name={item.name}
-              subLabel={item.description}
-              label={item.name}
-              defaultChecked={!!item.defaultChecked}
+              key={`category-${item.id}`}
+              name={`category-${item.id}`}
+              subLabel={item.info}
+              label={item.category}
+              defaultChecked={selectedCategories.includes(item)}
+              onChange={() => onCategoryChange(item)}
             />
           ))}
         </div>
         <div className="flex flex-col space-y-5">
           {list2.map((item) => (
             <Checkbox
-              key={item.name}
-              name={item.name}
-              subLabel={item.description}
-              label={item.name}
-              defaultChecked={!!item.defaultChecked}
+              key={`category-${item.id}`}
+              name={`category-${item.id}`}
+              subLabel={item.info}
+              label={item.category}
+              defaultChecked={selectedCategories.includes(item)}
+              onChange={() => onCategoryChange(item)}
             />
           ))}
         </div>
@@ -415,17 +386,9 @@ const TabFilters = () => {
                           Type of experiences
                         </h3>
                         <div className="mt-6 relative ">
-                          {renderMoreFilterItem(moreFilter1)}
+                          {renderMoreFilterItem(categories, selectedCategories)}
                         </div>
                       </div>
-                      {/* <div className="py-7">
-                        <h3 className="text-xl font-medium">Time of day</h3>
-                        <div className="mt-6 relative ">
-                          {renderMoreFilterItem(moreFilter2)}
-                        </div>
-                      </div> */}
-
-                      {/* --------- */}
                       {/* ---- */}
                       <div className="py-7">
                         <h3 className="text-xl font-medium">Range Prices</h3>
@@ -519,19 +482,69 @@ const TabFilters = () => {
     );
   };
 
+  const filterPills = ({
+    filters,
+    onRemoveFilter,
+  }: {
+    filters: FilterType[];
+    onRemoveFilter: any;
+  }) => {
+    return (
+      <>
+        <div className="border-b border-neutral-200 dark:border-neutral-700 my-5"></div>
+        <h5 className="text-lg font-semibold text-neutral-900 dark:text-neutral-200 mb-4">
+          Active filters
+        </h5>
+        <div className="flex flex-wrap gap-2">
+          {filters.length > 0 && filters.map((filter, index) => (
+            <div
+              key={index}
+              className="bg-blue-100 rounded-full px-4 py-2 flex items-center"
+            >
+              <span className="text-sm text-blue-600">{filter.value}</span>
+              <button
+                className="ml-2 text-gray-400 hover:text-gray-600 transition duration-300"
+                onClick={() => onRemoveFilter(filter)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+          ))}
+        </div>
+      </>
+    );
+  };
+
   return (
-    <div className="flex lg:space-x-4">
-      <div className="hidden lg:flex space-x-4">
-        {renderTabsTypeOfPlace()}
-        {renderTabsPriceRage()}
-        {/* {renderTabsTimeOfDay()}
-        {renderTabOnSale()} */}
+    <>
+      <div className="flex lg:space-x-4">
+        <div className="hidden lg:flex space-x-4">
+          {!defaultCategory && renderTabsTypeOfPlace()}
+          {renderTabsPriceRage()}
+        </div>
+        <div className="flex lg:hidden space-x-4">
+          {renderTabMobileFilter()}
+        </div>
       </div>
-      <div className="flex lg:hidden space-x-4">
-        {renderTabMobileFilter()}
-        {/* {renderTabOnSale()} */}
-      </div>
-    </div>
+      {filters.length > 0 &&
+        filterPills({
+          filters,
+          onRemoveFilter: onFilterRemove,
+        })}
+    </>
   );
 };
 

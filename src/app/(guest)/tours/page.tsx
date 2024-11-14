@@ -5,13 +5,18 @@ import StayCard from "@/components/home/partials/StayCard";
 import SectionHeroArchivePage from "@/components/tours/sections/SectionHeroArchivePage";
 import { searchTours } from "@/services/server/tourActions";
 import { Tour } from "@/data/tours";
+import { getCookie } from "cookies-next";
 
-const Tours = async ({ searchParams }: { searchParams: {
+export interface TourProps extends URLSearchParams {
   placeId?: string;
   byCategory?: string;
+  byCategories?: string;
   byLocation?: string;
   byDates?: string;
-} }) => {
+  [key: string]: any;
+}
+
+const Tours = async ({ searchParams }: { searchParams: TourProps }) => {
   const currentPage = "/tours";
   const response = await searchTours(searchParams);
   const { data, meta } = response;
@@ -36,18 +41,17 @@ const Tours = async ({ searchParams }: { searchParams: {
             heading="All tours around Sri Lanka"
             subHeading={
               <span className="block text-neutral-500 dark:text-neutral-400 mt-3">
-                1599 tours
+                {meta?.total ?? 0} tours
                 <span className="mx-2">·</span>
                 Aug 12 - 18
                 <span className="mx-2">·</span>2 Guests
               </span>
             }
           />
-
-          {data.length > 0 && (
+          {
             <>
               <div className="mb-8 lg:mb-11">
-                <TabFilters />
+                <TabFilters searchParams={searchParams} />
               </div>
               <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                 {data.length > 0 &&
@@ -61,7 +65,7 @@ const Tours = async ({ searchParams }: { searchParams: {
                 </div>
               )}
             </>
-          )}
+          }
         </div>
       </div>
     </>

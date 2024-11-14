@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { login } from "../../../lib/api";
-import Cookies from "js-cookie";
+import { setCookie } from "cookies-next";
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,8 +8,8 @@ export async function POST(request: NextRequest) {
     const { email, password } = await request.json();
     const { data } = await login(email, password);
 
-    Cookies.set("user", JSON.stringify(data.user));
-    Cookies.set("token", data.accessToken || '');
+    setCookie("user", JSON.stringify(data.user));
+    setCookie("token", data.accessToken || "");
 
     return new Response(JSON.stringify(data), {
       status: 200,

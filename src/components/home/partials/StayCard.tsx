@@ -1,3 +1,4 @@
+"use client";
 import React, { FC } from "react";
 import StartRating from "./StartRating";
 import BtnLikeIcon from "./BtnLikeIcon";
@@ -6,24 +7,27 @@ import Badge from "@/components/shared/Badge";
 import Link from "next/link";
 import GallerySlider from "./GallerySlider";
 import { FeaturedTour, Tour } from "@/data/tours";
+import { useAppSelector } from "@/services/redux/hooks";
 
 export interface StayCardProps {
   className?: string;
   data: Tour | FeaturedTour;
   size?: "default" | "small";
+  onRemoved?: (tourId: number) => void;
 }
 
 const StayCard: FC<StayCardProps> = ({
   size = "default",
   className = "",
   data,
+  onRemoved
 }) => {
   const {
     images,
     category,
     title,
     slug,
-    like,
+    is_liked,
     saleOff,
     isAds,
     price,
@@ -32,7 +36,6 @@ const StayCard: FC<StayCardProps> = ({
     guide,
     id,
   } = data;
-
   const renderSliderGallery = () => {
     return (
       <div className="relative w-full">
@@ -43,7 +46,12 @@ const StayCard: FC<StayCardProps> = ({
           href={"tours/" + category.slug + "/" + slug}
           galleryClass={size === "default" ? undefined : ""}
         />
-        <BtnLikeIcon isLiked={like} className="absolute right-3 top-3 z-[1]" />
+        <BtnLikeIcon
+          tourId={id}
+          isLiked={is_liked}
+          className="absolute right-3 top-3 z-[1]"
+          onDislike={onRemoved}
+        />
         {saleOff && <SaleOffBadge className="absolute left-3 top-3" />}
       </div>
     );
@@ -79,7 +87,7 @@ const StayCard: FC<StayCardProps> = ({
         <div className="w-14 border-b border-neutral-100 dark:border-neutral-800"></div>
         <div className="flex justify-between items-center">
           <Link href={"tours/" + category.slug + "/" + slug}>
-            <span className="text-base font-semibold">{price}</span>
+            <span className="text-base font-semibold">${price}</span>
           </Link>
           {!!reviewStart && (
             <StartRating reviewCount={reviewCount} point={reviewStart} />

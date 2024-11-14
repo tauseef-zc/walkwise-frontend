@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from 'react'
-import { getTourCategory, ICategory } from '../reducers/slices/TourCategorySlice';
+import { getTourCategory } from '../reducers/slices/TourCategorySlice';
 import { useAppDispatch, useAppSelector } from '../hooks';
 
 const useTourCategory = () => {

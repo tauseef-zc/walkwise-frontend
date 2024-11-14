@@ -11,7 +11,7 @@ export interface SectionHeroArchivePageProps {
   listingType?: ReactNode;
   currentPage: "Stays" | "Experiences" | "Cars" | "Flights";
   rightImage?: StaticImageData;
-  searchParams?: {
+  searchParams: {
     placeId?: string;
   };
 }

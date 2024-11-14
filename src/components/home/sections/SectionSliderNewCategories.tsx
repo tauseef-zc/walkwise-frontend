@@ -10,7 +10,6 @@ import CardCategory4 from "../partials/CardCategory4";
 import CardCategory5 from "../partials/CardCategory5";
 import PrevBtn from "../partials/PrevBtn";
 import NextBtn from "../partials/NextBtn";
-import { TaxonomyType } from "@/types/home";
 import useTourCategory from "@/services/redux/actions/useTourCategory";
 import { ICategory } from "@/services/redux/reducers/slices/TourCategorySlice";
 

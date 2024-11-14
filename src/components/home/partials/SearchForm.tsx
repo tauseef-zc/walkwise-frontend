@@ -9,12 +9,6 @@ import { useRouter } from "next/navigation";
 import { createSearchUrl } from "@/services/server/tourActions";
 import useGoogleLocation from "@/hooks/useGoogleLocation";
 
-interface SearchData {
-  location: string;
-  dates: string;
-  guests: GuestsObject;
-}
-
 const SearchForm: FC<{ placeId?: string }> = ({ placeId }) => {
   const { place } = useGoogleLocation(placeId);
   const [location, setLocation] = useState<PlaceResult | null>(place);
@@ -22,10 +16,24 @@ const SearchForm: FC<{ placeId?: string }> = ({ placeId }) => {
   const [guests, setGuests] = useState<GuestsObject>();
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
-  
+
   useEffect(() => {
     setLocation(place);
   }, [place]);
+
+  const submitSearch = (
+    location?: PlaceResult | null,
+    dates?: string,
+    guests?: GuestsObject
+  ) => {
+    const query = createSearchUrl({
+      byLocation: JSON.stringify(location?.geocode || {}),
+      placeId: location?.placeId || "",
+      byDates: dates,
+      byGuests: JSON.stringify(guests || {}),
+    });
+    router.push(`/tours?${query.toString()}`);
+  };
 
   const renderForm = () => {
     return (
@@ -36,8 +44,11 @@ const SearchForm: FC<{ placeId?: string }> = ({ placeId }) => {
       >
         <LocationInput
           className="flex-[1.5]"
-          onLocationSelected={(place: PlaceResult) => {
+          onLocationSelected={(place: PlaceResult | null) => {
             setLocation(place);
+            if (place == null) {
+              submitSearch(place, dates, guests);
+            }
           }}
           defaultLocation={place}
         />
@@ -53,14 +64,7 @@ const SearchForm: FC<{ placeId?: string }> = ({ placeId }) => {
           className="flex-1"
           onSearchSubmit={(guests) => {
             setGuests(guests);
-            const query = createSearchUrl({
-              byLocation: JSON.stringify(location?.geocode || {}),
-              placeId: location?.placeId || "",
-              byDates: dates,
-              byGuests: JSON.stringify(guests || {}),
-            });
-
-            router.push(`/tours?${query.toString()}`);
+            submitSearch(location, dates, guests);
           }}
         />
       </form>

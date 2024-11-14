@@ -1,8 +1,6 @@
-import { CustomLink } from "@/data/types";
 import React, { FC } from "react";
 import twFocusClass from "@/utils/twFocusClass";
 import Link from "next/link";
-import { Route } from "@/types/router";
 import { TourMeta } from "@/data/tours";
 import { getRoute } from "@/lib/urls";
 

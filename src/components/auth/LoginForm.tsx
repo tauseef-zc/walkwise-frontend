@@ -14,10 +14,8 @@ import { useRouter } from "next/navigation";
 const LoginForm = () => {
   const { isAuthenticated, user } = useAppSelector((state: any) => state.auth);
   const dispatch = useAppDispatch();
-  const { replace } = useRouter();
-  const [serverError, setServerError] = useState(
-    ({} as LoginRequestError) || null
-  );
+  const { replace, prefetch } = useRouter();
+  const [serverError, setServerError] = useState<LoginRequestError>({} as LoginRequestError);
   const [loading, setLoading] = useState<boolean>(false);
   const { login } = useAuth();
   const {
@@ -29,6 +27,11 @@ const LoginForm = () => {
   const onSubmit = async (data: LoginFormInput) => {
     setLoading(true);
     setServerError({} as LoginRequestError);
+
+    prefetch("/otp-verify?email=" + data.email);
+    prefetch("/onboarding");
+    prefetch("/my-account");
+    prefetch("/dashboard");
 
     await login(data.email, data.password)
       .then((res) => {

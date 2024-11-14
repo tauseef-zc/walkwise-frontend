@@ -13,7 +13,7 @@ const CardCategory5: FC<CardCategory5Props> = ({
   className = "",
   taxonomy,
 }) => {
-  const { count, category:name, slug: href = "/", image: thumbnail } = taxonomy;
+  const { category:name, slug: href = "/", image: thumbnail } = taxonomy;
   return (
     <Link
       href={href}
@@ -41,7 +41,7 @@ const CardCategory5: FC<CardCategory5Props> = ({
         <span
           className={`block mt-2 text-sm text-neutral-6000 dark:text-neutral-400`}
         >
-          {convertNumbThousand(count)} properties
+          {convertNumbThousand(0)} properties
         </span>
       </div>
     </Link>

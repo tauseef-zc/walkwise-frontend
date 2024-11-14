@@ -7,8 +7,8 @@ import SectionClientSay from "@/components/home/sections/SectionClientSay";
 
 const About = () => {
   return (
-    <div>
-      <div className='className="nc-PageAbout py-16"'>
+    <div className="relative">
+      <div className="nc-PageAbout py-16">
         <GlassBackground />
         <SectionHero
           rightImg={rightImg}
@@ -33,7 +33,7 @@ const About = () => {
         </SectionHero>
       </div>
       <div className="relative py-16 my-24">
-        <BackgroundSection className="bg-neutral-100 dark:bg-black dark:bg-opacity-20 " />
+        <BackgroundSection className="bg-neutral-100 dark:bg-black dark:bg-opacity-20 w-full" />
         <SectionClientSay />
       </div>
     </div>

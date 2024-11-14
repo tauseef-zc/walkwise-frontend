@@ -1,28 +1,29 @@
-
 export interface TourImages {
-    id: string;
-    image: string;
-    thumbnail: string;
+  id: string;
+  image: string;
+  thumbnail: string;
 }
 
 export interface TourCategory {
-    id: string;
-    category: string;
-    slug: string;
-    image: string;
+  id: number;
+  category: string;
+  slug: string;
+  info?: string;
+  image: string;
+  tours_count?: number;
 }
 
 export interface TourGuide {
-    id: string;
-    name: string;
-    phone: string;
-    rating: number;
-    user_id: number;
-    verified_at: string;
+  id: string;
+  name: string;
+  phone: string;
+  rating: number;
+  user_id: number;
+  verified_at: string;
 }
 
 export interface Tour {
-  id: string;
+  id: number;
   title: string;
   slug: string;
   images: TourImages[];
@@ -32,7 +33,7 @@ export interface Tour {
   updated_at: string;
   saleOff?: string | null;
   isAds?: boolean | null;
-  like?: boolean;
+  is_liked?: boolean;
   reviewStart?: number;
   reviewCount?: number;
 }

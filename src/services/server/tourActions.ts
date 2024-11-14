@@ -1,9 +1,19 @@
+"use server";
 import { TourCategory, TourPagination } from "@/data/tours";
 import api from "@/lib/restApi";
+import { getCookie } from "cookies-next";
+import { cookies } from "next/headers";
 
 export const searchTours = async (data: any) => {
   const searchParams = createSearchUrl(data);
-  const response = await api.get<any>("/search-tours?" + searchParams);
+  const token = await getCookie("token", { cookies});
+  const response = await api.get<any>("/search-tours?" + searchParams, {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response as unknown as TourPagination;
 };
 

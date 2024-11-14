@@ -46,7 +46,6 @@ const StepInformation = ({
     defaultValues: tourData,
   });
   const onSubmit = (formData: IInformationFormInput) => {
-    console.log(formData);
     onSubmitAction(formData);
   };
   const { categories } = useTourCategory();

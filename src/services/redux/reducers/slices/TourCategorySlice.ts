@@ -6,6 +6,7 @@ export interface ICategory {
   id: number;
   category: string;
   slug: string;
+  info?: string;
   image: string;
   tours_count?: number;
 }
