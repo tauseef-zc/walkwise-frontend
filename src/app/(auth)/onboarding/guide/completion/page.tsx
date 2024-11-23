@@ -1,4 +1,5 @@
 "use client";
+import LocationInput, { PlaceResult } from "@/components/inputs/LocationInput";
 import PhoneInput from "@/components/inputs/PhoneInput";
 import FormItem from "@/components/onboarding/FormItem";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
@@ -18,6 +19,7 @@ import { FieldError, useForm } from "react-hook-form";
 interface IFormInput {
   phone: string;
   avatar: FileList;
+  location: PlaceResult;
   has_vehicle: boolean;
   gender?: number | null;
   primary_lang: string;
@@ -93,6 +95,21 @@ function Completion() {
           </FormItem>
           <FormItem label="Phone number" error={errors.phone as FieldError}>
             <PhoneInput name="phone" register={register} required={true} />
+          </FormItem>
+          <FormItem
+            label="Primary Location"
+            className="mb-5"
+            error={errors.location as FieldError}
+          >
+            <LocationInput
+              placeholder="Primary base location. Ex: Galle"
+              onPlaceSelected={function (location: PlaceResult): void {
+                setValue("location", location);
+              }}
+              {...register("location", {
+                required: "Primary location is required",
+              })}
+            />
           </FormItem>
           <FormItem label="What is your gender?">
             <div className="flex justify-start gap-5">

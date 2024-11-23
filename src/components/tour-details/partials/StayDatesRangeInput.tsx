@@ -10,21 +10,33 @@ import DatePickerCustomDay from "@/components/inputs/DatePickerCustomDay";
 
 export interface StayDatesRangeInputProps {
   className?: string;
+  onChange?: (value: { from: Date | null; to: Date | null }) => void;
+  defaultValue: { from: Date | null; to: Date | null };
 }
 
 const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
   className = "flex-1",
+  onChange,
+  defaultValue,
 }) => {
   const [startDate, setStartDate] = useState<Date | null>(
-    new Date("2023/02/06")
+    defaultValue.from ?? null
   );
-  const [endDate, setEndDate] = useState<Date | null>(new Date("2023/02/23"));
+  const [endDate, setEndDate] = useState<Date | null>(null);
   //
 
   const onChangeDate = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
+    let selected = { from: start, to: end };
     setStartDate(start);
-    setEndDate(end);
+    if (start && end == null) {
+      selected.to = new Date(start.getTime() + 3 * 24 * 60 * 60 * 1000);
+      setEndDate(selected.to);
+    } else {
+      setEndDate(end);
+    }
+
+    if (onChange) onChange(selected);
   };
 
   const renderInput = () => {
@@ -86,6 +98,11 @@ const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
                   onChange={onChangeDate}
                   startDate={startDate}
                   endDate={endDate}
+                  maxDate={
+                    startDate
+                      ? new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000)
+                      : null
+                  }
                   selectsRange
                   monthsShown={2}
                   showPopperArrow={false}

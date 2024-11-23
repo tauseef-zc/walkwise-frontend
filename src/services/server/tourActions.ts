@@ -1,13 +1,13 @@
 "use server";
 import { TourCategory, TourPagination } from "@/data/tours";
-import api from "@/lib/restApi";
+import api, { get } from "@/lib/restApi";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
 
 export const searchTours = async (data: any) => {
-  const searchParams = createSearchUrl(data);
-  const token = await getCookie("token", { cookies});
-  const response = await api.get<any>("/search-tours?" + searchParams, {
+  const searchParams = await createSearchUrl(data);
+  const token = await getCookie("token", { cookies });
+  const response = await get("/search-tours?" + searchParams, {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -18,11 +18,11 @@ export const searchTours = async (data: any) => {
 };
 
 export const getTourCategory = async (slug: string) => {
-  const response = await api.get<any>("/tour-categories/" + slug);
+  const response = await get("/tour-categories/" + slug);
   return response as unknown as TourCategory;
 };
 
-export const createSearchUrl = (obj: any) => {
+export const createSearchUrl = async (obj: any) => {
   const urlSearchParams = new URLSearchParams();
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
@@ -34,5 +34,14 @@ export const createSearchUrl = (obj: any) => {
       }
     }
   }
-  return urlSearchParams.toString();
+  return await urlSearchParams.toString();
+};
+
+export const getTour = async (slug: string) => {
+  try {
+    const response = await api.get("/tours/" + slug);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };

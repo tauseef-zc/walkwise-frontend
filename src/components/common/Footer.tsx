@@ -1,35 +1,34 @@
-import React from 'react';
-import { WidgetFooterMenu, widgetMenus } from '@/data/footer';
-import FooterNav from './partials/FooterNav';
-import SocialsList1 from '../shared/SocialsList1';
-import LogoSvg from './LogoSvg';
+import React from "react";
+import { WidgetFooterMenu, widgetMenus } from "@/data/footer";
+import FooterNav from "./partials/FooterNav";
+import SocialsList1 from "../shared/SocialsList1";
+import LogoSvg from "./LogoSvg";
 
 const Footer = () => {
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY ?? "";
 
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY ?? "";
-
-    const renderWidgetMenuItem = (menu: WidgetFooterMenu, index: number) => {
-      return (
-        <div key={index} className="text-sm">
-          <h2 className="font-semibold text-neutral-700 dark:text-neutral-200">
-            {menu.title}
-          </h2>
-          <ul className="mt-5 space-y-4">
-            {menu.menus.map((item, index) => (
-              <li key={index}>
-                <a
-                  key={index}
-                  className="text-neutral-6000 dark:text-neutral-300 hover:text-black dark:hover:text-white"
-                  href={item.href}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      );
-    };
+  const renderWidgetMenuItem = (menu: WidgetFooterMenu, index: number) => {
+    return (
+      <div key={index} className="text-sm">
+        <h2 className="font-semibold text-neutral-700 dark:text-neutral-200">
+          {menu.title}
+        </h2>
+        <ul className="mt-5 space-y-4">
+          {menu.menus.map((item, index) => (
+            <li key={index}>
+              <a
+                key={index}
+                className="text-neutral-6000 dark:text-neutral-300 hover:text-black dark:hover:text-white"
+                href={item.href}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -49,12 +48,13 @@ const Footer = () => {
         </div>
       </div>
       <script
-        src={`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`}
+        src={`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=maps,marker,places&v=quarterly`}
+        type="text/javascript"
         async
         defer
       ></script>
     </>
   );
-}
+};
 
 export default Footer;

@@ -8,6 +8,7 @@ import { dislikeTour } from "@/services/redux/reducers/slices/LikedToursSlice";
 import React, { FC, useEffect } from "react";
 
 const WishList: FC = () => {
+  
   const { tours, pagination, loading, refresh } = useLikedTours();
   const dispatch = useAppDispatch();
 

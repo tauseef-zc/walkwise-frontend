@@ -45,6 +45,8 @@ const LocationInput: React.FC<LocationInputProps> = ({
   };
 
   useEffect(() => {
+    if (!window?.google || !window?.google?.maps) return;
+
     const autocompleteInstance = new window.google.maps.places.Autocomplete(
       inputRef.current as HTMLInputElement,
       {
@@ -83,7 +85,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onPlaceSelected]);
+  }, [onPlaceSelected, window?.google?.maps]);
 
   return (
     <>

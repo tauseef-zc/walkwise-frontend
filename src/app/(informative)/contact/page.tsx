@@ -45,7 +45,6 @@ const Contact = () => {
             <form className="grid grid-cols-1 gap-6" action="#" method="post">
               <label className="block">
                 <Label>Full name</Label>
-
                 <Input placeholder="Example Doe" type="text" className="mt-1" />
               </label>
               <label className="block">

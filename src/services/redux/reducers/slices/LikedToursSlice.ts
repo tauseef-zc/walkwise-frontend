@@ -1,5 +1,5 @@
 "use client";
-import { get } from "@/lib/restApi";
+import api, { get } from "@/lib/restApi";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Tour } from "@/data/tours";
 
@@ -12,12 +12,14 @@ export interface LikedTourState {
   loading: boolean;
   data: ITour[];
   pagination?: any;
+  empty: boolean;
 }
 
 const initialState: LikedTourState = {
   loading: false,
   data: [],
   pagination: {},
+  empty: false,
 };
 
 export const getLikedTours = createAsyncThunk(
@@ -35,8 +37,7 @@ const LikedTourProcess = createSlice({
 
     dislikeTour: (state: LikedTourState, action) => {
       state.data = state.data.filter((tour) => tour.id !== action.payload);
-    }
-
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getLikedTours.pending, (state) => {
@@ -49,10 +50,10 @@ const LikedTourProcess = createSlice({
       state.data = action.payload.data;
       state.pagination = action.payload.meta;
       state.loading = false;
+      state.empty = state.data.length === 0;
     });
 
     builder.addCase(getLikedTours.rejected, (state, action) => {
-      console.log(action);
       state.loading = false;
     });
   },

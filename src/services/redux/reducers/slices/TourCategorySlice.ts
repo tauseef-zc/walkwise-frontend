@@ -1,5 +1,5 @@
 "use client";
-import api from "@/lib/restApi";
+import { get } from "@/lib/restApi";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export interface ICategory {
@@ -21,7 +21,7 @@ const initialState: TourCategoryState = {
 
 export const getTourCategory = createAsyncThunk(
   "gettingTourCategories",
-  async () => await api.get("/tour-categories")
+  async () => await get("/tour-categories")
 );
 
 const tourCategoryProcess = createSlice({

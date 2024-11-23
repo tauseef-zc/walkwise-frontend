@@ -21,12 +21,12 @@ const SearchForm: FC<{ placeId?: string }> = ({ placeId }) => {
     setLocation(place);
   }, [place]);
 
-  const submitSearch = (
+  const submitSearch = async (
     location?: PlaceResult | null,
     dates?: string,
     guests?: GuestsObject
   ) => {
-    const query = createSearchUrl({
+    const query = await createSearchUrl({
       byLocation: JSON.stringify(location?.geocode || {}),
       placeId: location?.placeId || "",
       byDates: dates,

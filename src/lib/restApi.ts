@@ -1,8 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios from "axios";
 import { getCookie } from "cookies-next";
-import { useCallback } from "react";
 
 const instance = axios.create({
   baseURL:
@@ -31,7 +30,17 @@ export const get = async (endpoint: string, params = {}) => {
     const response = await instance.get(endpoint, { params });
     return response; 
   } catch (error) {
-    console.error("Error fetching data:", error);
+    // console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const post = async (endpoint: string, params = {}) => {
+  try {
+    const response = await instance.post(endpoint, params);
+    return response.data;
+  } catch (error) {
+    console.error("Error inserting data:", error);
     throw error;
   }
 };

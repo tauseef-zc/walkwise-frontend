@@ -16,8 +16,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <div className="relative py-16">
           <BackgroundSection />
           <SectionSliderNewCategories
-            heading="Explore by types of stays"
-            subHeading="Explore houses based on 10 types of stays"
+            heading="Suggestions for discovery"
+            subHeading="Popular categories to recommends for you"
             categoryCardType="card3"
             itemPerRow={5}
             sliderStyle="style2"

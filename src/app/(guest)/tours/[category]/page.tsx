@@ -18,6 +18,7 @@ const TourCategory = async ({
 }) => {
   const currentPage = `/tours/${category}/`;
   const categoryData = await getTourCategory(category);
+
   searchParams.byCategory = categoryData.id;
   const response = await searchTours(searchParams);
   const { data, meta } = response;
@@ -28,12 +29,16 @@ const TourCategory = async ({
         <SectionHeroArchivePage
           title={categoryData.category}
           currentPage="Experiences"
-          listingType={<>
-            <i className="text-2xl las la-umbrella-beach"></i>
-            <span className="ml-2.5">{meta?.total ?? 0} tours</span>
-          </>} searchParams={{
-            placeId: undefined
-          }}        />
+          listingType={
+            <>
+              <i className="text-2xl las la-umbrella-beach"></i>
+              <span className="ml-2.5">{meta?.total ?? 0} tours</span>
+            </>
+          }
+          searchParams={{
+            placeId: undefined,
+          }}
+        />
       </div>
       <div className="container relative">
         <div className={`nc-SectionGridFilterCard pb-24 lg:pb-28`}>
@@ -50,7 +55,10 @@ const TourCategory = async ({
           />
 
           <div className="mb-8 lg:mb-11">
-            <TabFilters searchParams={searchParams} defaultCategory={categoryData} />
+            <TabFilters
+              searchParams={searchParams}
+              defaultCategory={categoryData}
+            />
           </div>
           <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
             {data.length > 0 &&

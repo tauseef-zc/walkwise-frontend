@@ -1,12 +1,15 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getLikedTours } from "../reducers/slices/LikedToursSlice";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { useSearchParams } from "next/navigation";
+import { set } from "js-cookie";
 
 const useLikedTours = () => {
   const dispatch = useAppDispatch();
   const searchParameters = useSearchParams();
+  const [page, setPage] = useState(1);
+
   const {
     data: tours,
     pagination,
@@ -14,23 +17,21 @@ const useLikedTours = () => {
   } = useAppSelector((state) => state.user.liked_tours);
 
   useEffect(() => {
-    if (tours.length === 0 && !loading) {
-      dispatch(getLikedTours(1));
+    if (page && !loading) {
+      dispatch(getLikedTours(page));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tours]);
+  }, [page]);
 
   useEffect(() => {
     if (searchParameters.get("page") && !loading) {
-      dispatch(getLikedTours(Number(searchParameters.get("page"))));
+      setPage(Number(searchParameters.get("page")));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParameters]);
 
   const refresh = () =>
     dispatch(getLikedTours(Number(searchParameters.get("page")) ?? 1));
-
-  console.log({ tours, pagination, loading });
 
   return { tours, pagination, loading, refresh };
 };

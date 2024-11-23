@@ -1,7 +1,8 @@
 import { useApi } from "@/hooks/useApi";
 
 export const useTours = () => {
-    const api = useApi();
+  const api = useApi();
+
   const addToWishlist = async (tour_id: number) => {
     try {
       const response = await api.get("/wishlist/" + tour_id);

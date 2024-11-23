@@ -43,7 +43,7 @@ const StayCard: FC<StayCardProps> = ({
           uniqueID={`StayCard_${id}`}
           ratioClass="aspect-w-4 aspect-h-3 "
           galleryImgs={images}
-          href={"tours/" + category.slug + "/" + slug}
+          href={"/tours/" + category.slug + "/" + slug}
           galleryClass={size === "default" ? undefined : ""}
         />
         <BtnLikeIcon
@@ -62,7 +62,7 @@ const StayCard: FC<StayCardProps> = ({
       <div className={size === "default" ? "p-4 space-y-4" : "p-3 space-y-1"}>
         <div className={size === "default" ? "space-y-2" : "space-y-1"}>
           <Link
-            href={"tours/" + category.slug}
+            href={"/tours/" + category.slug}
             className="text-sm text-neutral-500 dark:text-neutral-400"
           >
             {category.category}
@@ -74,7 +74,7 @@ const StayCard: FC<StayCardProps> = ({
                 size === "default" ? "text-base" : "text-base"
               }`}
             >
-              <Link href={"tours/" + category.slug + "/" + slug}>
+              <Link href={"/tours/" + category.slug + "/" + slug}>
                 <span className="line-clamp-1">{title}</span>
               </Link>
             </h2>
@@ -86,7 +86,7 @@ const StayCard: FC<StayCardProps> = ({
         </div>
         <div className="w-14 border-b border-neutral-100 dark:border-neutral-800"></div>
         <div className="flex justify-between items-center">
-          <Link href={"tours/" + category.slug + "/" + slug}>
+          <Link href={"/tours/" + category.slug + "/" + slug}>
             <span className="text-base font-semibold">${price}</span>
           </Link>
           {!!reviewStart && (
