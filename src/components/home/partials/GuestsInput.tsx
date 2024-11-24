@@ -16,18 +16,25 @@ export interface GuestsInputProps {
   buttonSubmitHref?: PathName;
   hasButtonSubmit?: boolean;
   onSearchSubmit?: (data: GuestsObject) => void;
+  defaultValue?: GuestsObject;
 }
 
 const GuestsInput: FC<GuestsInputProps> = ({
   fieldClassName = "[ nc-hero-field-padding ]",
   className = "[ nc-flex-1 ]",
-  buttonSubmitHref = "/tours",
   hasButtonSubmit = true,
   onSearchSubmit = (data: GuestsObject) => {},
+  defaultValue = { guestAdults: 1, guestChildren: 0, guestInfants: 0 },
 }) => {
-  const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(1);
-  const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(0);
-  const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(0);
+  const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(
+    defaultValue.guestAdults
+  );
+  const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(
+    defaultValue.guestChildren
+  );
+  const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(
+    defaultValue.guestInfants
+  );
 
   const handleChangeData = (value: number, type: keyof GuestsObject) => {
     let newValue = {
@@ -50,7 +57,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
   };
 
   const totalGuests =
-    guestChildrenInputValue + guestAdultsInputValue + guestInfantsInputValue;
+    (guestChildrenInputValue ?? 0) + (guestAdultsInputValue ?? 0);
 
   return (
     <Popover className={`flex relative ${className}`}>
@@ -90,11 +97,16 @@ const GuestsInput: FC<GuestsInputProps> = ({
             {/* BUTTON SUBMIT OF FORM */}
             {hasButtonSubmit && (
               <div className="pr-2 xl:pr-4">
-                <ButtonSubmit isSubmit={true} onClick={() => onSearchSubmit({
-                  guestAdults: guestAdultsInputValue,
-                  guestChildren: guestChildrenInputValue,
-                  guestInfants: guestInfantsInputValue
-                })} />
+                <ButtonSubmit
+                  isSubmit={true}
+                  onClick={() =>
+                    onSearchSubmit({
+                      guestAdults: guestAdultsInputValue,
+                      guestChildren: guestChildrenInputValue,
+                      guestInfants: guestInfantsInputValue,
+                    })
+                  }
+                />
               </div>
             )}
           </div>

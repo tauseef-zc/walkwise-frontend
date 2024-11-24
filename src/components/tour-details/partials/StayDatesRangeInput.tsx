@@ -12,12 +12,14 @@ export interface StayDatesRangeInputProps {
   className?: string;
   onChange?: (value: { from: Date | null; to: Date | null }) => void;
   defaultValue: { from: Date | null; to: Date | null };
+  dateCount?: number;
 }
 
 const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
   className = "flex-1",
   onChange,
   defaultValue,
+  dateCount = 1,
 }) => {
   const [startDate, setStartDate] = useState<Date | null>(
     defaultValue.from ?? null
@@ -30,7 +32,7 @@ const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
     let selected = { from: start, to: end };
     setStartDate(start);
     if (start && end == null) {
-      selected.to = new Date(start.getTime() + 3 * 24 * 60 * 60 * 1000);
+      selected.to = new Date(start.getTime() + dateCount * 24 * 60 * 60 * 1000);
       setEndDate(selected.to);
     } else {
       setEndDate(end);
@@ -100,7 +102,9 @@ const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
                   endDate={endDate}
                   maxDate={
                     startDate
-                      ? new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000)
+                      ? new Date(
+                          startDate.getTime() + dateCount * 24 * 60 * 60 * 1000
+                        )
                       : null
                   }
                   selectsRange

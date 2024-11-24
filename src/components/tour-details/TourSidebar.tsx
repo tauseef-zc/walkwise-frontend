@@ -14,10 +14,8 @@ interface TourSidebarProps {
   tour: Tour;
 }
 
-
 const TourSidebar: FC<TourSidebarProps> = ({ tour }) => {
   const { user } = useAppSelector((state) => state.auth); 
-  const { checkout } = useAppSelector((state) => state.checkout); 
   const dispatch = useAppDispatch();
   const { push } = useRouter();
   const { tour_availability } = tour;
@@ -94,6 +92,7 @@ const TourSidebar: FC<TourSidebarProps> = ({ tour }) => {
             setDates(dateObject);
           }}
           defaultValue={dates}
+          dateCount={tour.tour_days.length}
         />
         <div className="w-full border-b border-neutral-200 dark:border-neutral-700"></div>
         <GuestsInput

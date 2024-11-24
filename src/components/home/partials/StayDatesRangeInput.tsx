@@ -7,29 +7,30 @@ import DatePickerCustomHeaderTwoMonth from "@/components/inputs/DatePickerCustom
 import DatePickerCustomDay from "@/components/inputs/DatePickerCustomDay";
 import DatePicker from "react-datepicker";
 import ClearDataButton from "./ClearDataButton";
+import { SearchDate } from "@/services/redux/reducers/slices/SearchSlice";
 
 export interface StayDatesRangeInputProps {
   className?: string;
   fieldClassName?: string;
-  onDatesChanged: (data: string) => void;
+  onDatesChanged: (data: { from: Date | null; to: Date | null }) => void;
+  defaultValue?: SearchDate;
 }
 
 const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
   className = "[ lg:nc-flex-2 ]",
   fieldClassName = "[ nc-hero-field-padding ]",
   onDatesChanged,
+  defaultValue = { from: new Date(), to: new Date() },
 }) => {
-  const [startDate, setStartDate] = useState<Date | null>(
-    new Date("2023/02/06")
-  );
-  const [endDate, setEndDate] = useState<Date | null>(new Date("2023/02/23"));
+  const [startDate, setStartDate] = useState<Date | null>(defaultValue.from);
+  const [endDate, setEndDate] = useState<Date | null>(defaultValue.to);
   //
 
   const onChangeDate = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
-    onDatesChanged(JSON.stringify({ from: start, to: end }));
+    onDatesChanged({ from: start, to: end });
   };
 
   const renderInput = () => {

@@ -5,7 +5,6 @@ import StayCard from "@/components/home/partials/StayCard";
 import SectionHeroArchivePage from "@/components/tours/sections/SectionHeroArchivePage";
 import { searchTours } from "@/services/server/tourActions";
 import { Tour } from "@/data/tours";
-import { getCookie } from "cookies-next";
 
 export interface TourProps extends URLSearchParams {
   placeId?: string;
@@ -25,7 +24,6 @@ const Tours = async ({ searchParams }: { searchParams: TourProps }) => {
     <>
       <div className="container pt-10 pb-10 lg:pt-16 lg:pb-10">
         <SectionHeroArchivePage
-          searchParams={searchParams}
           currentPage="Experiences"
           listingType={
             <>
@@ -33,20 +31,14 @@ const Tours = async ({ searchParams }: { searchParams: TourProps }) => {
               <span className="ml-2.5">{meta?.total ?? 0} tours</span>
             </>
           }
+          hideSearch={false}
         />
       </div>
       <div className="container relative">
         <div className={`nc-SectionGridFilterCard pb-24 lg:pb-28`}>
           <Heading2
             heading="All tours around Sri Lanka"
-            subHeading={
-              <span className="block text-neutral-500 dark:text-neutral-400 mt-3">
-                {meta?.total ?? 0} tours
-                <span className="mx-2">·</span>
-                Aug 12 - 18
-                <span className="mx-2">·</span>2 Guests
-              </span>
-            }
+            total={meta?.total ?? 0}
           />
           {
             <>

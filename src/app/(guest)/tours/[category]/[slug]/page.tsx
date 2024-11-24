@@ -1,3 +1,4 @@
+import Review from "@/components/payments/checkout/Review";
 import TourGallery from "@/components/tour-details/TourGallery";
 import TourInfo from "@/components/tour-details/TourInfo";
 import TourItinerary from "@/components/tour-details/TourItinerary";
@@ -27,6 +28,7 @@ const TourDetail = async ({
           <TourOverview overview={tour.overview} />
           <TourItinerary itineraries={tour.tour_days} />
           <TourMap tour={tour} />
+          <Review tour={tour} />
         </div>
         {/* Sidebar */}
         <div className="hidden lg:block flex-grow mt-14 lg:mt-0 ">

@@ -1,3 +1,5 @@
+import { Booking } from "@/app/(common)/checkout/success/[payment_id]/page";
+
 export interface TourImages {
   id: string;
   image: string;
@@ -13,6 +15,24 @@ export interface TourCategory {
   tours_count?: number;
 }
 
+export interface User {
+  id: number;
+  name: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  verified: boolean;
+  avatar?: string;
+  nationality?: string;
+  primary_lang?: string;
+  other_lang?: string[];
+  onboarding?: boolean;
+  user_type?: string;
+  guide?: TourGuide;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface TourGuide {
   id: string;
   name: string;
@@ -20,23 +40,6 @@ export interface TourGuide {
   rating: number;
   user_id: number;
   verified_at: string;
-  user?: {
-    id: number;
-    name: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    verified: boolean;
-    avatar?: string;
-    nationality?: string;
-    primary_lang?: string;
-    other_lang?: string[];
-    onboarding?: boolean;
-    user_type?: string;
-    resource?: string;
-    created_at?: string;
-    updated_at?: string;
-  }
 }
 
 export interface Location {
@@ -64,18 +67,37 @@ export interface TourAvailability {
   to: Date;
 }
 
+export interface TourReview {
+  id: number;
+  name: string;
+  rating: number;
+  review: string;
+  reviewer: {
+    id: number;
+    name: string;
+    email: string;
+    avatar: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Tour {
   id: number;
   title: string;
   slug: string;
   images: TourImages[];
   category: TourCategory;
-  guide: TourGuide;
+  user: User;
   location: Location;
   start_location: Location;
   end_location: Location;
   tour_days: TourDay[];
   tour_availability?: TourAvailability[];
+  reviews?: TourReview[];
+  rating: number;
+  has_booking?: boolean;
+  user_booking?: Booking;
   price: number;
   updated_at: string;
   saleOff?: string | null;

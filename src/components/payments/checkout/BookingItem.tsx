@@ -16,13 +16,16 @@ interface BookingItemProps {
 const BookingItem: FC<BookingItemProps> = ({ tour, guests, bookingDate }) => {
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (!tour) {
+      dispatch(clearCheckout({}));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tour]);
+
   if (!tour || !("images" in tour)) {
     return <></>;
   }
-
-  useEffect(() => {
-    dispatch(clearCheckout({}));
-  }, []);
 
   return (
     <div className="space-y-6">
@@ -101,13 +104,13 @@ const BookingItem: FC<BookingItemProps> = ({ tour, guests, bookingDate }) => {
             <span className="mt-1.5 text-lg font-semibold">
               {guests &&
                 guests.guestAdults > 0 &&
-                `${guests.guestAdults} adults, `}
+                `${guests.guestAdults} adults`}
               {guests &&
                 guests.guestChildren > 0 &&
-                `${guests.guestChildren} children, `}
+                `, ${guests.guestChildren} children`}
               {guests &&
                 guests.guestInfants > 0 &&
-                `${guests.guestInfants} infants`}
+                `, ${guests.guestInfants} infants`}
             </span>
           </div>
         </div>

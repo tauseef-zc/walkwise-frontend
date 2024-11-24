@@ -13,6 +13,7 @@ export const MyAccountNav = () => {
 
   const listNav: RouteList = {
     "/my-account": "My Account",
+    "/my-account/bookings": "Bookings",
     "/my-account/wishlist": "Wishlist",
     "/my-account/account-password": "Account Password",
   };

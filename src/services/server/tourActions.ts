@@ -18,8 +18,12 @@ export const searchTours = async (data: any) => {
 };
 
 export const getTourCategory = async (slug: string) => {
-  const response = await get("/tour-categories/" + slug);
-  return response as unknown as TourCategory;
+  try {
+    const response = await get("/tour-categories/" + slug);
+    return response as unknown as TourCategory;
+  } catch (error) {
+    return null;
+  }
 };
 
 export const createSearchUrl = async (obj: any) => {

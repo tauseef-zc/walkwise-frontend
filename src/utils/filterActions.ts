@@ -62,7 +62,7 @@ const useFilters = (categories: ICategory[], router: any) => {
   }, [categories, searchParams, selectedCategories]);
 
   const onFilterRemove = useCallback(
-    (filter: FilterType) => {
+    async (filter: FilterType) => {
       const newFilters = filters.filter((item: FilterType) => item !== filter);
       setFilters(newFilters);
 
@@ -106,7 +106,7 @@ const useFilters = (categories: ICategory[], router: any) => {
           delete updatedSearchParams[key]
       );
 
-      router.push("/tours?" + createSearchUrl(updatedSearchParams));
+      router.push("/tours?" + await createSearchUrl(updatedSearchParams));
     },
     [
       filters,

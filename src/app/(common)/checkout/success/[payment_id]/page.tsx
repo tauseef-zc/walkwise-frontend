@@ -6,28 +6,35 @@ import moment from "moment";
 import { notFound } from "next/navigation";
 import React from "react";
 
+export interface Booking {
+  id: number;
+  tour: Tour;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  adults: number;
+  children: number;
+  infants: number;
+  total: number;
+  booking_date: string;
+  created_at: string;
+}
+
 export interface Payment {
   id: number;
   amount: number;
   status: number;
   payment_date: string;
+  transaction_id: string;
+  transaction_ref: string;
   created_at: string;
-  booking: {
-    id: number;
-    tour: Tour;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone: string;
-    adults: number;
-    children: number;
-    infants: number;
-    booking_date: string;
-    created_at: string;
-  };
+  booking: Booking;
 }
 
-const getPayment = async (paymentId: string): Promise<Payment | null> => {
+export const getPayment = async (
+  paymentId: string
+): Promise<Payment | null> => {
   try {
     return (await get("/payments/" + paymentId)) as unknown as Payment;
   } catch (error) {
@@ -40,7 +47,6 @@ const SuccessPage = async ({
 }: {
   params: { payment_id: string };
 }) => {
-
   const payment = await getPayment(payment_id);
   if (!payment) return notFound();
 
@@ -83,6 +89,30 @@ const SuccessPage = async ({
             <div className="space-y-6">
               <h3 className="text-2xl font-semibold">Booking detail</h3>
               <div className="flex flex-col space-y-4">
+                <div className="flex text-neutral-6000 dark:text-neutral-300">
+                  <span className="flex-1">First Name</span>
+                  <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
+                    {booking.first_name}
+                  </span>
+                </div>
+                <div className="flex text-neutral-6000 dark:text-neutral-300">
+                  <span className="flex-1">Last Name</span>
+                  <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
+                    {booking.last_name}
+                  </span>
+                </div>
+                <div className="flex text-neutral-6000 dark:text-neutral-300">
+                  <span className="flex-1">Email</span>
+                  <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
+                    {booking.email}
+                  </span>
+                </div>
+                <div className="flex text-neutral-6000 dark:text-neutral-300">
+                  <span className="flex-1">Phone</span>
+                  <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
+                    {booking.phone}
+                  </span>
+                </div>
                 <div className="flex text-neutral-6000 dark:text-neutral-300">
                   <span className="flex-1">Booking code</span>
                   <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">

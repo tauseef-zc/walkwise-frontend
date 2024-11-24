@@ -7,7 +7,6 @@ import Badge from "@/components/shared/Badge";
 import Link from "next/link";
 import GallerySlider from "./GallerySlider";
 import { FeaturedTour, Tour } from "@/data/tours";
-import { useAppSelector } from "@/services/redux/hooks";
 
 export interface StayCardProps {
   className?: string;
@@ -20,7 +19,7 @@ const StayCard: FC<StayCardProps> = ({
   size = "default",
   className = "",
   data,
-  onRemoved
+  onRemoved,
 }) => {
   const {
     images,
@@ -31,9 +30,8 @@ const StayCard: FC<StayCardProps> = ({
     saleOff,
     isAds,
     price,
-    reviewStart,
-    reviewCount,
-    guide,
+    rating,
+    user,
     id,
   } = data;
   const renderSliderGallery = () => {
@@ -81,7 +79,7 @@ const StayCard: FC<StayCardProps> = ({
           </div>
           <div className="flex items-center text-neutral-500 dark:text-neutral-400 text-sm space-x-1.5">
             <i className="las la-user-circle"></i>
-            <span className="">{guide.name}</span>
+            <span className="">{user?.name}</span>
           </div>
         </div>
         <div className="w-14 border-b border-neutral-100 dark:border-neutral-800"></div>
@@ -89,9 +87,7 @@ const StayCard: FC<StayCardProps> = ({
           <Link href={"/tours/" + category.slug + "/" + slug}>
             <span className="text-base font-semibold">${price}</span>
           </Link>
-          {!!reviewStart && (
-            <StartRating reviewCount={reviewCount} point={reviewStart} />
-          )}
+          <StartRating point={rating}  />
         </div>
       </div>
     );

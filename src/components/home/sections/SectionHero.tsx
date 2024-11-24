@@ -23,7 +23,7 @@ const SectionHero: FC<SectionHeroProps> = ({ className = "" }) => {
             expert-led walking tours and uncover the stories behind every
             street.
           </span>
-          <ButtonPrimary href="/listing-stay-map" sizeClass="px-5 py-4 sm:px-7">
+          <ButtonPrimary href="/tours" sizeClass="px-5 py-4 sm:px-7">
             Start your search
           </ButtonPrimary>
         </div>

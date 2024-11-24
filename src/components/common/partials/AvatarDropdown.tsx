@@ -106,7 +106,11 @@ export default function AvatarDropdown({ className = "" }: Props) {
 
                     {/* ------------------ 2 --------------------- */}
                     <Link
-                      href={"/author"}
+                      href={
+                        user?.user_type === "guide"
+                          ? "/dashboard/bookings"
+                          : "/my-account/bookings"
+                      }
                       className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                       onClick={() => close()}
                     >
@@ -152,36 +156,38 @@ export default function AvatarDropdown({ className = "" }: Props) {
                         </svg>
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium ">{"My bookings"}</p>
+                        <p className="text-sm font-medium ">{"Bookings"}</p>
                       </div>
                     </Link>
 
                     {/* ------------------ 2 --------------------- */}
-                    <Link
-                      href={"/account-savelists"}
-                      className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
-                      onClick={() => close()}
-                    >
-                      <div className="flex items-center justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <path
-                            d="M12.62 20.81C12.28 20.93 11.72 20.93 11.38 20.81C8.48 19.82 2 15.69 2 8.68998C2 5.59998 4.49 3.09998 7.56 3.09998C9.38 3.09998 10.99 3.97998 12 5.33998C13.01 3.97998 14.63 3.09998 16.44 3.09998C19.51 3.09998 22 5.59998 22 8.68998C22 15.69 15.52 19.82 12.62 20.81Z"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </div>
-                      <div className="ml-4">
-                        <p className="text-sm font-medium ">{"Wishlist"}</p>
-                      </div>
-                    </Link>
+                    {user?.user_type !== "guide" && (
+                      <Link
+                        href={"/my-account/wishlist"}
+                        className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                        onClick={() => close()}
+                      >
+                        <div className="flex items-center justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <path
+                              d="M12.62 20.81C12.28 20.93 11.72 20.93 11.38 20.81C8.48 19.82 2 15.69 2 8.68998C2 5.59998 4.49 3.09998 7.56 3.09998C9.38 3.09998 10.99 3.97998 12 5.33998C13.01 3.97998 14.63 3.09998 16.44 3.09998C19.51 3.09998 22 5.59998 22 8.68998C22 15.69 15.52 19.82 12.62 20.81Z"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </div>
+                        <div className="ml-4">
+                          <p className="text-sm font-medium ">{"Wishlist"}</p>
+                        </div>
+                      </Link>
+                    )}
 
                     <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
 

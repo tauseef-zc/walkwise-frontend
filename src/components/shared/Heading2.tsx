@@ -1,30 +1,49 @@
+"use client";
+import { useAppSelector } from "@/services/redux/hooks";
+import moment from "moment";
 import React from "react";
 import { ReactNode } from "react";
 
 export interface Heading2Props {
   heading?: ReactNode;
-  subHeading?: ReactNode;
   className?: string;
+  total?: number;
+  dates?: string;
+  guests?: number;
 }
 
 const Heading2: React.FC<Heading2Props> = ({
   className = "",
   heading = "Stays in Tokyo",
-  subHeading,
+  total = 0,
+  dates = "",
+  guests = 0,
 }) => {
+
+  const { data } = useAppSelector((state) => state.search);
+
+  if ("from" in data?.dates && "to" in data?.dates) {
+    dates =
+      moment(data.dates.from ?? new Date()).format("MMM DD") +
+      " - " +
+      moment(data.dates.to ?? new Date()).format("MMM DD");
+  }
+
+  if("guests" in data) {
+    guests =
+      (data.guests?.guestAdults ?? 0) + (data.guests?.guestChildren ?? 0);
+  }
+
   return (
     <div className={`mb-12 lg:mb-16 ${className}`}>
       <h2 className="text-4xl font-semibold">{heading}</h2>
-      {subHeading ? (
-        subHeading
-      ) : (
-        <span className="block text-neutral-500 dark:text-neutral-400 mt-3">
-          233 stays
-          <span className="mx-2">·</span>
-          Aug 12 - 18
-          <span className="mx-2">·</span>2 Guests
-        </span>
-      )}
+      <span className="block text-neutral-500 dark:text-neutral-400 mt-3">
+        {total} tours
+        <span className="mx-2">·</span>
+        {dates}
+        <span className="mx-2">·</span>
+        {guests} Guests
+      </span>
     </div>
   );
 };

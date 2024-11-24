@@ -29,7 +29,7 @@ const TabFilters = ({
 }) => {
   const { categories } = useTourCategory();
   const [isOpenMoreFilter, setIsOpenMoreFilter] = useState(false);
-  
+
   const closeModalMoreFilter = () => setIsOpenMoreFilter(false);
   const openModalMoreFilter = () => setIsOpenMoreFilter(true);
   const router = useRouter();
@@ -120,7 +120,7 @@ const TabFilters = ({
                       Clear
                     </ButtonThird>
                     <ButtonPrimary
-                      onClick={() => {
+                      onClick={async () => {
                         close();
                         if (selectedCategories.length > 0) {
                           const categoryIds = selectedCategories.map(
@@ -129,12 +129,12 @@ const TabFilters = ({
                           searchParams.byCategories =
                             JSON.stringify(categoryIds);
                           router.push(
-                            `/tours?${createSearchUrl(searchParams)}`
+                            `/tours?${await createSearchUrl(searchParams)}`
                           );
                         } else {
                           delete searchParams.byCategories;
                           router.push(
-                            `/tours?${createSearchUrl(searchParams)}`
+                            `/tours?${await createSearchUrl(searchParams)}`
                           );
                         }
                       }}
@@ -246,25 +246,27 @@ const TabFilters = ({
                   </div>
                   <div className="p-5 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
                     <ButtonThird
-                      onClick={() => {
+                      onClick={async () => {
                         close();
                         setRangePrices([0, 0]);
                         delete searchParams.minPrice;
                         delete searchParams.maxPrice;
-                        router.push(`/tours?${createSearchUrl(searchParams)}`);
+                        router.push(
+                          `/tours?${await createSearchUrl(searchParams)}`
+                        );
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
                       Clear
                     </ButtonThird>
                     <ButtonPrimary
-                      onClick={() => {
+                      onClick={async () => {
                         close();
                         if (rangePrices[0] >= 0 && rangePrices[1] > 0) {
                           searchParams.minPrice = rangePrices[0];
                           searchParams.maxPrice = rangePrices[1];
                           router.push(
-                            `/tours?${createSearchUrl(searchParams)}`
+                            `/tours?${await createSearchUrl(searchParams)}`
                           );
                         }
                       }}
@@ -319,16 +321,24 @@ const TabFilters = ({
   };
 
   const renderTabMobileFilter = () => {
+    const activeFilters =
+      selectedCategories.length +
+      (rangePrices[0] > 0 && rangePrices[1] > 0 ? 1 : 0);
     return (
       <div>
         <div
-          className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border border-primary-500 bg-primary-50 text-primary-700 focus:outline-none cursor-pointer`}
+          className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border focus:outline-none cursor-pointer ${
+            activeFilters > 0
+              ? "border-primary-500 bg-primary-50 text-primary-700"
+              : ""
+          }`}
           onClick={openModalMoreFilter}
         >
           <span>
-            <span className="hidden sm:inline">Experiences</span> filters (3)
+            <span className="hidden sm:inline">Experiences</span> filters 
+            {activeFilters > 0 ? " (" + activeFilters + ")" : ""}
           </span>
-          {renderXClear()}
+          {activeFilters > 0 && renderXClear()}
         </div>
 
         <Transition appear show={isOpenMoreFilter} as={Fragment}>
@@ -396,10 +406,10 @@ const TabFilters = ({
                           <div className="relative flex flex-col space-y-8">
                             <div className="space-y-5">
                               <Slider
-                                className="text-red-400"
+                                range
                                 min={0}
                                 max={2000}
-                                defaultValue={[0, 1000]}
+                                defaultValue={[rangePrices[0], rangePrices[1]]}
                                 allowCross={false}
                                 onChange={(e) => setRangePrices(e as number[])}
                               />
@@ -461,13 +471,43 @@ const TabFilters = ({
 
                   <div className="p-4 sm:p-6 flex-shrink-0 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
                     <ButtonThird
-                      onClick={closeModalMoreFilter}
+                      onClick={async () => {
+                        clearSelectedCategories();
+                        setRangePrices([0, 0]);
+                        delete searchParams.minPrice;
+                        delete searchParams.maxPrice;
+                        router.push(
+                          `/tours?${await createSearchUrl(searchParams)}`
+                        );
+                        closeModalMoreFilter();
+                      }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
                       Clear
                     </ButtonThird>
                     <ButtonPrimary
-                      onClick={closeModalMoreFilter}
+                      onClick={async () => {
+                        if (rangePrices[0] >= 0 && rangePrices[1] > 0) {
+                          searchParams.minPrice = rangePrices[0];
+                          searchParams.maxPrice = rangePrices[1];
+                        }
+
+                        if (selectedCategories.length > 0) {
+                          const categoryIds = selectedCategories.map(
+                            (item) => item.id
+                          );
+                          searchParams.byCategories =
+                            JSON.stringify(categoryIds);
+                        } else {
+                          delete searchParams.byCategories;
+                        }
+
+                        router.push(
+                          `/tours?${await createSearchUrl(searchParams)}`
+                        );
+
+                        closeModalMoreFilter();
+                      }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
                       Apply
@@ -496,33 +536,34 @@ const TabFilters = ({
           Active filters
         </h5>
         <div className="flex flex-wrap gap-2">
-          {filters.length > 0 && filters.map((filter, index) => (
-            <div
-              key={index}
-              className="bg-blue-100 rounded-full px-4 py-2 flex items-center"
-            >
-              <span className="text-sm text-blue-600">{filter.value}</span>
-              <button
-                className="ml-2 text-gray-400 hover:text-gray-600 transition duration-300"
-                onClick={() => onRemoveFilter(filter)}
+          {filters.length > 0 &&
+            filters.map((filter, index) => (
+              <div
+                key={index}
+                className="bg-blue-100 rounded-full px-4 py-2 flex items-center"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+                <span className="text-sm text-blue-600">{filter.value}</span>
+                <button
+                  className="ml-2 text-gray-400 hover:text-gray-600 transition duration-300"
+                  onClick={() => onRemoveFilter(filter)}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-          ))}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+            ))}
         </div>
       </>
     );
