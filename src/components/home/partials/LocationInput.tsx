@@ -1,5 +1,4 @@
 "use client";
-
 import { MapPinIcon } from "@heroicons/react/24/outline";
 import React, { useState, useRef, useEffect, FC } from "react";
 import ClearDataButton from "./ClearDataButton";
@@ -31,6 +30,22 @@ const LocationInput: FC<LocationInputProps> = ({
 
   const [value, setValue] = useState<any>(defaultLocation?.address ?? "");
   const [showPopover, setShowPopover] = useState(autoFocus);
+  const [load, setLoad] = useState(false);
+
+  const eventClickOutsideDiv = (event: MouseEvent) => {
+    if (!containerRef.current) return;
+    // CLICK IN_SIDE
+    if (!showPopover || containerRef.current.contains(event.target as Node)) {
+      return;
+    }
+    // CLICK OUT_SIDE
+    setShowPopover(false);
+  };
+
+  const handleSelectLocation = (item: string) => {
+    setValue(item);
+    setShowPopover(false);
+  };
 
   useEffect(() => {
     setShowPopover(autoFocus);
@@ -95,7 +110,7 @@ const LocationInput: FC<LocationInputProps> = ({
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window?.google?.maps]);
+  }, [load]);
 
   useEffect(() => {
     if (defaultLocation !== null) {
@@ -103,22 +118,14 @@ const LocationInput: FC<LocationInputProps> = ({
     }
   }, [defaultLocation]);
 
-  const eventClickOutsideDiv = (event: MouseEvent) => {
-    if (!containerRef.current) return;
-    // CLICK IN_SIDE
-    if (!showPopover || containerRef.current.contains(event.target as Node)) {
-      return;
+  useEffect(() => {
+    if (!load) {
+      setLoad(true);
     }
-    // CLICK OUT_SIDE
-    setShowPopover(false);
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleSelectLocation = (item: string) => {
-    setValue(item);
-    setShowPopover(false);
-  };
-
-  return (
+  return load && (
     <div className={`relative flex ${className}`} ref={containerRef}>
       <div
         // onClick={() => setShowPopover(true)}

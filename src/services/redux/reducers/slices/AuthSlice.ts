@@ -1,4 +1,5 @@
 "use client";
+import { TourGuide } from "@/data/tours";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   getCookie,
@@ -32,16 +33,12 @@ export interface User {
   updated_at: string;
   onboarding: boolean;
   user_type: string;
-  resource: {
+  traveler?: {
+    id: number;
     accessibility?: string[];
     interests?: string[];
-    phone: string;
-    bio?: string;
     dietary_restrictions?: string;
-    experience?: number;
-    expertise?: string[];
-    has_vehicle?: boolean;
-    documents?: string[];
+    phone: string;
     passport_image?: string;
     nationality: string;
     emergency_contact?: {
@@ -49,8 +46,8 @@ export interface User {
       phone: string;
       email: string;
     };
-
-  }
+  };
+  guide?: TourGuide;
 }
 
 export interface AuthState {

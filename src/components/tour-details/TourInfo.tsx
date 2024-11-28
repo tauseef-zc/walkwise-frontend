@@ -9,8 +9,8 @@ interface TourInfoProps {
 }
 
 const TourInfo: FC<TourInfoProps> = ({ tour }) => {
-  let languages: string[] = [tour?.guide?.user?.primary_lang ?? ''];
-  languages = [...languages, ...tour?.guide?.user?.other_lang ?? []];
+  let languages: string[] = [tour?.user?.primary_lang ?? ''];
+  languages = [...languages, ...tour?.user?.other_lang ?? []];
   return (
     <div className="listingSection__wrap !space-y-6">
       {/* 1 */}
@@ -40,7 +40,7 @@ const TourInfo: FC<TourInfoProps> = ({ tour }) => {
         <span className="ml-2.5 text-neutral-500 dark:text-neutral-400">
           Tour by{" "}
           <span className="text-neutral-900 dark:text-neutral-200 font-medium">
-            { tour?.guide?.name}
+            { tour?.user?.name}
           </span>
         </span>
       </div>

@@ -22,11 +22,13 @@ const Heading2: React.FC<Heading2Props> = ({
 
   const { data } = useAppSelector((state) => state.search);
 
-  if ("from" in data?.dates && "to" in data?.dates) {
-    dates =
-      moment(data.dates.from ?? new Date()).format("MMM DD") +
-      " - " +
-      moment(data.dates.to ?? new Date()).format("MMM DD");
+  if (data?.dates) {
+    if ("from" in data?.dates && "to" in data?.dates) {
+      dates =
+        moment(data.dates.from ?? new Date()).format("MMM DD") +
+        " - " +
+        moment(data.dates.to ?? new Date()).format("MMM DD");
+    }
   }
 
   if("guests" in data) {

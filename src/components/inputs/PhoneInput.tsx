@@ -50,6 +50,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({ name, required, register, onNum
   return (
     <Input
       type="text"
+      value={value}
       onChange={(e) => {
         const re = /^[0-9\+\-\b]+$/;
         if (re.test(e.target.value) || e.target.value === "") {

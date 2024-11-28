@@ -31,7 +31,6 @@ const TourCategory = async ({
       <div className="container pt-10 pb-10 lg:pt-16 lg:pb-10">
         <SectionHeroArchivePage
           title={categoryData.category}
-          currentPage="Experiences"
           listingType={
             <>
               <i className="text-2xl las la-umbrella-beach"></i>

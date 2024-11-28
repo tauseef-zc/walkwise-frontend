@@ -11,7 +11,7 @@ import Slider from "rc-slider";
 import useTourCategory from "@/services/redux/actions/useTourCategory";
 import { ICategory } from "@/services/redux/reducers/slices/TourCategorySlice";
 import { createSearchUrl } from "@/services/server/tourActions";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { TourProps } from "@/app/(guest)/tours/page";
 import useFilters from "@/utils/filterActions";
 
@@ -29,7 +29,6 @@ const TabFilters = ({
 }) => {
   const { categories } = useTourCategory();
   const [isOpenMoreFilter, setIsOpenMoreFilter] = useState(false);
-
   const closeModalMoreFilter = () => setIsOpenMoreFilter(false);
   const openModalMoreFilter = () => setIsOpenMoreFilter(true);
   const router = useRouter();

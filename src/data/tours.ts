@@ -37,9 +37,16 @@ export interface TourGuide {
   id: string;
   name: string;
   phone: string;
+  bio?: string;
+  experience?: number;
+  expertise?: string[];
+  has_vehicle?: boolean;
+  documents?: string[];
   rating: number;
   user_id: number;
+  avatar: string;
   verified_at: string;
+  location: Location;
 }
 
 export interface Location {
@@ -133,6 +140,17 @@ export interface TourMeta {
 
 export interface TourPagination {
   data: Tour[];
+  links: {
+    first: string;
+    last: string;
+    prev: string;
+    next: string;
+  };
+  meta: TourMeta;
+}
+
+export interface GuidePagination {
+  data: TourGuide[];
   links: {
     first: string;
     last: string;

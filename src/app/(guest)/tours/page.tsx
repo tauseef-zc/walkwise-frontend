@@ -24,7 +24,6 @@ const Tours = async ({ searchParams }: { searchParams: TourProps }) => {
     <>
       <div className="container pt-10 pb-10 lg:pt-16 lg:pb-10">
         <SectionHeroArchivePage
-          currentPage="Experiences"
           listingType={
             <>
               <i className="text-2xl las la-umbrella-beach"></i>

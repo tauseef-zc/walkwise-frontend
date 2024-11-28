@@ -33,11 +33,11 @@ const AuthNav: FC = () => {
           <div className="hidden lg:flex space-x-1">
             <SwitchDarkMode />
             <SearchDropdown className="flex items-center" />
-            <NotifyDropdown />
+            {/* <NotifyDropdown /> */}
             <AvatarDropdown />
           </div>
           <div className="flex space-x-2 lg:hidden">
-            <NotifyDropdown />
+            {/* <NotifyDropdown /> */}
             <AvatarDropdown />
             <MenuBar />
           </div>

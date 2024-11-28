@@ -1,5 +1,5 @@
 "use client";
-import api from "@/lib/restApi";
+import axiosInstance from "@/utils/clientApi";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ICategory } from "./TourCategorySlice";
 
@@ -30,7 +30,7 @@ const initialState: GuideTourState = {
 
 export const getGuideTours = createAsyncThunk(
   "gettingGuideTours",
-  async (page: number) => await api.get("/guides/tours?page=" + page)
+  async (page: number) => await axiosInstance.get("/guides/tours?page=" + page)
 );
 
 const GuideTourProcess = createSlice({

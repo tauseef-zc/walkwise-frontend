@@ -39,7 +39,7 @@ const ProfileUpdateForm: FC = () => {
     experience,
     has_vehicle,
   } = {
-    ...user?.resource,
+    ...user?.guide,
   };
   const {
     register,
@@ -85,13 +85,14 @@ const ProfileUpdateForm: FC = () => {
         email: user.email,
         primary_lang: user.primary_lang,
         other_lang: user.other_lang,
-        phone: user.resource?.phone,
-        bio: user.resource?.bio,
-        expertise: user.resource?.expertise,
-        experience: user.resource?.experience,
-        has_vehicle: user.resource?.has_vehicle || 0,
+        phone: user.guide?.phone,
+        bio: user.guide?.bio,
+        expertise: user.guide?.expertise,
+        experience: user.guide?.experience,
+        has_vehicle: user.guide?.has_vehicle || 0,
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, setValue]);
 
   useEffect(() => {

@@ -8,6 +8,7 @@ import TourCategoryReducer, {
 import GuideTourReducer, { GuideTourState } from "./slices/GuideToursSlice";
 import LikedTourReducer, { LikedTourState } from "./slices/LikedToursSlice";
 import CheckoutReducer, { CheckoutState } from "./slices/CheckoutSlice";
+import MessageReducer, { ChatState } from "./slices/MessagesSlice";
 
 export interface RootState {
   search: SearchState;
@@ -23,6 +24,7 @@ export interface RootState {
     liked_tours: LikedTourState;
   };
   checkout: CheckoutState;
+  messages: ChatState;
 }
 
 const rootReducer = combineReducers({
@@ -39,6 +41,7 @@ const rootReducer = combineReducers({
   user: combineReducers({
     liked_tours: LikedTourReducer,
   }),
+  messages: MessageReducer,
 });
 
 export default rootReducer;

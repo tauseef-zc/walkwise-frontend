@@ -1,5 +1,5 @@
 import Footer from "@/components/common/Footer";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import Head from "next/head";
 import "./globals.css";
@@ -24,6 +24,14 @@ export const metadata: Metadata = {
   description: "A Tour Booking Platform",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "blue",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,9 +42,6 @@ export default function RootLayout({
 
   return (
     <html lang="en" className={poppins.className}>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Head>
       <StoreProvider>
         <AuthCheck>
           <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">

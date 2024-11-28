@@ -1,64 +1,62 @@
 "use client";
-import React, { useEffect, useState } from 'react'
-import ButtonPrimary from '../shared/ButtonPrimary';
-import Input from '../shared/Input';
-import { useForm } from 'react-hook-form';
-import { RegisterFormInput, RegisterRequestError } from '@/types/formData';
-import { useAppDispatch, useAppSelector } from '@/services/redux/hooks';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/services/app/AuthService';
-import { setCredentials } from '@/services/redux/reducers/slices/AuthSlice';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from "react";
+import ButtonPrimary from "../shared/ButtonPrimary";
+import Input from "../shared/Input";
+import { useForm, FormState  } from "react-hook-form";
+import { RegisterFormInput } from "@/types/formData";
+import { useAppDispatch, useAppSelector } from "@/services/redux/hooks";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/services/app/AuthService";
+import { setCredentials } from "@/services/redux/reducers/slices/AuthSlice";
+import { toast } from "react-toastify";
 
 const RegisterForm = () => {
-    const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-    const [serverError, setServerError] = useState(
-      ({} as RegisterRequestError) || null
-    );
-    const [loading, setLoading] = useState<boolean>(false);
-    const { register: registerUser } = useAuth();
-    const { replace } = useRouter();
-    const dispatch = useAppDispatch();
-    const {
-      register,
-      handleSubmit,
-      formState: { errors },
-    } = useForm<RegisterFormInput>();
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const [serverError, setServerError] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { register: registerUser } = useAuth();
+  const { replace } = useRouter();
+  const dispatch = useAppDispatch();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormInput>();
 
-    const onSubmit = async (data: RegisterFormInput) => {
-      setLoading(true);
-      setServerError({} as RegisterRequestError);
-      data.password_confirmation = data.password;
-      await registerUser(data)
-        .then((res) => {
-          dispatch(setCredentials(res.data));
-          toast("Your account is created successfully!", {
-            type: "success",
-          });
-        })
-        .catch((error) => {
-          setLoading(false);
-          const { response } = error;
-
-          if (response?.status === 400) {
-            replace("/otp-verify?email=" + data.email);
-          }
-
-          const codes = [401, 422];
-          if (codes.includes(response?.status)) {
-            setServerError(response?.data);
-          }
+  const onSubmit = async (data: RegisterFormInput) => {
+    setLoading(true);
+    setServerError(null);
+    data.password_confirmation = data.password;
+    await registerUser(data)
+      .then((res) => {
+        dispatch(setCredentials(res.data));
+        toast("Your account is created successfully!", {
+          type: "success",
         });
-    };
+      })
+      .catch((error) => {
+        setLoading(false);
+        const { response } = error;
 
-    useEffect(() => {
-      setLoading(false);
-      if (isAuthenticated && user !== null && !user.verified) {
-        replace("/otp-verify?email=" + user.email);
-      } else if (isAuthenticated && user !== null && user.onboarding) {
-        replace("/onboarding");
-      }
-    }, [isAuthenticated, user, replace]);
+        if (response?.status === 400) {
+          replace("/otp-verify?email=" + data.email);
+        }
+
+        const codes = [401, 422];
+        if (codes.includes(response?.status)) {
+          setServerError(response?.data);
+        }
+      });
+  };
+
+  useEffect(() => {
+    setLoading(false);
+    if (isAuthenticated && user !== null && !user.verified) {
+      replace("/otp-verify?email=" + user.email);
+    } else if (isAuthenticated && user !== null && user.onboarding) {
+      replace("/onboarding");
+    }
+  }, [isAuthenticated, user, replace]);
 
   return (
     <form
@@ -135,6 +133,6 @@ const RegisterForm = () => {
       </ButtonPrimary>
     </form>
   );
-}
+};
 
-export default RegisterForm
+export default RegisterForm;

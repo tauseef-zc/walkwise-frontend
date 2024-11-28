@@ -50,7 +50,7 @@ const AccountForm: FC = () => {
     nationality,
     emergency_contact,
   } = {
-    ...user?.resource,
+    ...user?.traveler,
   };
   const {
     register,
@@ -97,12 +97,12 @@ const AccountForm: FC = () => {
         email: user.email,
         primary_lang: user.primary_lang,
         other_lang: user.other_lang,
-        accessibility: user.resource?.accessibility,
-        interests: user.resource?.interests,
-        nationality: user.resource?.nationality,
-        dietary_restrictions: user.resource?.dietary_restrictions,
-        phone: user.resource?.phone,
-        emergency_contact: user.resource?.emergency_contact,
+        accessibility: user.traveler?.accessibility,
+        interests: user.traveler?.interests,
+        nationality: user.traveler?.nationality,
+        dietary_restrictions: user.traveler?.dietary_restrictions,
+        phone: user.traveler?.phone,
+        emergency_contact: user.traveler?.emergency_contact,
       });
     }
   }, [user, setValue]);

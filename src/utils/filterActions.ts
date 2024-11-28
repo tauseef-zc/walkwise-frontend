@@ -58,6 +58,13 @@ const useFilters = (categories: ICategory[], router: any) => {
       });
     }
 
+    if (searchParams.has("search")) {
+      filtersItems.push({
+        key: "search",
+        value: searchParams.get("search") || "",
+      });
+    }
+
     return filtersItems;
   }, [categories, searchParams, selectedCategories]);
 
@@ -97,6 +104,10 @@ const useFilters = (categories: ICategory[], router: any) => {
         delete updatedSearchParams.minPrice;
         delete updatedSearchParams.maxPrice;
         setRangePrices([0, 0]);
+      }
+
+      if (filter.key === "search") {
+        delete updatedSearchParams.search;
       }
 
       // Remove undefined or empty parameters from searchParams
