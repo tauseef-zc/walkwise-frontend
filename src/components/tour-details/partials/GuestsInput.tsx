@@ -5,22 +5,34 @@ import { Popover, Transition } from "@headlessui/react";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
 import ClearDataButton from "@/components/home/partials/ClearDataButton";
 import NcInputNumber from "@/components/inputs/NcInputNumber";
+import { on } from "events";
+
+export interface GuestsObject {
+  guestAdults: number;
+  guestChildren: number;
+  guestInfants: number;
+}
 
 export interface GuestsInputProps {
   className?: string;
+  guests?: GuestsObject;
+  onChange?: (data: GuestsObject) => void;
 }
 
-export interface GuestsObject {
-  guestAdults?: number;
-  guestChildren?: number;
-  guestInfants?: number;
-}
-
-
-const GuestsInput: FC<GuestsInputProps> = ({ className = "flex-1" }) => {
-  const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(2);
-  const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(1);
-  const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(1);
+const GuestsInput: FC<GuestsInputProps> = ({
+  className = "flex-1",
+  guests,
+  onChange,
+}) => {
+  const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(
+    guests?.guestAdults || 2
+  );
+  const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(
+    guests?.guestChildren || 0
+  );
+  const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(
+    guests?.guestInfants || 0
+  );
 
   const handleChangeData = (value: number, type: keyof GuestsObject) => {
     let newValue = {
@@ -28,6 +40,7 @@ const GuestsInput: FC<GuestsInputProps> = ({ className = "flex-1" }) => {
       guestChildren: guestChildrenInputValue,
       guestInfants: guestInfantsInputValue,
     };
+
     if (type === "guestAdults") {
       setGuestAdultsInputValue(value);
       newValue.guestAdults = value;
@@ -40,10 +53,11 @@ const GuestsInput: FC<GuestsInputProps> = ({ className = "flex-1" }) => {
       setGuestInfantsInputValue(value);
       newValue.guestInfants = value;
     }
+
+    onChange && onChange(newValue);
   };
 
-  const totalGuests =
-    guestChildrenInputValue + guestAdultsInputValue + guestInfantsInputValue;
+  const totalGuests = guestChildrenInputValue + guestAdultsInputValue;
 
   return (
     <Popover className={`flex relative ${className}`}>

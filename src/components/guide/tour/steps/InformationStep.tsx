@@ -4,15 +4,11 @@ import Select from "@/components/shared/Select";
 import Textarea from "@/components/shared/Textarea";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 import { FieldError, useForm } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "@/services/redux/hooks";
-import { useEffect, useState } from "react";
+
 import {
   ICategory,
-  getTourCategory,
 } from "@/services/redux/reducers/slices/TourCategorySlice";
-import { useApi } from "@/hooks/useApi";
 import { IFormInput } from "../TourCreateForm";
-import { AxiosResponse } from "axios";
 import LocationInput, { PlaceResult } from "@/components/inputs/LocationInput";
 import useTourCategory from "@/services/redux/actions/useTourCategory";
 
@@ -46,7 +42,6 @@ const StepInformation = ({
     defaultValues: tourData,
   });
   const onSubmit = (formData: IInformationFormInput) => {
-    console.log(formData);
     onSubmitAction(formData);
   };
   const { categories } = useTourCategory();

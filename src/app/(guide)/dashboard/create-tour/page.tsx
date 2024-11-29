@@ -11,7 +11,7 @@ const CreateTour = () => {
         </div>
       </div>
       <div className="flex justify-center">
-        <div className="flex-grow mt-10 md:mt-0 max-w-3xl">
+        <div className="flex-grow mt-10 md:mt-0 max-w-3xl p-10 bg-white dark:bg-neutral-800 shadow-lg rounded-xl">
           <TourCreateForm />
         </div>
       </div>

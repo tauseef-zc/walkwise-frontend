@@ -70,7 +70,6 @@ const OtpScreen = ({ searchParams }: { searchParams: any }) => {
         .catch((error) => {
           setLoading(false);
           setOtp([]);
-          console.log({error});
           setError("Invalid OTP entered! Please try again.");
         });
     }

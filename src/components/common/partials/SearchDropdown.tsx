@@ -3,6 +3,7 @@
 import { Popover, Transition } from "@headlessui/react";
 import Input from "@/components/shared/Input";
 import React, { FC, Fragment } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
   className?: string;
@@ -10,6 +11,27 @@ interface Props {
 
 const SearchDropdown: FC<Props> = ({ className = "" }) => {
   const inputRef = React.createRef<HTMLInputElement>();
+  const [value, setValue] = React.useState("");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    router.push(`/tours?search=${value}`);
+    inputRef.current?.blur();
+  }
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  }
+
+  React.useEffect(() => {
+    if (searchParams.get("search")) {
+      setValue(searchParams.get("search") || "");
+      inputRef.current?.focus();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   return (
     <React.Fragment>
@@ -41,12 +63,15 @@ const SearchDropdown: FC<Props> = ({ className = "" }) => {
                   static
                   className="absolute right-0 z-10 top-full w-screen max-w-sm"
                 >
-                  <form action="" method="POST">
+                  <form action="/tours" method="GET" onSubmit={handleSubmit}>
                     <Input
                       ref={inputRef}
                       rounded="rounded-full"
                       type="search"
                       placeholder="Type and press enter"
+                      value={value}
+                      onChange={handleSearch}
+                      name="search"
                     />
                     <input type="submit" hidden value="" />
                   </form>

@@ -1,3 +1,4 @@
+"use client";
 import React, { FC } from "react";
 import StartRating from "./StartRating";
 import BtnLikeIcon from "./BtnLikeIcon";
@@ -11,28 +12,28 @@ export interface StayCardProps {
   className?: string;
   data: Tour | FeaturedTour;
   size?: "default" | "small";
+  onRemoved?: (tourId: number) => void;
 }
 
 const StayCard: FC<StayCardProps> = ({
   size = "default",
   className = "",
   data,
+  onRemoved,
 }) => {
   const {
     images,
     category,
     title,
     slug,
-    like,
+    is_liked,
     saleOff,
     isAds,
     price,
-    reviewStart,
-    reviewCount,
-    guide,
+    rating,
+    user,
     id,
   } = data;
-
   const renderSliderGallery = () => {
     return (
       <div className="relative w-full">
@@ -40,10 +41,15 @@ const StayCard: FC<StayCardProps> = ({
           uniqueID={`StayCard_${id}`}
           ratioClass="aspect-w-4 aspect-h-3 "
           galleryImgs={images}
-          href={"tours/" + category.slug + "/" + slug}
+          href={"/tours/" + category.slug + "/" + slug}
           galleryClass={size === "default" ? undefined : ""}
         />
-        <BtnLikeIcon isLiked={like} className="absolute right-3 top-3 z-[1]" />
+        <BtnLikeIcon
+          tourId={id}
+          isLiked={is_liked}
+          className="absolute right-3 top-3 z-[1]"
+          onDislike={onRemoved}
+        />
         {saleOff && <SaleOffBadge className="absolute left-3 top-3" />}
       </div>
     );
@@ -54,7 +60,7 @@ const StayCard: FC<StayCardProps> = ({
       <div className={size === "default" ? "p-4 space-y-4" : "p-3 space-y-1"}>
         <div className={size === "default" ? "space-y-2" : "space-y-1"}>
           <Link
-            href={"tours/" + category.slug}
+            href={"/tours/" + category.slug}
             className="text-sm text-neutral-500 dark:text-neutral-400"
           >
             {category.category}
@@ -66,24 +72,22 @@ const StayCard: FC<StayCardProps> = ({
                 size === "default" ? "text-base" : "text-base"
               }`}
             >
-              <Link href={"tours/" + category.slug + "/" + slug}>
+              <Link href={"/tours/" + category.slug + "/" + slug}>
                 <span className="line-clamp-1">{title}</span>
               </Link>
             </h2>
           </div>
           <div className="flex items-center text-neutral-500 dark:text-neutral-400 text-sm space-x-1.5">
             <i className="las la-user-circle"></i>
-            <span className="">{guide.name}</span>
+            <span className="">{user?.name}</span>
           </div>
         </div>
         <div className="w-14 border-b border-neutral-100 dark:border-neutral-800"></div>
         <div className="flex justify-between items-center">
-          <Link href={"tours/" + category.slug + "/" + slug}>
-            <span className="text-base font-semibold">{price}</span>
+          <Link href={"/tours/" + category.slug + "/" + slug}>
+            <span className="text-base font-semibold">${price}</span>
           </Link>
-          {!!reviewStart && (
-            <StartRating reviewCount={reviewCount} point={reviewStart} />
-          )}
+          <StartRating point={rating}  />
         </div>
       </div>
     );

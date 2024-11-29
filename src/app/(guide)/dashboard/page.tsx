@@ -1,5 +1,29 @@
-"use client";
-const Dashboard = () => {
+import { get } from "@/lib/restApi";
+import {
+  CalendarIcon,
+  CurrencyDollarIcon,
+  MapIcon,
+  StarIcon,
+} from "@heroicons/react/24/solid";
+
+interface DashboardResponse {
+  bookingCount: number;
+  toursCount: number;
+  earnings: number;
+  rating: number;
+}
+
+const getDashboardStats = async () => {
+  try {
+    const response = await get("/guides/dashboard");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const Dashboard = async () => {
+  const response = (await getDashboardStats()) as unknown as DashboardResponse;
   return (
     <>
       <h2 className="text-3xl font-semibold mb-8">Dashboard</h2>
@@ -8,19 +32,7 @@ const Dashboard = () => {
           <div className="ml-[18px] flex h-[90px] w-auto flex-row items-center">
             <div className="rounded-full bg-lightPrimary p-3 dark:bg-navy-700">
               <span className="flex items-center text-brand-500 dark:text-white">
-                <svg
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 24 24"
-                  className="h-7 w-7"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path fill="none" d="M0 0h24v24H0z"></path>
-                  <path d="M4 9h4v11H4zM16 13h4v7h-4zM10 4h4v16h-4z"></path>
-                </svg>
+                <MapIcon className="h-12 w-12" />
               </span>
             </div>
           </div>
@@ -29,7 +41,7 @@ const Dashboard = () => {
               Total Tours
             </p>
             <h4 className="text-xl font-bold text-navy-700 dark:text-white">
-              10
+              {response?.toursCount ?? 0}
             </h4>
           </div>
         </div>
@@ -37,20 +49,7 @@ const Dashboard = () => {
           <div className="ml-[18px] flex h-[90px] w-auto flex-row items-center">
             <div className="rounded-full bg-lightPrimary p-3 dark:bg-navy-700">
               <span className="flex items-center text-brand-500 dark:text-white">
-                <svg
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 512 512"
-                  className="h-6 w-6"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M298.39 248a4 4 0 002.86-6.8l-78.4-79.72a4 4 0 00-6.85 2.81V236a12 12 0 0012 12z"></path>
-                  <path d="M197 267a43.67 43.67 0 01-13-31v-92h-72a64.19 64.19 0 00-64 64v224a64 64 0 0064 64h144a64 64 0 0064-64V280h-92a43.61 43.61 0 01-31-13zm175-147h70.39a4 4 0 002.86-6.8l-78.4-79.72a4 4 0 00-6.85 2.81V108a12 12 0 0012 12z"></path>
-                  <path d="M372 152a44.34 44.34 0 01-44-44V16H220a60.07 60.07 0 00-60 60v36h42.12A40.81 40.81 0 01231 124.14l109.16 111a41.11 41.11 0 0111.83 29V400h53.05c32.51 0 58.95-26.92 58.95-60V152z"></path>
-                </svg>
+                <CalendarIcon className="h-12 w-12" />
               </span>
             </div>
           </div>
@@ -59,7 +58,7 @@ const Dashboard = () => {
               Total Bookings
             </p>
             <h4 className="text-xl font-bold text-navy-700 dark:text-white">
-              30
+              {response?.bookingCount ?? 0}
             </h4>
           </div>
         </div>
@@ -67,19 +66,7 @@ const Dashboard = () => {
           <div className="ml-[18px] flex h-[90px] w-auto flex-row items-center">
             <div className="rounded-full bg-lightPrimary p-3 dark:bg-navy-700">
               <span className="flex items-center text-brand-500 dark:text-white">
-                <svg
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 24 24"
-                  className="h-6 w-6"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path fill="none" d="M0 0h24v24H0z"></path>
-                  <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"></path>
-                </svg>
+                <CurrencyDollarIcon className="h-12 w-12" />
               </span>
             </div>
           </div>
@@ -88,7 +75,7 @@ const Dashboard = () => {
               Your Earnings
             </p>
             <h4 className="text-xl font-bold text-navy-700 dark:text-white">
-              $1,000
+              ${response?.earnings ?? 0}
             </h4>
           </div>
         </div>
@@ -96,18 +83,8 @@ const Dashboard = () => {
           <div className="ml-[18px] flex h-[90px] w-auto flex-row items-center">
             <div className="rounded-full bg-lightPrimary p-3 dark:bg-navy-700">
               <span className="flex items-center text-brand-500 dark:text-white">
-                <svg
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 512 512"
-                  className="h-6 w-6"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M208 448V320h96v128h97.6V256H464L256 64 48 256h62.4v192z"></path>
-                </svg>
+                {/* Star rating icon */}
+                <StarIcon className="h-12 w-12" />
               </span>
             </div>
           </div>
@@ -116,13 +93,13 @@ const Dashboard = () => {
               Your Rating
             </p>
             <h4 className="text-xl font-bold text-navy-700 dark:text-white">
-              5.4/10
+              {Number(response?.rating).toFixed(1) ?? 0}/5
             </h4>
           </div>
         </div>
       </div>
     </>
   );
-}
+};
 
-export default Dashboard
+export default Dashboard;

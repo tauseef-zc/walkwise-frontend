@@ -1,7 +1,6 @@
 "use client";
 import { useAuth } from "@/services/app/AuthService";
 import { useAppSelector } from "@/services/redux/hooks";
-import Cookies from "js-cookie";
 import React, { useEffect } from "react";
 
 const AuthCheck = ({ children }: { children: React.ReactNode }) => {

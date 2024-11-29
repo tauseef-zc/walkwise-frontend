@@ -1,6 +1,5 @@
 "use client";
-
-import { ClockIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import { MapPinIcon } from "@heroicons/react/24/outline";
 import React, { useState, useRef, useEffect, FC } from "react";
 import ClearDataButton from "./ClearDataButton";
 import { PlaceResult } from "@/components/inputs/LocationInput";
@@ -11,7 +10,7 @@ export interface LocationInputProps {
   className?: string;
   divHideVerticalLineClass?: string;
   autoFocus?: boolean;
-  onLocationSelected: (place: PlaceResult) => void;
+  onLocationSelected: (place: PlaceResult | null) => void;
   defaultLocation: PlaceResult | null;
 }
 
@@ -31,8 +30,22 @@ const LocationInput: FC<LocationInputProps> = ({
 
   const [value, setValue] = useState<any>(defaultLocation?.address ?? "");
   const [showPopover, setShowPopover] = useState(autoFocus);
+  const [load, setLoad] = useState(false);
 
-  console.log("defaultLocation", defaultLocation);
+  const eventClickOutsideDiv = (event: MouseEvent) => {
+    if (!containerRef.current) return;
+    // CLICK IN_SIDE
+    if (!showPopover || containerRef.current.contains(event.target as Node)) {
+      return;
+    }
+    // CLICK OUT_SIDE
+    setShowPopover(false);
+  };
+
+  const handleSelectLocation = (item: string) => {
+    setValue(item);
+    setShowPopover(false);
+  };
 
   useEffect(() => {
     setShowPopover(autoFocus);
@@ -56,6 +69,8 @@ const LocationInput: FC<LocationInputProps> = ({
   }, [showPopover]);
 
   useEffect(() => {
+    if (!window?.google || !window?.google?.maps) return;
+
     const autocompleteInstance = new window.google.maps.places.Autocomplete(
       inputRef.current as HTMLInputElement,
       {
@@ -95,7 +110,7 @@ const LocationInput: FC<LocationInputProps> = ({
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [load]);
 
   useEffect(() => {
     if (defaultLocation !== null) {
@@ -103,79 +118,14 @@ const LocationInput: FC<LocationInputProps> = ({
     }
   }, [defaultLocation]);
 
-  const eventClickOutsideDiv = (event: MouseEvent) => {
-    if (!containerRef.current) return;
-    // CLICK IN_SIDE
-    if (!showPopover || containerRef.current.contains(event.target as Node)) {
-      return;
+  useEffect(() => {
+    if (!load) {
+      setLoad(true);
     }
-    // CLICK OUT_SIDE
-    setShowPopover(false);
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleSelectLocation = (item: string) => {
-    setValue(item);
-    setShowPopover(false);
-  };
-
-  const renderRecentSearches = () => {
-    return (
-      <>
-        <h3 className="block mt-2 sm:mt-0 px-4 sm:px-8 font-semibold text-base sm:text-lg text-neutral-800 dark:text-neutral-100">
-          Recent searches
-        </h3>
-        <div className="mt-2">
-          {[
-            "Hamptons, Suffolk County, NY",
-            "Las Vegas, NV, United States",
-            "Ueno, Taito, Tokyo",
-            "Ikebukuro, Toshima, Tokyo",
-          ].map((item) => (
-            <span
-              onClick={() => handleSelectLocation(item)}
-              key={item}
-              className="flex px-4 sm:px-8 items-center space-x-3 sm:space-x-4 py-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 cursor-pointer"
-            >
-              <span className="block text-neutral-400">
-                <ClockIcon className="h-4 sm:h-6 w-4 sm:w-6" />
-              </span>
-              <span className=" block font-medium text-neutral-700 dark:text-neutral-200">
-                {item}
-              </span>
-            </span>
-          ))}
-        </div>
-      </>
-    );
-  };
-
-  const renderSearchValue = () => {
-    return (
-      <>
-        {[
-          "Ha Noi, Viet Nam",
-          "San Diego, CA",
-          "Humboldt Park, Chicago, IL",
-          "Bangor, Northern Ireland",
-        ].map((item) => (
-          <span
-            onClick={() => handleSelectLocation(item)}
-            key={item}
-            className="flex px-4 sm:px-8 items-center space-x-3 sm:space-x-4 py-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 cursor-pointer"
-          >
-            <span className="block text-neutral-400">
-              <ClockIcon className="h-4 w-4 sm:h-6 sm:w-6" />
-            </span>
-            <span className="block font-medium text-neutral-700 dark:text-neutral-200">
-              {item}
-            </span>
-          </span>
-        ))}
-      </>
-    );
-  };
-
-  return (
+  return load && (
     <div className={`relative flex ${className}`} ref={containerRef}>
       <div
         // onClick={() => setShowPopover(true)}
@@ -200,10 +150,11 @@ const LocationInput: FC<LocationInputProps> = ({
           <span className="block mt-0.5 text-sm text-neutral-400 font-light ">
             <span className="line-clamp-1">{!!value ? placeHolder : desc}</span>
           </span>
-          {value && showPopover && (
+          {value && (
             <ClearDataButton
               onClick={() => {
                 setValue("");
+                onLocationSelected(null);
               }}
             />
           )}
@@ -214,12 +165,6 @@ const LocationInput: FC<LocationInputProps> = ({
         <div
           className={`h-8 absolute self-center top-1/2 -translate-y-1/2 z-0 bg-white dark:bg-neutral-800 ${divHideVerticalLineClass}`}
         ></div>
-      )}
-
-      {showPopover && (
-        <div className="absolute left-0 z-40 w-full min-w-[300px] sm:min-w-[500px] bg-white dark:bg-neutral-800 top-full mt-3 py-3 sm:py-6 rounded-3xl shadow-xl max-h-96 overflow-y-auto">
-          {value ? renderSearchValue() : renderRecentSearches()}
-        </div>
       )}
     </div>
   );

@@ -1,13 +1,13 @@
 import { logout } from "@/lib/api";
-import Cookies from "js-cookie";
+import { deleteCookie, getCookie } from "cookies-next";
 
 export async function GET() {
   try {
-    const token = Cookies.get("token");
+    const token = getCookie("token");
 
     if (token) {
-      Cookies.remove("token");
-      Cookies.remove("user");
+      deleteCookie("token");
+      deleteCookie("user");
       await logout(token);
     }
 

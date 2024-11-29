@@ -1,3 +1,56 @@
 .nc-header-bg {
   @apply bg-white/70 dark:bg-neutral-900/60 backdrop-blur-2xl backdrop-filter;
 }
+
+.payments {
+  background-color: #f9f9f9;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.payments:focus {
+  border-color: #6366f1;
+}
+
+.payments .InputElement {
+  color: #fff; /* Primary text color */
+}
+
+.pac-container {
+
+  border-radius: 10px;
+  margin-top: 5px;
+
+  .pac-item {
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f7f7f7;
+    }
+  }
+
+   &::after {
+      content: '';
+      display: block;
+      clear: both;  
+      height: 0;
+      background-image: none;
+    }
+
+
+  .pac-item-query {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .pac-icon {
+    margin-right: 10px;
+    font-size: 18px;
+    color: #888;
+  }
+}

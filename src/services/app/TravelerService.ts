@@ -2,7 +2,6 @@ import { useApi } from "@/hooks/useApi";
 import { useAppDispatch } from "../redux/hooks";
 
 export const useTraveler = () => {
-  const dispatch = useAppDispatch();
   const api = useApi();
 
   const createTraveler = async (data: any) => {

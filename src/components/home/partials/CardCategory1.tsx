@@ -14,7 +14,7 @@ const CardCategory1: FC<CardCategory1Props> = ({
   size = "normal",
   taxonomy,
 }) => {
-  const { count, name, href = "/", thumbnail } = taxonomy;
+  const { name, href = "/", thumbnail } = taxonomy;
   return (
     <Link
       href={href}
@@ -42,7 +42,7 @@ const CardCategory1: FC<CardCategory1Props> = ({
             size === "large" ? "text-sm" : "text-xs"
           } block mt-[2px] text-neutral-500 dark:text-neutral-400`}
         >
-          {count} Articles
+          {0} Articles
         </span>
       </div>
     </Link>
