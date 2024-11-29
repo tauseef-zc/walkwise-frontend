@@ -10,11 +10,11 @@ const useGuideTours = () => {
   const { data: tours, pagination, loading } = useAppSelector((state) => state.guide.tours);
 
   useEffect(() => {
-    if (tours.length === 0 && !loading) {
+    if (!loading) {
       dispatch(getGuideTours(1));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tours]);
+  }, []);
 
   useEffect(() => {
     if (searchParameters.get("page") && !loading) {

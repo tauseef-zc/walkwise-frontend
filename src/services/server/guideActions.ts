@@ -16,3 +16,19 @@ export const searchGuides = async (data: any) => {
   });
   return response as unknown as GuidePagination;
 };
+
+export const getGuide = async (id: number, page: string | number | string[]) => {
+  try {
+    const token = await getCookie("token", { cookies });
+    const response = await get("/guides/" + id + "?page=" + page, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

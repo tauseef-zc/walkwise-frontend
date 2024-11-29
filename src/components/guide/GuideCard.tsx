@@ -12,7 +12,7 @@ const GuideCard = ({ className = "", guide }: { className?: string, guide: TourG
         [ nc-box-has-hover ] [ nc-dark-box-bg-has-hover ] ${className}`}
     >
       <Avatar
-        sizeClass="w-20 h-20 text-2xl"
+        sizeClass="w-[8rem] h-[8rem] text-2xl"
         radius="rounded-full"
         imgUrl={getImage(guide.avatar)}
         userName={guide.name}

@@ -46,7 +46,11 @@ export interface TourGuide {
   user_id: number;
   avatar: string;
   verified_at: string;
+  is_verified: boolean;
   location: Location;
+  created_at?: string;
+  updated_at?: string;
+  user?: User;
 }
 
 export interface Location {

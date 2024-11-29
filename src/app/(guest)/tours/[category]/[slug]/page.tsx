@@ -13,7 +13,7 @@ const TourDetail = async ({
 }: {
   params: { slug: string; category: string };
 }) => {
-  const { slug, category } = params;
+  const { slug } = params;
   const tour = await getTour(slug);
 
   return (

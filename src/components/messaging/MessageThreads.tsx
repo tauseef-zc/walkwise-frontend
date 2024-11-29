@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/services/redux/hooks";
-import { fetchThreads, Thread } from "@/services/redux/reducers/slices/MessagesSlice";
+import { useAppSelector } from "@/services/redux/hooks";
+import { Thread } from "@/services/redux/reducers/slices/MessagesSlice";
 
 const MessageThreads = ({
   showCurrentThread,
@@ -9,22 +9,14 @@ const MessageThreads = ({
   showCurrentThread: (id: number) => void;
   onShowMenu: (show: boolean) => void;
 }) => {
-  const dispatch = useAppDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const threads = useAppSelector((state: any) => state.messages.threads);
-  const userId = useAppSelector((state: any) => state.auth.user?.id);
-
+  
   useEffect(() => {
     onShowMenu(showMenu);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showMenu]);
 
-  useEffect(() => {
-    if (userId) {
-      dispatch(fetchThreads(userId));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
   return (
     <div className="w-full md:w-1/4 border-b md:border-b-0 md:border-r bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 p-6 pt-8">
       <div className="flex justify-between items-center md:hidden mb-4">

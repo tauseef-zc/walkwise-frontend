@@ -17,9 +17,9 @@ export const searchTours = async (data: any) => {
   return response as unknown as TourPagination;
 };
 
-export const getTourCategory = async (slug: string) => {
+export const getTourCategory = async (slug: string, page: number = 1) => {
   try {
-    const response = await get("/tour-categories/" + slug);
+    const response = await get("/tour-categories/" + slug + "?page=" + page);
     return response as unknown as TourCategory;
   } catch (error) {
     return null;

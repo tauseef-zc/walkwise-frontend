@@ -3,14 +3,15 @@ import StartRating from "../home/partials/StartRating";
 import Avatar from "../shared/Avatar";
 import Badge from "../shared/Badge";
 import { FC } from "react";
+import { getImage } from "@/lib/assets";
 
 interface TourInfoProps {
   tour: Tour;
 }
 
 const TourInfo: FC<TourInfoProps> = ({ tour }) => {
-  let languages: string[] = [tour?.user?.primary_lang ?? ''];
-  languages = [...languages, ...tour?.user?.other_lang ?? []];
+  let languages: string[] = [tour?.user?.primary_lang ?? ""];
+  languages = [...languages, ...(tour?.user?.other_lang ?? [])];
   return (
     <div className="listingSection__wrap !space-y-6">
       {/* 1 */}
@@ -26,7 +27,7 @@ const TourInfo: FC<TourInfoProps> = ({ tour }) => {
 
       {/* 3 */}
       <div className="flex items-center space-x-4">
-        <StartRating />
+        <StartRating point={tour?.rating ?? 0} />
         <span>·</span>
         <span>
           <i className="las la-map-marker-alt"></i>
@@ -36,11 +37,16 @@ const TourInfo: FC<TourInfoProps> = ({ tour }) => {
 
       {/* 4 */}
       <div className="flex items-center">
-        <Avatar hasChecked sizeClass="h-10 w-10" radius="rounded-full" />
+        <Avatar
+          hasChecked={tour?.user?.guide?.is_verified}
+          imgUrl={getImage(tour?.user?.guide?.avatar ?? "")}
+          sizeClass="h-10 w-10"
+          radius="rounded-full"
+        />
         <span className="ml-2.5 text-neutral-500 dark:text-neutral-400">
           Tour by{" "}
           <span className="text-neutral-900 dark:text-neutral-200 font-medium">
-            { tour?.user?.name}
+            {tour?.user?.name}
           </span>
         </span>
       </div>

@@ -7,8 +7,6 @@ import {
 } from "@/services/redux/reducers/slices/MessagesSlice";
 import Pusher from "pusher-js";
 import moment from "moment";
-import ButtonCircle from "../shared/ButtonCircle";
-import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import ButtonPrimary from "../shared/ButtonPrimary";
 
 const MessageList = ({ threadId }: { threadId: number }) => {

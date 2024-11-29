@@ -1,27 +1,41 @@
 "use client";
-
+import { useAppSelector } from "@/services/redux/hooks";
 import { Route } from "@/types/router";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 
 interface RouteList {
   [key: string]: string;
 }
 export const DashboardNav = () => {
+  const [active, setActive] = React.useState(false);
   const pathname = usePathname();
-
-  const listNav: RouteList = {
+  const { user } = useAppSelector((state) => state.auth);
+  let listNav: RouteList = {
     "/dashboard": "Dashboard",
-    "/dashboard/tours": "Tours",
-    "/dashboard/bookings": "Bookings",
-    "/dashboard/payments": "Payments",
-    "/dashboard/messages": "Messages",
+    "/dashboard/wishlist": "Wishlist",
     "/dashboard/update-profile": "Profile Update",
     "/dashboard/account-password": "Update Password",
   };
 
-  return (
+  if (user?.guide?.is_verified) {
+     listNav = {
+      "/dashboard": "Dashboard",
+      "/dashboard/tours": "Tours",
+      "/dashboard/bookings": "Bookings",
+      "/dashboard/messages": "Messages",
+      '/dashboard/wishlist': 'Wishlist',
+      "/dashboard/update-profile": "Profile Update",
+      "/dashboard/account-password": "Update Password",
+    };
+  }
+
+  useEffect(() => {
+    setActive(true);
+  }, []);
+
+  return active && (
     <div className="container">
       <div className="flex space-x-8 md:space-x-14 overflow-x-auto hiddenScrollbar">
         {Object.keys(listNav).map((item: Route) => {

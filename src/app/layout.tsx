@@ -1,7 +1,6 @@
 import Footer from "@/components/common/Footer";
 import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
-import Head from "next/head";
 import "./globals.css";
 import "@/assets/fonts/line-awesome-1.3.0/css/line-awesome.css";
 import "@/styles/index.scss";

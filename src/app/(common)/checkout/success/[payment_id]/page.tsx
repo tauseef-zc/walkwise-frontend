@@ -1,6 +1,6 @@
 import BookingItem from "@/components/payments/checkout/BookingItem";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
-import { Tour } from "@/data/tours";
+import { Tour, User } from "@/data/tours";
 import { get } from "@/lib/restApi";
 import moment from "moment";
 import { notFound } from "next/navigation";
@@ -19,6 +19,8 @@ export interface Booking {
   total: number;
   booking_date: string;
   created_at: string;
+  payment?: Payment;
+  user?: User;
 }
 
 export interface Payment {
