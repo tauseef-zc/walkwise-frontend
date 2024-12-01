@@ -74,7 +74,7 @@ const TourItinerary: FC<Props> = ({ itineraries }) => {
               <h4 className="text-lg font-semibold">Location</h4>
               <div className="prose sm:prose">
                 <ul className="mt-3 text-neutral-500 dark:text-neutral-400 space-y-2">
-                  <li>{itineraries[tab].location.address}</li>
+                  <li>{itineraries[tab]?.location?.address ?? "-"}</li>
                 </ul>
               </div>
             </div>

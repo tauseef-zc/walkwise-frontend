@@ -114,7 +114,7 @@ const LoginForm = () => {
       <div className="block">
         <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
           Password
-          <Link href="/login" className="text-sm underline font-medium">
+          <Link href="/forgot-password" className="text-sm underline font-medium">
             Forgot password?
           </Link>
         </span>
