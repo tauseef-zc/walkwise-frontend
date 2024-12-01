@@ -38,6 +38,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
 
   const locationName = () => {
     if (defaultLocation) {
+      onPlaceSelected(defaultLocation as PlaceResult);
       const location = defaultLocation as PlaceResult;
       return location.address;
     }

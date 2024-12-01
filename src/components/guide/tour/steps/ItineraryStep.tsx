@@ -27,7 +27,7 @@ const ItineraryStep = ({
   onBackAction: (step: number) => void;
 }) => {
   const idCount = tourData.tour_days?.length ?? 0;
-  const ids: number[] = idCount > 0 ? Array.from(Array(idCount).keys()) : [0];  
+  const ids: number[] = idCount > 0 ? Array.from(Array(idCount).keys()) : [0];
   const [cardIds, setCardIds] = React.useState<number[]>(ids);
   const {
     handleSubmit,

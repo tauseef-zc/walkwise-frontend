@@ -52,7 +52,7 @@ const LoginForm = () => {
           replace("/otp-verify?email=" + data.email);
         }
 
-        const codes = [401, 422];
+        const codes = [403, 422];
         if (codes.includes(response?.status)) {
           setServerError(response?.data);
         }
@@ -78,8 +78,6 @@ const LoginForm = () => {
   return (
     <form
       className="grid grid-cols-1 gap-6"
-      action="#"
-      method="post"
       onSubmit={handleSubmit(onSubmit)}
     >
       {serverError?.error && (

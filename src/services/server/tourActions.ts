@@ -49,3 +49,13 @@ export const getTour = async (slug: string) => {
     throw error;
   }
 };
+
+
+export const getTourById = async (id: number) => {
+  try {
+    const response = await api.get("/tours/get/" + id);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
