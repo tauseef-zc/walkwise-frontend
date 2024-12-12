@@ -12,6 +12,7 @@ import { useAuth } from "@/services/app/AuthService";
 import { useGuide } from "@/services/app/GuideService";
 import { useAppDispatch, useAppSelector } from "@/services/redux/hooks";
 import { setStep } from "@/services/redux/reducers/slices/OnboardingSlice";
+import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FieldError, useForm } from "react-hook-form";

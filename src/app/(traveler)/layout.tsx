@@ -6,6 +6,7 @@ export interface CommonLayoutProps {
 }
 
 const MyAccountLayout: FC<CommonLayoutProps> = ({ children }) => {
+
   return (
     <div className="nc-CommonLayoutAccount bg-neutral-50 dark:bg-neutral-900">
       <div className="border-b border-neutral-200 dark:border-neutral-700 pt-12 bg-white dark:bg-neutral-800">

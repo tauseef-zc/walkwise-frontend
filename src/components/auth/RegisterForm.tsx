@@ -15,7 +15,7 @@ const RegisterForm = () => {
   const [serverError, setServerError] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const { register: registerUser } = useAuth();
-  const { replace } = useRouter();
+  const { replace, prefetch } = useRouter();
   const dispatch = useAppDispatch();
   const {
     register,
@@ -25,6 +25,12 @@ const RegisterForm = () => {
 
   const onSubmit = async (data: RegisterFormInput) => {
     setLoading(true);
+    
+    prefetch("/otp-verify?email=" + data.email);
+    prefetch("/onboarding");
+    prefetch("/my-account");
+    prefetch("/dashboard");
+
     setServerError(null);
     data.password_confirmation = data.password;
     await registerUser(data)
