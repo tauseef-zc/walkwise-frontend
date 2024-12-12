@@ -12,7 +12,6 @@ import { AnimatePresence, motion, MotionConfig } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import { useSwipeable } from "react-swipeable";
-import { DEMO_IMAGE } from "../ListingImageGallery";
 import { variants } from "@/utils/animationVariants";
 import downloadPhoto from "../utils/downloadPhoto";
 import { range } from "../utils/range";
@@ -31,7 +30,7 @@ interface SharedModalProps {
 
 export default function SharedModal({
   index,
-  images = DEMO_IMAGE,
+  images = [],
   changePhotoId,
   closeModal,
   navigation,

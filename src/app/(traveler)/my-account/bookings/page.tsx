@@ -1,10 +1,10 @@
-import { Payment } from "@/app/(common)/checkout/success/[payment_id]/page";
 import { ContentItem } from "@/components/guide/table/partials/TableContents";
 import { HeadItem } from "@/components/guide/table/partials/TableHeading";
 import Table from "@/components/guide/table/table";
 import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import Pagination from "@/components/shared/Pagination";
 import { TourMeta } from "@/data/tours";
+import { Payment } from "@/data/types";
 import { getImage } from "@/lib/assets";
 import { get } from "@/lib/restApi";
 import moment from "moment";

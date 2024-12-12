@@ -1,5 +1,6 @@
 "use server";
 import { TourCategory, TourPagination } from "@/data/tours";
+import { Booking, Payment } from "@/data/types";
 import api, { get } from "@/lib/restApi";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
@@ -57,5 +58,31 @@ export const getTourById = async (id: number) => {
     return response.data;
   } catch (error) {
     throw error;
+  }
+};
+
+export const getPayment = async (
+  paymentId: string
+): Promise<Payment | null> => {
+  try {
+    const response = await get(`/payments/${paymentId}`);
+    if (!response || typeof response !== "object" || !("id" in response)) {
+      return null; // Validate response structure
+    }
+    return response as unknown as Payment;
+  } catch (error) {
+    console.error("Failed to fetch payment:", error);
+    return null;
+  }
+};
+
+
+export const getBooking = async (
+  paymentId: number
+): Promise<Booking | null> => {
+  try {
+    return (await get("/guides/bookings/" + paymentId)).data as unknown as Booking;
+  } catch (error) {
+    return null;
   }
 };

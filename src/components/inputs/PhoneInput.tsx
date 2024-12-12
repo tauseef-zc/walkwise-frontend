@@ -17,6 +17,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({ name, required, register, onNum
     if (value) {
       onNumberChange && onNumberChange(value);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   if (!register) {

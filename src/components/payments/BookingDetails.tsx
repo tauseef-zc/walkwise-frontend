@@ -1,4 +1,4 @@
-import { Booking, Payment } from "@/app/(common)/checkout/success/[payment_id]/page";
+import { Booking, Payment } from "@/data/types";
 import moment from "moment";
 
 const BookingDetails = ({

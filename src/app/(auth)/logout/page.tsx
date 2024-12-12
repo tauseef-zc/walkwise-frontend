@@ -31,6 +31,7 @@ const Logout = () => {
           setLoading(false);
         });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <div className="text-center my-5">Logging out...</div>;
