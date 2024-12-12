@@ -30,6 +30,8 @@ const SuccessPage = async ({ params }: { params: { payment_id: string } }) => {
     guestInfants: booking?.infants || 0,
   };
 
+  console.log(payment);
+
   return (
     <div className="nc-PayPage">
       <main className="container mt-11 mb-24 lg:mb-32">
@@ -69,7 +71,7 @@ const SuccessPage = async ({ params }: { params: { payment_id: string } }) => {
                 />
                 <BookingDetail
                   label="Total"
-                  value={`$${payment?.amount.toFixed(2)}`}
+                  value={`$${Number(payment?.amount)?.toFixed(2)}`}
                 />
                 <BookingDetail label="Payment Method" value="Credit Card" />
               </div>
