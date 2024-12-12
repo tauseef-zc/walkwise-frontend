@@ -5,6 +5,7 @@ import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import Input from "@/components/shared/Input";
 import ButtonThird from "@/components/shared/ButtonThird";
+import { init } from "next/dist/compiled/webpack/webpack";
 
 interface ITourDate {
   from: Date | null;
@@ -77,6 +78,7 @@ const DateRangeCard = ({
           type="hidden"
           {...register(`tour_dates.${cardId}`, {
             required: "Please select a tour availability date range.",
+            value: dates,
           })}
         />
         {cardIndex !== 0 && (

@@ -11,6 +11,7 @@ import {
 import { IFormInput } from "../TourCreateForm";
 import LocationInput, { PlaceResult } from "@/components/inputs/LocationInput";
 import useTourCategory from "@/services/redux/actions/useTourCategory";
+import { useEffect } from "react";
 
 interface IInformationFormInput extends IFormInput {
   title?: string;
@@ -45,6 +46,12 @@ const StepInformation = ({
     onSubmitAction(formData);
   };
   const { categories } = useTourCategory();
+  
+  useEffect(() => {
+    if (tourData.tour_category_id) {
+      setValue("tour_category_id", tourData.tour_category_id);
+    }
+  }, [categories, tourData, setValue]);
 
   return (
     <>
@@ -122,9 +129,9 @@ const StepInformation = ({
           <LocationInput
             type="places"
             placeholder="Ex: Bandaranayake Airport"
-            defaultLocation={tourData.location}
-            onPlaceSelected={function (location: PlaceResult): void {
-              setValue("start_point", location);
+            defaultLocation={tourData.start_point}
+            onPlaceSelected={function (start_point: PlaceResult): void {
+              setValue("start_point", start_point);
             }}
             {...register("start_point", {
               required: "Please enter a tour Starting Location",
@@ -139,9 +146,9 @@ const StepInformation = ({
           <LocationInput
             type="places"
             placeholder="Ex: Colombo, Sri Lanka"
-            defaultLocation={tourData.location}
-            onPlaceSelected={function (location: PlaceResult): void {
-              setValue("end_point", location);
+            defaultLocation={tourData.end_point}
+            onPlaceSelected={function (end_point: PlaceResult): void {
+              setValue("end_point", end_point);
             }}
             {...register("end_point", {
               required: "Please enter a tour Ending Location",

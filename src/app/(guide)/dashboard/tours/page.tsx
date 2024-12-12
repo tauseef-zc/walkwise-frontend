@@ -7,6 +7,7 @@ import ButtonSecondary from "@/components/shared/ButtonSecondary";
 import { getImage } from "@/lib/assets";
 import useGuideTours from "@/services/redux/actions/useGuideTours";
 import { ITour } from "@/services/redux/reducers/slices/GuideToursSlice";
+import { PencilIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -45,7 +46,9 @@ const DashboardTours = () => {
       const items: ContentItem[][] = [];
       tours.forEach((tour: ITour) => {
         const currentImage = tour?.images[0];
-        const imagePath = getImage(currentImage.thumbnail);
+        const imagePath = currentImage?.thumbnail !== undefined ?getImage(
+          currentImage.thumbnail
+        ) : "";
         items.push([
           { value: tour.id },
           {
@@ -59,10 +62,10 @@ const DashboardTours = () => {
           {
             value: (
               <Link
-                href="/dashboard/tours/1"
-                className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
+                href={"/dashboard/tours/" + tour.id}
+                className="flex flex-row justify-evenly items-center align-middle  text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
               >
-                View
+                <PencilIcon className="w-3 h-3" /> <span>Edit</span>
               </Link>
             ),
           },

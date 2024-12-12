@@ -75,13 +75,13 @@ const TourMap: FC<TourMapProps> = ({ tour }) => {
     if (!window?.google || !window?.google?.maps) return;
 
     if (tour.tour_days && tour.tour_days.length > 0) {
-      points.push(new google.maps.LatLng(tour.start_location.geocode));
+      points.push(new google.maps.LatLng(tour.start_location?.geocode));
       tour.tour_days.forEach((day: TourDay) => {
         if (day.location?.geocode?.lat && day.location?.geocode?.lng) {
           points.push(new google.maps.LatLng(day.location?.geocode));
         }
       });
-      points.push(new google.maps.LatLng(tour.end_location.geocode));
+      points.push(new google.maps.LatLng(tour.end_location?.geocode));
       setWaypoints(points);
     }
 

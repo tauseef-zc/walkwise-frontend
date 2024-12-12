@@ -1,13 +1,9 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useApi } from "@/hooks/useApi";
-import {
-  setCredentials,
-  User,
-} from "../redux/reducers/slices/AuthSlice";
+import { setCredentials, User } from "../redux/reducers/slices/AuthSlice";
 import { RegisterFormInput } from "@/types/formData";
 // Adjust this import based on your Redux setup
-
 
 interface LoginResponse {
   user: User;
@@ -33,11 +29,10 @@ export const useAuth = () => {
   const api = useApi();
 
   const checkAuth = useCallback(async () => {
-      await getUser()
-        .then((res) => {
-          dispatch(setCredentials(res.data));
-        });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    await getUser().then((res) => {
+      dispatch(setCredentials(res.data));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   const login = useCallback(
@@ -87,16 +82,58 @@ export const useAuth = () => {
       email: string;
       otp: string;
       verify_email: boolean;
+      skip_user?: boolean;
     }): Promise<DataResponse> => {
       try {
         const response = await api.post<DataResponse>("/auth/verify", data);
-        await checkAuth();
+        if (data.skip_user == false) {
+          await checkAuth();
+        }
         return response.data;
       } catch (error) {
         throw error;
       }
     },
     [api, checkAuth]
+  );
+
+  const forgotPassword = useCallback(
+    async (email: string): Promise<DataResponse> => {
+      try {
+        const response = await api.post<DataResponse>("/auth/forgot-password", {
+          email,
+        });
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    [api]
+  );
+
+  const resetPassword = useCallback(
+    async (data: {
+      email: string;
+      password: string;
+      password_confirmation: string;
+      token: string;
+    }): Promise<DataResponse> => {
+      try {
+        const response = await api.put<DataResponse>(
+          "/auth/reset-password",
+          data,
+          {
+            headers: {
+              "Authorization": `Bearer ${data.token}`,
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    [api]
   );
 
   const logout = useCallback(async (): Promise<void> => {
@@ -122,6 +159,8 @@ export const useAuth = () => {
     logout,
     getUser,
     checkAuth,
+    forgotPassword,
+    resetPassword,
     sendVerification,
     verifyUser,
   };

@@ -39,10 +39,24 @@ export const useGuide = () => {
             throw error;
         }    
     };
+    
+    const updateTour = async (id: number , data: any) => {
+        try {
+            const response = await api.post("/guides/tours/update/" + id, data, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }    
+    };
 
     return {
         createGuide,
-        createTour
+        createTour,
+        updateTour
     };
 
 };

@@ -52,7 +52,7 @@ const LoginForm = () => {
           replace("/otp-verify?email=" + data.email);
         }
 
-        const codes = [401, 422];
+        const codes = [403, 422];
         if (codes.includes(response?.status)) {
           setServerError(response?.data);
         }
@@ -78,8 +78,6 @@ const LoginForm = () => {
   return (
     <form
       className="grid grid-cols-1 gap-6"
-      action="#"
-      method="post"
       onSubmit={handleSubmit(onSubmit)}
     >
       {serverError?.error && (
@@ -114,7 +112,7 @@ const LoginForm = () => {
       <div className="block">
         <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
           Password
-          <Link href="/login" className="text-sm underline font-medium">
+          <Link href="/forgot-password" className="text-sm underline font-medium">
             Forgot password?
           </Link>
         </span>

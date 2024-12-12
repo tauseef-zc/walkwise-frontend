@@ -5,9 +5,9 @@ import DateRangeCard from "./partials/DateRangeCard";
 import ImageUploader from "./partials/ImageUploader";
 import Input from "@/components/shared/Input";
 import { useForm } from "react-hook-form";
-import { IFormInput } from "../TourCreateForm";
+import { ITourUpdateInput } from "../TourUpdateForm";
 
-interface IFinalFormInput extends IFormInput {
+interface IFinalFormInput extends ITourUpdateInput {
   tour_dates?: {
     from: Date | null;
     to: Date | null;
@@ -31,7 +31,8 @@ const CompletionStep = ({
   };
 }) => {
   const idCount = tourData.tour_dates?.length ?? 0;
-  const ids: number[] = idCount > 0 ? Array.from(Array(idCount).keys()) : [0];  
+  const images = tourData.existing_images?.length ?? 0;
+  const ids: number[] = idCount > 0 ? Array.from(Array(idCount).keys()) : [0];
   const [cardIds, setCardIds] = React.useState<number[]>(ids);
   const [openDate, setOpenDate] = React.useState<number>(0);
   const {
@@ -51,6 +52,8 @@ const CompletionStep = ({
     setCardIds([...cardIds, updatedId]);
     setOpenDate(updatedId);
   };
+
+  console.log({ dates: tourData.tour_dates });
 
   return (
     <form action="POST" onSubmit={handleSubmit(onSubmitAction)}>
@@ -78,11 +81,18 @@ const CompletionStep = ({
         <p className="text-sm text-gray-400 mb-5">
           You can upload up to 10 images
         </p>
-        {errors.tour_dates && (
+        {errors.tour_images && (
           <p className="text-sm text-red-500 mb-5">Please upload tour images</p>
         )}
-        <ImageUploader onUpload={(files) => setValue("tour_images", files)} />
-        <Input type="hidden" {...register("tour_images", { required: true })} />
+        <ImageUploader
+          defaultImages={tourData.existing_images}
+          onChange={(images) => setValue("existing_images", images)}
+          onUpload={(files) => setValue("tour_images", files)}
+        />
+        <Input
+          type="hidden"
+          {...register("tour_images", { required: images == 0 })}
+        />
       </div>
 
       {serverErrors && (
