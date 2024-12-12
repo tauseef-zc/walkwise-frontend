@@ -30,8 +30,6 @@ const SuccessPage = async ({ params }: { params: { payment_id: string } }) => {
     guestInfants: booking?.infants || 0,
   };
 
-  console.log(payment);
-
   return (
     <div className="nc-PayPage">
       <main className="container mt-11 mb-24 lg:mb-32">
