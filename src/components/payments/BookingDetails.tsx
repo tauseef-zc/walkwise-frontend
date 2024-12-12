@@ -51,7 +51,7 @@ const BookingDetails = ({
         <div className="flex text-neutral-6000 dark:text-neutral-300">
           <span className="flex-1">Total</span>
           <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-            ${booking.total}
+            ${Number(payment.amount).toFixed(2)}
           </span>
         </div>
         <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
