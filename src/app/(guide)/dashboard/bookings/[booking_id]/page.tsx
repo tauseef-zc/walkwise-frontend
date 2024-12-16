@@ -1,10 +1,9 @@
-import { Booking } from "@/app/(common)/checkout/success/[payment_id]/page";
 import BookingDetails from "@/components/payments/BookingDetails";
 import BookingItem from "@/components/payments/checkout/BookingItem";
-import TourReviewForm from "@/components/payments/TourReviewForm";
 import { notFound } from "next/navigation";
 import React from "react";
-import { get } from "@/lib/restApi";
+import { Booking } from "@/data/types";
+import { getBooking } from "@/services/server/tourActions";
 
 export interface Payment {
   id: number;
@@ -17,15 +16,6 @@ export interface Payment {
   booking: Booking;
 }
 
-export const getBooking = async (
-  paymentId: number
-): Promise<Booking | null> => {
-  try {
-    return (await get("/guides/bookings/" + paymentId)).data as unknown as Booking;
-  } catch (error) {
-    return null;
-  }
-};
 
 const BookingDetailPage = async ({
   params: { booking_id },

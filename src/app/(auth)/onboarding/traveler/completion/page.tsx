@@ -10,6 +10,7 @@ import { useAuth } from "@/services/app/AuthService";
 import { useTraveler } from "@/services/app/TravelerService";
 import { useAppDispatch, useAppSelector } from "@/services/redux/hooks";
 import { setStep } from "@/services/redux/reducers/slices/OnboardingSlice";
+import { setCookie } from "cookies-next";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FieldError, useForm } from "react-hook-form";

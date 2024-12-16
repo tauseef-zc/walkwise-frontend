@@ -1,56 +1,23 @@
 import BookingItem from "@/components/payments/checkout/BookingItem";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
-import { Tour, User } from "@/data/tours";
-import { get } from "@/lib/restApi";
+import { getPayment } from "@/services/server/tourActions";
 import moment from "moment";
 import { notFound } from "next/navigation";
 import React from "react";
 
-export interface Booking {
-  id: number;
-  tour: Tour;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone: string;
-  adults: number;
-  children: number;
-  infants: number;
-  total: number;
-  booking_date: string;
-  created_at: string;
-  payment?: Payment;
-  user?: User;
-}
 
-export interface Payment {
-  id: number;
-  amount: number;
-  status: number;
-  payment_date: string;
-  transaction_id: string;
-  transaction_ref: string;
-  created_at: string;
-  booking: Booking;
-}
+const SuccessPage = async ({ params }: { params: { payment_id: string } }) => {
+  const payment_id = params.payment_id || "";
 
-export const getPayment = async (
-  paymentId: string
-): Promise<Payment | null> => {
-  try {
-    return (await get("/payments/" + paymentId)) as unknown as Payment;
-  } catch (error) {
-    return null;
+  if (!payment_id) {
+    return notFound(); 
   }
-};
 
-const SuccessPage = async ({
-  params: { payment_id },
-}: {
-  params: { payment_id: string };
-}) => {
   const payment = await getPayment(payment_id);
-  if (!payment) return notFound();
+
+  if (!payment) {
+    return notFound(); // Redirect if payment is not found
+  }
 
   const {
     booking,
@@ -58,91 +25,59 @@ const SuccessPage = async ({
   } = payment;
 
   const guests = {
-    guestAdults: booking.adults,
-    guestChildren: booking.children,
-    guestInfants: booking.infants,
+    guestAdults: booking?.adults || 0,
+    guestChildren: booking?.children || 0,
+    guestInfants: booking?.infants || 0,
   };
 
   return (
-    <div className={`nc-PayPage`}>
-      <main className="container mt-11 mb-24 lg:mb-32 ">
+    <div className="nc-PayPage">
+      <main className="container mt-11 mb-24 lg:mb-32">
         <div className="max-w-4xl mx-auto">
           <div className="w-full flex flex-col sm:rounded-2xl space-y-10 px-0 sm:p-6 xl:p-8">
             <h2 className="text-3xl lg:text-4xl font-semibold">
-              Congratulation 🎉
+              Congratulations 🎉
             </h2>
 
-            <p className="text-neutral-6000 dark:text-neutral-300">
+            <p className="text-neutral-600 dark:text-neutral-300">
               Your booking has been successfully completed.
             </p>
 
             <div className="border-b border-neutral-200 dark:border-neutral-700"></div>
 
-            {/* ------------------------ */}
+            {/* Booking Item */}
             {tour && (
               <BookingItem
                 tour={tour}
                 guests={guests}
-                bookingDate={booking.booking_date}
+                bookingDate={booking?.booking_date || ""}
               />
             )}
 
-            {/* ------------------------ */}
+            {/* Booking Details */}
             <div className="space-y-6">
-              <h3 className="text-2xl font-semibold">Booking detail</h3>
+              <h3 className="text-2xl font-semibold">Booking Details</h3>
               <div className="flex flex-col space-y-4">
-                <div className="flex text-neutral-6000 dark:text-neutral-300">
-                  <span className="flex-1">First Name</span>
-                  <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                    {booking.first_name}
-                  </span>
-                </div>
-                <div className="flex text-neutral-6000 dark:text-neutral-300">
-                  <span className="flex-1">Last Name</span>
-                  <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                    {booking.last_name}
-                  </span>
-                </div>
-                <div className="flex text-neutral-6000 dark:text-neutral-300">
-                  <span className="flex-1">Email</span>
-                  <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                    {booking.email}
-                  </span>
-                </div>
-                <div className="flex text-neutral-6000 dark:text-neutral-300">
-                  <span className="flex-1">Phone</span>
-                  <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                    {booking.phone}
-                  </span>
-                </div>
-                <div className="flex text-neutral-6000 dark:text-neutral-300">
-                  <span className="flex-1">Booking code</span>
-                  <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                    #{booking.id}
-                  </span>
-                </div>
-                <div className="flex text-neutral-6000 dark:text-neutral-300">
-                  <span className="flex-1">Payment date</span>
-                  <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                    {moment(payment.payment_date).format("DD/MM/YYYY")}
-                  </span>
-                </div>
-                <div className="flex text-neutral-6000 dark:text-neutral-300">
-                  <span className="flex-1">Total</span>
-                  <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                    ${payment.amount}
-                  </span>
-                </div>
-                <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
-                  <span className="flex-1">Payment method</span>
-                  <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
-                    Credit card
-                  </span>
-                </div>
+                <BookingDetail label="First Name" value={booking?.first_name} />
+                <BookingDetail label="Last Name" value={booking?.last_name} />
+                <BookingDetail label="Email" value={booking?.email} />
+                <BookingDetail label="Phone" value={booking?.phone} />
+                <BookingDetail label="Booking Code" value={`#${booking?.id}`} />
+                <BookingDetail
+                  label="Payment Date"
+                  value={moment(payment?.payment_date).format("DD/MM/YYYY")}
+                />
+                <BookingDetail
+                  label="Total"
+                  value={`$${Number(payment?.amount)?.toFixed(2)}`}
+                />
+                <BookingDetail label="Payment Method" value="Credit Card" />
               </div>
             </div>
+
+            {/* Explore More */}
             <div>
-              <ButtonPrimary href="/tours">Explore more tours</ButtonPrimary>
+              <ButtonPrimary href="/tours">Explore More Tours</ButtonPrimary>
             </div>
           </div>
         </div>
@@ -150,5 +85,19 @@ const SuccessPage = async ({
     </div>
   );
 };
+
+interface BookingDetailProps {
+  label: string;
+  value?: string | number;
+}
+
+const BookingDetail: React.FC<BookingDetailProps> = ({ label, value }) => (
+  <div className="flex text-neutral-600 dark:text-neutral-300">
+    <span className="flex-1">{label}</span>
+    <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
+      {value || "N/A"}
+    </span>
+  </div>
+);
 
 export default SuccessPage;

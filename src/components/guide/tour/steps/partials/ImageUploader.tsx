@@ -112,6 +112,7 @@ const ImageUploader: FC<IImageUploadProps> = ({
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () =>
       files.forEach((file: IFile) => URL.revokeObjectURL(file.preview ?? ""));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <section className="mb-5">

@@ -1,4 +1,4 @@
-import { Booking } from "@/app/(common)/checkout/success/[payment_id]/page";
+import { Booking } from "./types";
 
 export interface TourImages {
   id: string;

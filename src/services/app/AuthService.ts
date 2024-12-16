@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useApi } from "@/hooks/useApi";
 import { setCredentials, User } from "../redux/reducers/slices/AuthSlice";
 import { RegisterFormInput } from "@/types/formData";
+import { setCookie } from "cookies-next";
 // Adjust this import based on your Redux setup
 
 interface LoginResponse {

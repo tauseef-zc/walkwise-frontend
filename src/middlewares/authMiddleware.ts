@@ -11,7 +11,7 @@ export const authGuestPath = [
   "/otp-verify"
 ];
 
-export const checkAuth = (
+export const checkAuth = async (
   user: any,
   token: string | undefined,
   pathName: string,
@@ -21,6 +21,7 @@ export const checkAuth = (
     user?.user_type === "traveler" ? "/my-account" : "/dashboard";
 
   if (token) {
+    console.log({token, user});
     if (
       user?.verified === true &&
       user?.onboarding === false &&

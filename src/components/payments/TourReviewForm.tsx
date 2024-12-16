@@ -2,9 +2,9 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
 import FiveStartIconForRate from "../common/partials/FiveStartIconForRate";
-import { Booking } from "@/app/(common)/checkout/success/[payment_id]/page";
 import { useApi } from "@/hooks/useApi";
 import ButtonPrimary from "../shared/ButtonPrimary";
+import { Booking } from "@/data/types";
 
 interface TourReviewFormProps {
   booking: Booking;

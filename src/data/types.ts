@@ -1,5 +1,6 @@
 import { Route } from "@/types/router";
 import { StaticImageData } from "next/image";
+import { Tour, User } from "./tours";
 
 //  ######  CustomLink  ######## //
 export interface CustomLink {
@@ -140,4 +141,32 @@ export interface CarDataType {
     lat: number;
     lng: number;
   };
+}
+
+export interface Booking {
+  id: number;
+  tour: Tour;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  adults: number;
+  children: number;
+  infants: number;
+  total: number;
+  booking_date: string;
+  created_at: string;
+  payment?: Payment;
+  user?: User;
+}
+
+export interface Payment {
+  id: number;
+  amount: number;
+  status: number;
+  payment_date: string;
+  transaction_id: string;
+  transaction_ref: string;
+  created_at: string;
+  booking: Booking;
 }

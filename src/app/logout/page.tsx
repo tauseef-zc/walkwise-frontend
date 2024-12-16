@@ -6,17 +6,10 @@ import { redirect, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const Logout = () => {
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const [loading, setLoading] = React.useState<boolean>(true);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { logout } = useAuth();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      redirect("/login");
-    }
-  }, [isAuthenticated, router]);
 
   useEffect(() => {
     if (loading) {
@@ -29,8 +22,10 @@ const Logout = () => {
         })
         .finally(() => {
           setLoading(false);
+          router.replace("/login");
         });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <div className="text-center my-5">Logging out...</div>;

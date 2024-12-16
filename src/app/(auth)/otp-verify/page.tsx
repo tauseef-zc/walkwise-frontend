@@ -7,7 +7,7 @@ import { useState } from "react";
 import ButtonPrimary from "@/components/shared/ButtonPrimary";
 
 const OtpScreen = ({ searchParams }: { searchParams: any }) => {
-  const { isAuthenticated, onboarding, verified } = useAppSelector(
+  const { onboarding, verified, user } = useAppSelector(
     (state) => state.auth
   );
   const [otp, setOtp] = useState<string[]>([]);
@@ -50,6 +50,10 @@ const OtpScreen = ({ searchParams }: { searchParams: any }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    router.prefetch("/my-account");
+    router.prefetch("/dashboard");
+    router.prefetch("/onboarding");
+
     setLoading(false);
     if (otp.length === 6) {
       setLoading(true);
@@ -65,7 +69,17 @@ const OtpScreen = ({ searchParams }: { searchParams: any }) => {
             theme: localStorage.getItem("theme") === "dark" ? "dark" : "light",
           });
           setLoading(false);
-          router.replace("/dashboard");
+          if(onboarding){
+            router.replace("/onboarding");
+          } else if(verified){
+            if(user?.user_type === "traveler"){
+              router.replace("/my-account");
+            } else {
+              router.replace("/dashboard");
+            }
+          } else {
+            router.replace("/login");
+          }
         })
         .catch((error) => {
           setLoading(false);
@@ -126,10 +140,7 @@ const OtpScreen = ({ searchParams }: { searchParams: any }) => {
               ))}
           </div>
           <div className="max-w-[260px] mx-auto mt-8 text-center justify-center">
-            <ButtonPrimary
-              loading={loading}
-              type="submit"
-            >
+            <ButtonPrimary loading={loading} type="submit">
               Verify Account
             </ButtonPrimary>
           </div>

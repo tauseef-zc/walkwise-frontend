@@ -1,10 +1,9 @@
-import {
-  getPayment,
-  Payment,
-} from "@/app/(common)/checkout/success/[payment_id]/page";
+
 import BookingDetails from "@/components/payments/BookingDetails";
 import BookingItem from "@/components/payments/checkout/BookingItem";
 import TourReviewForm from "@/components/payments/TourReviewForm";
+import { Payment } from "@/data/types";
+import { getPayment } from "@/services/server/tourActions";
 import { notFound } from "next/navigation";
 import React from "react";
 
