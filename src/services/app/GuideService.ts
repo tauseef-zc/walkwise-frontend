@@ -53,10 +53,20 @@ export const useGuide = () => {
         }    
     };
 
+    const getDashboardStats = async () => {
+      try {
+        const response = await api.get("/guides/dashboard");
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    };
+
     return {
-        createGuide,
-        createTour,
-        updateTour
+      createGuide,
+      createTour,
+      updateTour,
+      getDashboardStats,
     };
 
 };

@@ -1,10 +1,12 @@
-import { get } from "@/lib/restApi";
+"use client";
+import { useGuide } from "@/services/app/GuideService";
 import {
   CalendarIcon,
   CurrencyDollarIcon,
   MapIcon,
   StarIcon,
 } from "@heroicons/react/24/solid";
+import { useEffect, useState } from "react";
 
 interface DashboardResponse {
   bookingCount: number;
@@ -13,17 +15,22 @@ interface DashboardResponse {
   rating: number;
 }
 
-const getDashboardStats = async () => {
-  try {
-    const response = await get("/guides/dashboard");
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
 
-const Dashboard = async () => {
-  const response = (await getDashboardStats()) as unknown as DashboardResponse;
+const Dashboard = () => {
+  const { getDashboardStats } = useGuide();
+  const [data, setData] = useState<DashboardResponse | null>(null);
+  
+  const getData = async () => {
+    const response = await getDashboardStats();   
+    setData(response.data as unknown as DashboardResponse); 
+  };
+  
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+
   return (
     <>
       <h2 className="text-3xl font-semibold mb-8">Dashboard</h2>
@@ -41,7 +48,7 @@ const Dashboard = async () => {
               Total Tours
             </p>
             <h4 className="text-xl font-bold text-navy-700 dark:text-white">
-              {response?.toursCount ?? 0}
+              {data?.toursCount ?? 0}
             </h4>
           </div>
         </div>
@@ -58,7 +65,7 @@ const Dashboard = async () => {
               Total Bookings
             </p>
             <h4 className="text-xl font-bold text-navy-700 dark:text-white">
-              {response?.bookingCount ?? 0}
+              {data?.bookingCount ?? 0}
             </h4>
           </div>
         </div>
@@ -75,7 +82,7 @@ const Dashboard = async () => {
               Your Earnings
             </p>
             <h4 className="text-xl font-bold text-navy-700 dark:text-white">
-              ${response?.earnings ?? 0}
+              ${data?.earnings ?? 0}
             </h4>
           </div>
         </div>
@@ -93,7 +100,7 @@ const Dashboard = async () => {
               Your Rating
             </p>
             <h4 className="text-xl font-bold text-navy-700 dark:text-white">
-              {Number(response?.rating).toFixed(1) ?? 0}/5
+              {Number(data?.rating).toFixed(1) ?? 0}/5
             </h4>
           </div>
         </div>
